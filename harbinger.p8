@@ -143,7 +143,8 @@ function _update()
 	
 	handlecontrols()
  moveenemies()
- 
+ docollide()
+
  if heartanim > 0 then
 	 if t % 3 == 0 then
 		 heartanim-=1
@@ -183,6 +184,10 @@ function moveenemies()
 end
 
 function handlecontrols()
+ handlemoving()
+end
+
+function handlemoving()
 	moving=false
 	
 	if btn(⬅️) then
@@ -268,28 +273,10 @@ function trymove(s1,s2,x1,y1,canskirt)
 	end
  
  if moved then
-		local f = getitem()
-		if f then
-			if f.t == 'heart' then
-			 hp += 1
-			 del(items, f)
-			 sfx(0)
-			 heartanim=7
-			elseif f.t == 'enemy' then
-			 if blinkmode == 0 then
-				 blinkmode=15
-				 hp -= 1
-				 vx = -x1*7
-				 vy = -y1*7
-				end
-			end
-		end
-		
   if (x1!=0)	dx=x1
   if (y1!=0)	dy=y1
+  moving=true
  end
-
-	if moved then moving=true end
 end
 
 -->8
@@ -325,6 +312,27 @@ function heart(s)
 	return fget(s,2)
 end
 
+-->8
+-- collide
+
+function docollide()
+	local f = getitem()
+	if f then
+		if f.t == 'heart' then
+		 hp += 1
+		 del(items, f)
+		 sfx(0)
+		 heartanim=7
+		elseif f.t == 'enemy' then
+		 if blinkmode == 0 then
+			 blinkmode=15
+			 hp -= 1
+			 vx = -x1*7
+			 vy = -y1*7
+			end
+		end
+	end
+end
 __gfx__
 0000000000888800555555550000000076600000444444445555555500bab0005555555508800880000000000000000000000000000000005555555500000000
 0000000008f1f18057777765065000007766000045555554544444450a9bab00577777658ee88e8800800800000000000000000000000000544f4f4500000000

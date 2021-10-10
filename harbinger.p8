@@ -139,6 +139,20 @@ function _update()
 	t+=1
 	if t == 30 then t = 0 end
 	
+	handlecontrols()
+ 
+ if heartanim > 0 then
+	 if t % 3 == 0 then
+		 heartanim-=1
+		end
+ end
+ 
+ if blinkmode > 0 then
+  blinkmode -= 1
+ end
+end
+
+function handlecontrols()
 	moving=false
 	
 	if btn(⬅️) then
@@ -199,16 +213,6 @@ function _update()
 	  local s2 = sprat(7,8)
 		 trymove(s1,s2,0,1,canskirt)
 		end
- end
- 
- if heartanim > 0 then
-	 if t % 3 == 0 then
-		 heartanim-=1
-		end
- end
- 
- if blinkmode > 0 then
-  blinkmode -= 1
  end
 end
 

@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 16
+version 18
 __lua__
 // angle
 local a = 0
@@ -102,3 +102,8 @@ function make_laser(a,x,y,col)
 	add(lasers, l)
 end
 
+--[[	line(-sin(d/360)*12+x1,
+											cos(d/360)*12+y1,
+										-sin(d+10/360)*12+x1,
+											cos(d+10/360)*12+y1, 8)
+--]]

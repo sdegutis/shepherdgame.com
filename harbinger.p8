@@ -16,6 +16,7 @@ moving=false
 vx=0
 vy=0
 maxv=2
+movv=0.5
 
 
 function _init()
@@ -133,25 +134,25 @@ function _update()
 	moving=false
 	
 	if btn(⬅️) then
-	 vx -= 1
+	 vx -= movv
 	 if (vx<-maxv) vx=-maxv
 	elseif btn(➡️) then
-	 vx += 1
+	 vx += movv
 	 if (vx>maxv) vx=maxv
 	else
 	 if vx != 0 then
-		 vx -= 1 * sgn(vx)
+		 vx -= movv * sgn(vx)
 	 end
 	end
 
 	if vx < 0 then
-	 for i = 1,-vx do
+	 for i = 1,ceil(-vx) do
 		 local s1 = sprat(-1,0)
 		 local s2 = sprat(-1,7)
 		 trymove(s1,s2,-1,0)
 		end
 	elseif vx > 0 then
-	 for i = 1,vx do
+	 for i = 1,flr(vx) do
 		 local s1 = sprat(8,0)
 		 local s2 = sprat(8,7)
 		 trymove(s1,s2,1,0)
@@ -159,25 +160,25 @@ function _update()
 	end
 	
 	if btn(⬆️) then
-	 vy -= 1
+	 vy -= movv
 	 if (vy<-maxv) vy=-maxv
 	elseif btn(⬇️) then
-	 vy += 1
+	 vy += movv
 	 if (vy>maxv) vy=maxv
 	else
 	 if vy != 0 then
-		 vy -= 1 * sgn(vy)
+		 vy -= movv * sgn(vy)
 	 end
  end
  
  if vy < 0 then
-  for i = 1, -vy do
+  for i = 1, ceil(-vy) do
 		 local s1 = sprat(0,-1)
 	  local s2 = sprat(7,-1)
 		 trymove(s1,s2,0,-1)
 		end
  elseif vy > 0 then
-  for i = 1, vy do
+  for i = 1, flr(vy) do
 		 local s1 = sprat(0,8)
 	  local s2 = sprat(7,8)
 		 trymove(s1,s2,0,1)

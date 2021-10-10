@@ -92,6 +92,10 @@ function _draw()
 	
 	camera()
 	
+	drawbanner()
+end
+
+function drawbanner()
 	color(0)
 	rectfill(0,0,127,7)
 	for i = 1,hp do

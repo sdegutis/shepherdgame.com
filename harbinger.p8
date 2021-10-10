@@ -220,8 +220,8 @@ function trymove(s1,s2,x1,y1)
 			 heartanim=7
 			elseif f.t == 'enemy' then
 			 hp -= 1
-			 x -= x1*10
-			 y -= y1*10
+			 vx = -x1*10
+			 vy = -y1*10
 			end
 		end
 		

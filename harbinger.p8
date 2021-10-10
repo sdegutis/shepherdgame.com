@@ -61,6 +61,8 @@ function load_items()
 	 	 add(items,{
 	 	  x=x1*8,
 	 	  y=y1*8,
+	 	  dx=0,
+	 	  dy=0,
 	 	  t='enemy',
 	 	  s1=s,
 	 	  s2=s+1,
@@ -140,6 +142,7 @@ function _update()
 	if t == 30 then t = 0 end
 	
 	handlecontrols()
+ moveenemies()
  
  if heartanim > 0 then
 	 if t % 3 == 0 then
@@ -149,6 +152,33 @@ function _update()
  
  if blinkmode > 0 then
   blinkmode -= 1
+ end
+end
+
+function moveenemies()
+	if t == 0 then
+	 for i = 1, #items do
+	  local e = items[i]
+	  if e.t == 'enemy' then
+	   local s = 1
+	   if rnd(10) < 5 then s=-1 end
+	   if rnd(10) < 5 then
+		   e.dx=s
+		   e.dy=0
+	   else
+		   e.dx=0
+		   e.dy=s
+	   end
+	  end
+	 end
+	elseif t > 15 then
+	 for i = 1, #items do
+	  local e = items[i]
+	  if e.t == 'enemy' then
+	   e.x += e.dx
+	   e.y += e.dy
+	  end
+	 end
  end
 end
 

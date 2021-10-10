@@ -146,16 +146,20 @@ function _update()
 	end
 
 	if vx < 0 then
+	 local canskirt =
+	  not btn(⬆️) and not btn(⬇️)
 	 for i = 1,ceil(-vx) do
 		 local s1 = sprat(-1,0)
 		 local s2 = sprat(-1,7)
-		 trymove(s1,s2,-1,0)
+		 trymove(s1,s2,-1,0,canskirt)
 		end
 	elseif vx > 0 then
+	 local canskirt =
+	  not btn(⬆️) and not btn(⬇️)
 	 for i = 1,flr(vx) do
 		 local s1 = sprat(8,0)
 		 local s2 = sprat(8,7)
-		 trymove(s1,s2,1,0)
+		 trymove(s1,s2,1,0,canskirt)
 		end
 	end
 	
@@ -172,16 +176,20 @@ function _update()
  end
  
  if vy < 0 then
+	 local canskirt =
+	  not btn(⬅️) and not btn(➡️)
   for i = 1, ceil(-vy) do
 		 local s1 = sprat(0,-1)
 	  local s2 = sprat(7,-1)
-		 trymove(s1,s2,0,-1)
+		 trymove(s1,s2,0,-1,canskirt)
 		end
  elseif vy > 0 then
+	 local canskirt =
+	  not btn(⬅️) and not btn(➡️)
   for i = 1, flr(vy) do
 		 local s1 = sprat(0,8)
 	  local s2 = sprat(7,8)
-		 trymove(s1,s2,0,1)
+		 trymove(s1,s2,0,1,canskirt)
 		end
  end
  
@@ -192,24 +200,26 @@ function _update()
  end
 end
 
-function trymove(s1,s2,x1,y1)
+function trymove(s1,s2,x1,y1,canskirt)
  local moved = false
  
  if air(s1) and air(s2) then
   moved = true
   x += x1
   y += y1
- elseif air(s1) then
- 	moved=true
- 	if x1==0 then x-=1
- 	elseif y1==0 then y-=1
- 	end
- elseif air(s2) then
- 	moved=true
- 	if x1==0 then x+=1
- 	elseif y1==0 then y+=1
- 	end
- end
+ elseif canskirt then
+	 if air(s1) then
+	 	moved=true
+	 	if x1==0 then x-=1
+	 	elseif y1==0 then y-=1
+	 	end
+	 elseif air(s2) then
+	 	moved=true
+	 	if x1==0 then x+=1
+	 	elseif y1==0 then y+=1
+	 	end
+	 end
+	end
  
  if moved then
 		local f = getitem()

@@ -191,6 +191,20 @@ function handlemoving()
 	moving=false
 	
 	if btn(⬅️) then
+		dx=-1
+	elseif btn(➡️) then
+		dx=1
+	end
+	
+	if btn(⬆️) then
+		dy=-1
+	elseif btn(⬇️) then
+		dy=1
+	elseif btn(⬅️) or btn(➡️) then
+		dy=1
+	end
+	
+	if btn(⬅️) then
 	 vx -= movv
 	 if (vx<-maxv) vx=-maxv
 	elseif btn(➡️) then
@@ -273,8 +287,6 @@ function trymove(s1,s2,x1,y1,canskirt)
 	end
  
  if moved then
-  if (x1!=0)	dx=x1
-  if (y1!=0)	dy=y1
   moving=true
  end
 end

@@ -337,8 +337,8 @@ function docollide()
 			 if(y<f.y-2) y1=-1
 			 if(y>f.y+2) y1=1
 			 
-			 vx = x1*7
-			 vy = y1*7
+			 vx = x1*4
+			 vy = y1*4
 			end
 		end
 	end

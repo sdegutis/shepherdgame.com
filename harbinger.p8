@@ -280,6 +280,11 @@ end
 function trymove(s1,s2,x1,y1,canskirt)
  local moved = false
  
+ if slowarea() then
+ 	x1/=2
+ 	y1/=2
+ end
+ 
  if air(s1) and air(s2) then
   moved = true
   x += x1
@@ -326,6 +331,17 @@ function sprat(x1,y1)
  local tx = flr((x+x1) / 8)
  local ty = flr((y+y1) / 8)
  return mget(tx,ty)
+end
+
+function slowarea()
+	return slow(sprat(0,0))
+	    or slow(sprat(7,0))
+	    or slow(sprat(0,7))
+	    or slow(sprat(7,7))
+end
+
+function slow(s)
+ return fget(s,1)
 end
 
 function air(s)

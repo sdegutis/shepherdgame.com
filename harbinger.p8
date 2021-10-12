@@ -21,6 +21,7 @@ maxv2=3
 movv=0.5
 blinkmode=0
 invincible=false
+shot=nil
 
 
 function _init()
@@ -105,6 +106,10 @@ function _draw()
 	 spr(sp, s.x, s.y)
 	end
 	
+	if shot then
+	 spr(4,shot.x,shot.y)
+	end
+	
 	drawguy()
 	
 	camera()
@@ -174,6 +179,25 @@ function _update()
  maxv=maxv1
  if btn(❎) then
   maxv=maxv2
+ end
+ 
+ if btnp(🅾️) then
+ 	shot = {
+ 	 x=x,
+ 	 y=y,
+ 	 dx=dx,
+ 	 dy=dy,
+ 	 t=30,
+ 	}
+ end
+ 
+ if shot then
+  shot.x += shot.dx
+  shot.y += shot.dy
+  shot.t -= 1
+  if shot.t == 0 then
+  	shot = nil
+  end
  end
 
  if heartanim > 0 then

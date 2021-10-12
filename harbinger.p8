@@ -260,18 +260,14 @@ end
 function handlemoving()
 	moving=false
 	
-	if btn(⬅️) then
-		dx=-1
-	elseif btn(➡️) then
-		dx=1
-	end
-	
-	if btn(⬆️) then
-		dy=-1
-	elseif btn(⬇️) then
-		dy=1
-	elseif btn(⬅️) or btn(➡️) then
-		dy=1
+	if btn(⬆️) or btn(⬇️) or
+	   btn(⬅️) or btn(➡️) then
+		if     btn(⬅️) then	dx=-1
+		elseif btn(➡️) then	dx=1
+		else                dx=0	end
+		if     btn(⬆️) then	dy=-1
+		elseif btn(⬇️) then	dy=1
+		else                dy=0	end
 	end
 	
 	if btn(⬅️) then

@@ -3,6 +3,27 @@ version 33
 __lua__
 -- init
 
+--[[
+
+ideas for later:
+
+* make enemies randomly spawn.
+  should they spawn anywhere?
+  or only where placed on map?
+  maybe they should only spawn
+  when you reveal them on the
+  map? unclear.
+  
+* energy bar on banner right.
+  apples/etc increase energy.
+  what uses energy up? maybe
+  running? throwing swords?
+  we'd also need to have apples
+  respawn so you don't run out
+  of energy for basic needs.
+
+--]]
+
 x=0
 y=0
 items={}

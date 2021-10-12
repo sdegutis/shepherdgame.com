@@ -18,3 +18,5 @@ About 2-3 years of Pico-8 games made with and for my kids.
 | things3   | Pico-8 version of the game Things.                       |
 | war       | Eventual warcraft1 clone (but without occult).           |
 | windows   | Emulation of Windows 8 loading circles.                  |
+
+LICENSE: MIT

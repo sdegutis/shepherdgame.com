@@ -112,8 +112,6 @@ function load_items()
 	 	 add(items,{
 	 	  x=x*8,
 	 	  y=y*8,
-	 	  dx=0,
-	 	  dy=0,
 	 	  t='powerup',
 	 	  s1=s,
 	 	  s2=s+1,
@@ -124,8 +122,6 @@ function load_items()
 	 	 add(items,{
 	 	  x=x*8,
 	 	  y=y*8,
-	 	  dx=0,
-	 	  dy=0,
 	 	  t='portal',
 	 	  s1=s,
 	 	  s2=s+1,

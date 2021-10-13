@@ -174,14 +174,19 @@ function drawguy()
 	else
 	end
 
- local shouldblink = t % 3 < 1
- if blinkmode > 0 and shouldblink then
-  if invincible then
-	 	pal(12,9)
+	if invincible then
+	 if t % 15 < 5 then
+   for i=1,15 do
+		 	pal(i,(i+3)%3+10)
+   end
+		end
+		spr(s,x,y,1,1,fl)
+		pal()
+	elseif blinkmode > 0 then
+	 if t % 3 < 1 then
 			spr(s,x,y,1,1,fl)
-			pal()
-  end
- else
+		end
+	else
 		spr(s,x,y,1,1,fl)
 	end
 end

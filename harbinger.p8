@@ -66,14 +66,14 @@ function _init()
 end
 
 function get_initial()
-	for x1 = 0, 127 do
-	 for y1 = 0, 63 do
-	 	local s = mget(x1,y1)
+	for x = 0, 127 do
+	 for y = 0, 63 do
+	 	local s = mget(x,y)
 	 	if s == 1 then
-	 		local rs = mget(x1+1,y1)
-	 	 mset(x1,y1,rs)
-	 		hero.x = x1 * 8
-	 		hero.y = y1 * 8
+	 		local rs = mget(x+1,y)
+	 	 mset(x,y,rs)
+	 		hero.x = x * 8
+	 		hero.y = y * 8
 	 		return
 	 	end
 	 end
@@ -81,25 +81,25 @@ function get_initial()
 end
 
 function load_items()
-	for x1 = 0, 127 do
-	 for y1 = 0, 63 do
-	 	local s = mget(x1,y1)
+	for x = 0, 127 do
+	 for y = 0, 63 do
+	 	local s = mget(x,y)
 	 	if fget(s, 2) then
-	 		local rs = mget(x1+1,y1)
-	 	 mset(x1,y1,rs)
+	 		local rs = mget(x+1,y)
+	 	 mset(x,y,rs)
 	 	 add(items,{
-	 	  x=x1*8,
-	 	  y=y1*8,
+	 	  x=x*8,
+	 	  y=y*8,
 	 	  t='heart',
 	 	  s1=s,
 	 	  s2=s+1,
 	 	 })
 	 	elseif fget(s, 3) then
-	 		local rs = mget(x1+1,y1)
-	 	 mset(x1,y1,rs)
+	 		local rs = mget(x+1,y)
+	 	 mset(x,y,rs)
 	 	 add(items,{
-	 	  x=x1*8,
-	 	  y=y1*8,
+	 	  x=x*8,
+	 	  y=y*8,
 	 	  dx=0,
 	 	  dy=0,
 	 	  t='enemy',
@@ -107,11 +107,11 @@ function load_items()
 	 	  s2=s+1,
 	 	 })
 	 	elseif fget(s, 4) then
-	 		local rs = mget(x1+1,y1)
-	 	 mset(x1,y1,rs)
+	 		local rs = mget(x+1,y)
+	 	 mset(x,y,rs)
 	 	 add(items,{
-	 	  x=x1*8,
-	 	  y=y1*8,
+	 	  x=x*8,
+	 	  y=y*8,
 	 	  dx=0,
 	 	  dy=0,
 	 	  t='powerup',
@@ -119,11 +119,11 @@ function load_items()
 	 	  s2=s+1,
 	 	 })
 	 	elseif fget(s, 7) then
-	 		local rs = mget(x1+1,y1)
-	 	 mset(x1,y1,rs)
+	 		local rs = mget(x+1,y)
+	 	 mset(x,y,rs)
 	 	 add(items,{
-	 	  x=x1*8,
-	 	  y=y1*8,
+	 	  x=x*8,
+	 	  y=y*8,
 	 	  dx=0,
 	 	  dy=0,
 	 	  t='portal',
@@ -277,8 +277,8 @@ function pick_enemy_dir(e)
 	                 e.y + e.dy*8)
 end
 
-function notsolidat(x1,y1)
- local s = _sprat(x1,y1)
+function notsolidat(x,y)
+ local s = _sprat(x,y)
  return air(s)
 end
 
@@ -379,28 +379,28 @@ function handlemoving()
  end
 end
 
-function trymove(s1,s2,x1,y1,canskirt)
+function trymove(s1,s2,x,y,canskirt)
  local moved = false
  
  if slowarea() then
- 	x1/=2
- 	y1/=2
+ 	x/=2
+ 	y/=2
  end
  
  if air(s1) and air(s2) then
   moved = true
-  hero.x += x1
-  hero.y += y1
+  hero.x += x
+  hero.y += y
  elseif canskirt then
 	 if air(s1) then
 	 	moved=true
-	 	if x1==0 then hero.x-=1
-	 	elseif y1==0 then hero.y-=1
+	 	if x==0 then hero.x-=1
+	 	elseif y==0 then hero.y-=1
 	 	end
 	 elseif air(s2) then
 	 	moved=true
-	 	if x1==0 then hero.x+=1
-	 	elseif y1==0 then hero.y+=1
+	 	if x==0 then hero.x+=1
+	 	elseif y==0 then hero.y+=1
 	 	end
 	 end
 	end
@@ -429,15 +429,15 @@ function getitem()
  end
 end
 
-function sprat(x1,y1)
- local tx = flr((hero.x+x1) / 8)
- local ty = flr((hero.y+y1) / 8)
+function sprat(x,y)
+ local tx = flr((hero.x+x) / 8)
+ local ty = flr((hero.y+y) / 8)
  return mget(tx,ty)
 end
 
-function _sprat(x1,y1)
- local tx = flr(x1 / 8)
- local ty = flr(y1 / 8)
+function _sprat(x,y)
+ local tx = flr(x / 8)
+ local ty = flr(y / 8)
  return mget(tx,ty)
 end
 
@@ -524,16 +524,16 @@ function docollide()
 			 hero.hp -= 1
 			 sfx(4)
 			 
-			 local x1 = 0
-			 if(hero.x<f.x-2) x1=-1
-			 if(hero.x>f.x+2) x1=1
+			 local x = 0
+			 if(hero.x<f.x-2) x=-1
+			 if(hero.x>f.x+2) x=1
 			 
-			 local y1 = 0
-			 if(hero.y<f.y-2) y1=-1
-			 if(hero.y>f.y+2) y1=1
+			 local y = 0
+			 if(hero.y<f.y-2) y=-1
+			 if(hero.y>f.y+2) y=1
 			 
-			 hero.vx = x1*4
-			 hero.vy = y1*4
+			 hero.vx = x*4
+			 hero.vy = y*4
 			end
 		end
 	end

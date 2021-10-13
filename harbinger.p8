@@ -33,16 +33,22 @@ ideas for later:
   when you run out of hearts.
   maybe a fairie?
 
+* turn the blue treasure chest
+  into a cape since sarah thinks
+  it looks like one when the guy
+  walks over it.
+  what can it do? maybe fly over
+  solid objects for 400 ticks?
+
 --]]
 
 hero = {
+	hp=3,
 	x=0,
 	y=0,
-	hp=3,
-	dx=1,
-	dy=1,
-	vx=0,
-	vy=0,
+	m={x=0,y=0},
+	d={x=0,y=1},
+	v={x=0,y=0},
 	maxv=2,
 	maxv1=1,
 	maxv2=2,
@@ -181,14 +187,14 @@ end
 function drawguy()
  local fl=false
 	local s = 1
-	if (hero.dx==-1) fl=true
+	if (hero.d.x==-1) fl=true
 
 	if hero.moving then
 		s=32
-		if (hero.dy==-1) s=48
+		if (hero.d.y==-1) s=48
 		if (t%15<8) s+=1
 	else
-		if (hero.dy==-1) s=17
+		if (hero.d.y==-1) s=17
 	end	
 	
 	if hero.invincible then
@@ -228,8 +234,8 @@ function _update()
  	shot = {
  	 x=hero.x,
  	 y=hero.y,
- 	 dx=hero.dx,
- 	 dy=hero.dy,
+ 	 dx=hero.d.x,
+ 	 dy=hero.d.y,
  	 t=30,
  	}
  end
@@ -304,70 +310,69 @@ end
 function handlemoving()
 	hero.moving=false
 	
-	if btn(⬆️) or btn(⬇️) or
-	   btn(⬅️) or btn(➡️) then
-		if     btn(⬅️) then	hero.dx=-1
-		elseif btn(➡️) then	hero.dx=1
-		else                hero.dx=0	end
-		if     btn(⬆️) then	hero.dy=-1
-		elseif btn(⬇️) then	hero.dy=1
-		else                hero.dy=0	end
+	if     btn(⬅️) then	hero.m.x=-1
+	elseif btn(➡️) then	hero.m.x=1
+	else                hero.m.x=0	end
+
+	if     btn(⬆️) then	hero.m.y=-1
+	elseif btn(⬇️) then	hero.m.y=1
+	else                hero.m.y=0	end
+	
+	if hero.m.x!=0 or hero.m.y!=0 then
+		hero.d.x = hero.m.x
+		hero.d.y = hero.m.y
 	end
 	
-	if btn(⬅️) then
-	 hero.vx -= hero.movv
-	 if (hero.vx<-hero.maxv) hero.vx=-hero.maxv
-	elseif btn(➡️) then
-	 hero.vx += hero.movv
-	 if (hero.vx>hero.maxv) hero.vx=hero.maxv
+	if hero.m.x == -1 then
+	 hero.v.x -= hero.movv
+	 if (hero.v.x<-hero.maxv) hero.v.x=-hero.maxv
+	elseif hero.m.x == 1 then
+	 hero.v.x += hero.movv
+	 if (hero.v.x>hero.maxv) hero.v.x=hero.maxv
 	else
-	 if hero.vx != 0 then
-		 hero.vx -= hero.movv * sgn(hero.vx)
+	 if hero.v.x != 0 then
+		 hero.v.x -= hero.movv * sgn(hero.v.x)
 	 end
 	end
 
-	if hero.vx < 0 then
-	 local canskirt =
-	  not btn(⬆️) and not btn(⬇️)
-	 for i = 1,ceil(-hero.vx) do
+	if hero.v.x < 0 then
+	 local canskirt = hero.m.y == 0
+	 for i = 1,ceil(-hero.v.x) do
 		 local s1 = sprat(-1,0)
 		 local s2 = sprat(-1,7)
 		 trymove(s1,s2,-1,0,canskirt)
 		end
-	elseif hero.vx > 0 then
-	 local canskirt =
-	  not btn(⬆️) and not btn(⬇️)
-	 for i = 1,flr(hero.vx) do
+	elseif hero.v.x > 0 then
+	 local canskirt = hero.m.y == 0
+	 for i = 1,flr(hero.v.x) do
 		 local s1 = sprat(8,0)
 		 local s2 = sprat(8,7)
 		 trymove(s1,s2,1,0,canskirt)
 		end
 	end
 	
-	if btn(⬆️) then
-	 hero.vy -= hero.movv
-	 if (hero.vy<-hero.maxv) hero.vy=-hero.maxv
-	elseif btn(⬇️) then
-	 hero.vy += hero.movv
-	 if (hero.vy>hero.maxv) hero.vy=hero.maxv
+	if hero.m.y == -1 then
+	 hero.v.y -= hero.movv
+	 if (hero.v.y<-hero.maxv) hero.v.y=-hero.maxv
+	elseif hero.m.y == 1 then
+	 hero.v.y += hero.movv
+	 if (hero.v.y>hero.maxv) hero.v.y=hero.maxv
 	else
-	 if hero.vy != 0 then
-		 hero.vy -= hero.movv * sgn(hero.vy)
+	 if hero.v.y != 0 then
+		 hero.v.y -= hero.movv * sgn(hero.v.y)
 	 end
  end
  
- if hero.vy < 0 then
-	 local canskirt =
-	  not btn(⬅️) and not btn(➡️)
-  for i = 1, ceil(-hero.vy) do
+ if hero.v.y < 0 then
+	 local canskirt = hero.m.x == 0
+  for i = 1, ceil(-hero.v.y) do
 		 local s1 = sprat(0,-1)
 	  local s2 = sprat(7,-1)
 		 trymove(s1,s2,0,-1,canskirt)
 		end
- elseif hero.vy > 0 then
-	 local canskirt =
-	  not btn(⬅️) and not btn(➡️)
-  for i = 1, flr(hero.vy) do
+ elseif hero.v.y > 0 then
+	 local canskirt = hero.m.x == 0
+  for i = 1, flr(hero.v.y) do
 		 local s1 = sprat(0,8)
 	  local s2 = sprat(7,8)
 		 trymove(s1,s2,0,1,canskirt)
@@ -528,8 +533,8 @@ function docollide()
 			 if(hero.y<f.y-2) y=-1
 			 if(hero.y>f.y+2) y=1
 			 
-			 hero.vx = x*4
-			 hero.vy = y*4
+			 hero.v.x = x*4
+			 hero.v.y = y*4
 			end
 		end
 	end

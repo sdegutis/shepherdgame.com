@@ -29,6 +29,10 @@ ideas for later:
   will indicate the sign index.
   otherwise no idea how to.
 
+* make something fun happen
+  when you run out of hearts.
+  maybe a fairie?
+
 --]]
 
 x=0
@@ -477,7 +481,6 @@ function docollide()
 		 sfx(0)
 		elseif f.t == 'portal' then
 			if blinkmode==0 then
-			 blinkmode=30
 				local i = fi
 				local nxt
 				repeat
@@ -486,9 +489,36 @@ function docollide()
 					nxt=items[i]
 				until nxt.t=='portal'
 				
+				sfx(5)
+				
+				--[[
+				for i=0,3 do
+					for j=1,4 do
+						pal(i*4+j,0)
+						_draw()
+						flip()
+					end
+				end
+				pal()
+				--]]
+				
+				for i=1,90 do
+					circ(64,64,90-i,1)
+					if (i%5==0)	flip()
+				end
+				
 				x=nxt.x+8
 				y=nxt.y
-				sfx(5)
+				
+				for i=1,90 do
+					_draw()
+					for j=i,90 do
+						circ(64,64,j,1)
+					end
+					if (i%5==0)	flip()
+				end
+				
+			 blinkmode=30
 			end
 		elseif f.t == 'enemy' then
 		 if blinkmode == 0 then

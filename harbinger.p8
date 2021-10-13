@@ -22,6 +22,13 @@ ideas for later:
   respawn so you don't run out
   of energy for basic needs.
 
+* touching signs shows words
+  in a word box. they'd have
+  to be hardcoded in the code,
+  and the order of the sign
+  will indicate the sign index.
+  otherwise no idea how to.
+
 --]]
 
 x=0

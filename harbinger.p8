@@ -35,24 +35,27 @@ ideas for later:
 
 --]]
 
-x=0
-y=0
+hero = {
+	x=0,
+	y=0,
+	hp=3,
+	dx=1,
+	dy=1,
+	vx=0,
+	vy=0,
+	maxv=2,
+	maxv1=1,
+	maxv2=2,
+	movv=0.5,
+	moving=false,
+	blinkmode=0,
+	invincible=false,
+}
+
 items={}
-hp=3
 debug=true
 heartanim=0
 t=0
-dx=1
-dy=1
-moving=false
-vx=0
-vy=0
-maxv=2
-maxv1=1
-maxv2=2
-movv=0.5
-blinkmode=0
-invincible=false
 shot=nil
 
 
@@ -69,8 +72,8 @@ function get_initial()
 	 	if s == 1 then
 	 		local rs = mget(x1+1,y1)
 	 	 mset(x1,y1,rs)
-	 		x = x1 * 8
-	 		y = y1 * 8
+	 		hero.x = x1 * 8
+	 		hero.y = y1 * 8
 	 		return
 	 	end
 	 end
@@ -136,8 +139,8 @@ end
 -- draw
 
 function _draw()
-	local mx = mid(0, x-60, (128-16)*8)
-	local my = mid(-8, y-60, (64 -16)*8)
+	local mx = mid(0, hero.x-60, (128-16)*8)
+	local my = mid(-8, hero.y-60, (64 -16)*8)
 	camera(mx,my)
 	
 	cls(3)
@@ -164,10 +167,10 @@ end
 function drawbanner()
 	color(0)
 	rectfill(0,0,127,7)
-	for i = 1,hp do
+	for i = 1,hero.hp do
 	 local s = 10
 	 local p = false
-	 if heartanim>0 and i==hp then
+	 if heartanim>0 and i==hero.hp then
 	  pal(8, 2)
 	  p = true
 	  if heartanim % 2 == 0 then
@@ -182,35 +185,30 @@ end
 function drawguy()
  local fl=false
 	local s = 1
-	if (dx==-1) fl=true
+	if (hero.dx==-1) fl=true
 
-	if moving then
+	if hero.moving then
 		s=32
-		if (dy==-1) s=48
+		if (hero.dy==-1) s=48
 		if (t%15<8) s+=1
 	else
-		if (dy==-1) s=17
+		if (hero.dy==-1) s=17
 	end	
 	
-	if blinkdmode==0 and not invincible then
-	elseif invincible then
-	else
-	end
-
-	if invincible then
+	if hero.invincible then
 	 if t % 15 < 5 then
    for i=1,15 do
 		 	pal(i,(i+3)%3+10)
    end
 		end
-		spr(s,x,y,1,1,fl)
+		spr(s,hero.x,hero.y,1,1,fl)
 		pal()
-	elseif blinkmode > 0 then
+	elseif hero.blinkmode > 0 then
 	 if t % 3 < 1 then
-			spr(s,x,y,1,1,fl)
+			spr(s,hero.x,hero.y,1,1,fl)
 		end
 	else
-		spr(s,x,y,1,1,fl)
+		spr(s,hero.x,hero.y,1,1,fl)
 	end
 end
 
@@ -225,17 +223,17 @@ function _update()
  moveenemies()
  docollide()
  
- maxv=maxv1
+ hero.maxv=hero.maxv1
  if btn(❎) then
-  maxv=maxv2
+  hero.maxv=hero.maxv2
  end
  
  if btnp(🅾️) then
  	shot = {
- 	 x=x,
- 	 y=y,
- 	 dx=dx,
- 	 dy=dy,
+ 	 x=hero.x,
+ 	 y=hero.y,
+ 	 dx=hero.dx,
+ 	 dy=hero.dy,
  	 t=30,
  	}
  end
@@ -255,10 +253,10 @@ function _update()
 		end
  end
  
- if blinkmode > 0 then
-  blinkmode -= 1
-  if blinkmode==0 and invincible then
-  	invincible=false
+ if hero.blinkmode > 0 then
+  hero.blinkmode -= 1
+  if hero.blinkmode==0 and hero.invincible then
+  	hero.invincible=false
   	music()
   end
  end
@@ -308,42 +306,42 @@ function handlecontrols()
 end
 
 function handlemoving()
-	moving=false
+	hero.moving=false
 	
 	if btn(⬆️) or btn(⬇️) or
 	   btn(⬅️) or btn(➡️) then
-		if     btn(⬅️) then	dx=-1
-		elseif btn(➡️) then	dx=1
-		else                dx=0	end
-		if     btn(⬆️) then	dy=-1
-		elseif btn(⬇️) then	dy=1
-		else                dy=0	end
+		if     btn(⬅️) then	hero.dx=-1
+		elseif btn(➡️) then	hero.dx=1
+		else                hero.dx=0	end
+		if     btn(⬆️) then	hero.dy=-1
+		elseif btn(⬇️) then	hero.dy=1
+		else                hero.dy=0	end
 	end
 	
 	if btn(⬅️) then
-	 vx -= movv
-	 if (vx<-maxv) vx=-maxv
+	 hero.vx -= hero.movv
+	 if (hero.vx<-hero.maxv) hero.vx=-hero.maxv
 	elseif btn(➡️) then
-	 vx += movv
-	 if (vx>maxv) vx=maxv
+	 hero.vx += hero.movv
+	 if (hero.vx>hero.maxv) hero.vx=hero.maxv
 	else
-	 if vx != 0 then
-		 vx -= movv * sgn(vx)
+	 if hero.vx != 0 then
+		 hero.vx -= hero.movv * sgn(hero.vx)
 	 end
 	end
 
-	if vx < 0 then
+	if hero.vx < 0 then
 	 local canskirt =
 	  not btn(⬆️) and not btn(⬇️)
-	 for i = 1,ceil(-vx) do
+	 for i = 1,ceil(-hero.vx) do
 		 local s1 = sprat(-1,0)
 		 local s2 = sprat(-1,7)
 		 trymove(s1,s2,-1,0,canskirt)
 		end
-	elseif vx > 0 then
+	elseif hero.vx > 0 then
 	 local canskirt =
 	  not btn(⬆️) and not btn(⬇️)
-	 for i = 1,flr(vx) do
+	 for i = 1,flr(hero.vx) do
 		 local s1 = sprat(8,0)
 		 local s2 = sprat(8,7)
 		 trymove(s1,s2,1,0,canskirt)
@@ -351,29 +349,29 @@ function handlemoving()
 	end
 	
 	if btn(⬆️) then
-	 vy -= movv
-	 if (vy<-maxv) vy=-maxv
+	 hero.vy -= hero.movv
+	 if (hero.vy<-hero.maxv) hero.vy=-hero.maxv
 	elseif btn(⬇️) then
-	 vy += movv
-	 if (vy>maxv) vy=maxv
+	 hero.vy += hero.movv
+	 if (hero.vy>hero.maxv) hero.vy=hero.maxv
 	else
-	 if vy != 0 then
-		 vy -= movv * sgn(vy)
+	 if hero.vy != 0 then
+		 hero.vy -= hero.movv * sgn(hero.vy)
 	 end
  end
  
- if vy < 0 then
+ if hero.vy < 0 then
 	 local canskirt =
 	  not btn(⬅️) and not btn(➡️)
-  for i = 1, ceil(-vy) do
+  for i = 1, ceil(-hero.vy) do
 		 local s1 = sprat(0,-1)
 	  local s2 = sprat(7,-1)
 		 trymove(s1,s2,0,-1,canskirt)
 		end
- elseif vy > 0 then
+ elseif hero.vy > 0 then
 	 local canskirt =
 	  not btn(⬅️) and not btn(➡️)
-  for i = 1, flr(vy) do
+  for i = 1, flr(hero.vy) do
 		 local s1 = sprat(0,8)
 	  local s2 = sprat(7,8)
 		 trymove(s1,s2,0,1,canskirt)
@@ -391,24 +389,24 @@ function trymove(s1,s2,x1,y1,canskirt)
  
  if air(s1) and air(s2) then
   moved = true
-  x += x1
-  y += y1
+  hero.x += x1
+  hero.y += y1
  elseif canskirt then
 	 if air(s1) then
 	 	moved=true
-	 	if x1==0 then x-=1
-	 	elseif y1==0 then y-=1
+	 	if x1==0 then hero.x-=1
+	 	elseif y1==0 then hero.y-=1
 	 	end
 	 elseif air(s2) then
 	 	moved=true
-	 	if x1==0 then x+=1
-	 	elseif y1==0 then y+=1
+	 	if x1==0 then hero.x+=1
+	 	elseif y1==0 then hero.y+=1
 	 	end
 	 end
 	end
  
  if moved then
-  moving=true
+  hero.moving=true
  end
 end
 
@@ -424,16 +422,16 @@ function getitem()
   local x2 = item.x+4
   local y2 = item.y+4
 
-  if x>=x1 and x<=x2 and
-     y>=y1 and y<=y2 then
+  if hero.x>=x1 and hero.x<=x2 and
+     hero.y>=y1 and hero.y<=y2 then
    return item, i
   end
  end
 end
 
 function sprat(x1,y1)
- local tx = flr((x+x1) / 8)
- local ty = flr((y+y1) / 8)
+ local tx = flr((hero.x+x1) / 8)
+ local ty = flr((hero.y+y1) / 8)
  return mget(tx,ty)
 end
 
@@ -469,18 +467,18 @@ function docollide()
 	local f, fi = getitem()
 	if f then
 		if f.t == 'heart' then
-		 hp += 1
+		 hero.hp += 1
 		 del(items, f)
 		 sfx(0)
 		 heartanim=7
 		elseif f.t == 'powerup' then
 		 music(1)
-		 blinkmode = 400
-		 invincible=true
+		 hero.blinkmode = 400
+		 hero.invincible=true
 		 del(items, f)
 		 sfx(0)
 		elseif f.t == 'portal' then
-			if blinkmode==0 then
+			if hero.blinkmode==0 then
 				local i = fi
 				local nxt
 				repeat
@@ -507,8 +505,8 @@ function docollide()
 					if (i%5==0)	flip()
 				end
 				
-				x=nxt.x+8
-				y=nxt.y
+				hero.x=nxt.x+8
+				hero.y=nxt.y
 				
 				for i=1,90 do
 					_draw()
@@ -518,24 +516,24 @@ function docollide()
 					if (i%5==0)	flip()
 				end
 				
-			 blinkmode=30
+			 hero.blinkmode=30
 			end
 		elseif f.t == 'enemy' then
-		 if blinkmode == 0 then
-			 blinkmode=15
-			 hp -= 1
+		 if hero.blinkmode == 0 then
+			 hero.blinkmode=15
+			 hero.hp -= 1
 			 sfx(4)
 			 
 			 local x1 = 0
-			 if(x<f.x-2) x1=-1
-			 if(x>f.x+2) x1=1
+			 if(hero.x<f.x-2) x1=-1
+			 if(hero.x>f.x+2) x1=1
 			 
 			 local y1 = 0
-			 if(y<f.y-2) y1=-1
-			 if(y>f.y+2) y1=1
+			 if(hero.y<f.y-2) y1=-1
+			 if(hero.y>f.y+2) y1=1
 			 
-			 vx = x1*4
-			 vy = y1*4
+			 hero.vx = x1*4
+			 hero.vy = y1*4
 			end
 		end
 	end

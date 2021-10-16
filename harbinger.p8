@@ -563,16 +563,20 @@ function docollide()
 	local f, fi = getitem()
 	if f then
 		if f.t == 'heart' then
-		 hero.hp += 1
-		 del(items, f)
-		 sfx(0)
-		 heartanim=7
+			if not hero.invincible then
+			 hero.hp += 1
+			 del(items, f)
+			 sfx(0)
+			 heartanim=7
+			end
 		elseif f.t == 'powerup' then
-		 music(1)
-		 hero.blinkmode = 400
-		 hero.invincible=true
-		 del(items, f)
-		 sfx(0)
+			if not hero.invincible then
+			 music(1)
+			 hero.blinkmode = 400
+			 hero.invincible=true
+			 del(items, f)
+			 sfx(0)
+			end
 		elseif f.t == 'portal' then
 			if hero.blinkmode==0 then
 				local i = fi

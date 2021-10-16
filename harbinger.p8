@@ -167,11 +167,11 @@ end
 
 function drawfairie()
 	if fairie then
-	 local x1 = fairie.x+sin(fairie.t/30)*fairie.t
-	 local y1 = fairie.y+cos(fairie.t/20)*fairie.t
+	 local x1 = fairie.x+sin(fairie.t/30)*fairie.t/2
+	 local y1 = fairie.y+cos(fairie.t/20)*fairie.t/2
 		
-	 local x2 = fairie.x+sin(fairie.t/(30*1.1))*fairie.t
-	 local y2 = fairie.y+cos(fairie.t/(20*1.1))*fairie.t
+	 local x2 = fairie.x+sin(fairie.t/(30*1.05))*fairie.t/2
+	 local y2 = fairie.y+cos(fairie.t/(20*1.05))*fairie.t/2
 		
 		for i=1,15 do pal(i,1) end
 		spr(fairie.s+2, x2+1, y2+1)

@@ -145,6 +145,10 @@ function _draw()
 	 local s = items[i]
 	 local sp = s.s1
 	 if time() % 1 < .5 then sp=s.s2 end
+	 
+	 for i=1,15 do pal(i,1) end
+	 spr(sp, s.x+1, s.y+1)
+	 pal()
 	 spr(sp, s.x, s.y)
 	end
 	

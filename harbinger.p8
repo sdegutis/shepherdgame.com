@@ -217,7 +217,7 @@ function _drawguy(shadow)
 	if shadow then
 		for i=1,15 do pal(i,1) end
 		local j = 1
-		spr(s,hero.x-j,hero.y+j,1,1,fl)
+		spr(s,hero.x+j,hero.y+j,1,1,fl)
 		pal()
 	else
 		if hero.invincible then

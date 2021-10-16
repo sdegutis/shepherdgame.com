@@ -229,18 +229,27 @@ function drawmessage()
 	
 	local w = x2-x1-4
 	local h = 8
-	local lines = ceil(#message*4 / w)
+	local lines = {""}
+	local words = split(message," ")
 	
-	local y2=y1+(h*lines)+2
+	for i=1,#words do
+	 local word = words[i]
+	 local newline = lines[#lines] .. " " .. word
+	 if #newline * 4 <= w then
+	  lines[#lines] = newline
+	 else
+	 	add(lines, word)
+	 end
+	end
+	lines[1] = sub(lines[1], 2)
+	
+	local y2=y1+(h*#lines)+2
 	
 	rectfill(x1,y1,x2,y2,1)
 	rect(x1,y1,x2,y2,6)
 	
-	local m = message
-	for i=1,lines do
-	 local idx = flr(w/4)
-		local msg = sub(m, 0, idx)
-		m = sub(m, idx+1)
+	for i=1,#lines do
+	 local msg = lines[i]
 		local y = h*(i-1)
 		print(msg,x1+3,y1+3+y,7)
 	end

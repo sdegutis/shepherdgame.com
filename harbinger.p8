@@ -161,6 +161,10 @@ function _draw()
 	 local x2 = fairie.x+sin(fairie.t/(30*1.1))*10
 	 local y2 = fairie.y+cos(fairie.t/(20*1.1))*10
 		
+		for i=1,15 do pal(i,1) end
+		spr(fairie.s+2, x2+1, y2+1)
+		spr(fairie.s, x1+1, y1+1)
+		pal()
 		spr(fairie.s+2, x2, y2)
 		spr(fairie.s, x1, y1)
 	end

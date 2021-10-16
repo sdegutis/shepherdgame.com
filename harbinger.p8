@@ -57,6 +57,12 @@ t=0
 shot=nil
 
 message = nil
+signs = {
+ {14,7,'hai how are you doing sarah girl?'},
+ {11,11,'hi'},
+ {23,10,'this is a super long message with lots of really long words and things'},
+ {21,22,'😐 < wanted: link the wanted soldier!'},
+}
 
 function _init()
 	get_initial()
@@ -456,16 +462,15 @@ function trymove(s1,s2,x,y,canskirt)
  local gotsign = onsign()
  if gotsign then
  	local sx, sy =
- 	gotsign[1], gotsign[2]
-  if sx == 14 and sy == 7 then
-	  message = 'hai how are you doing sarah girl?'
-  elseif sx == 11 and sy == 11 then
-	  message = 'hi'
-  elseif sx == 23 and sy == 10 then
-	  message = 'this is a super long message with lots of really long words and things'
-  elseif sx == 21 and sy == 22 then
-	  message = '😐 < wanted: link the wanted soldier!'
-	 end
+ 		gotsign[1], gotsign[2]
+ 	
+ 	for i = 1,#signs do
+ 		local x1,y1,msg = unpack(signs[i])
+ 		if sx==x1 and sy==y1 then
+ 			message = msg
+	 		break
+ 		end
+ 	end
  else
  	message = nil
  end
@@ -532,10 +537,10 @@ function slowarea()
 end
 
 function onsign()
-	return issign(sprat(0,0))
-	    or issign(sprat(7,0))
-	    or issign(sprat(0,7))
-	    or issign(sprat(7,7))
+	return issign(sprat(3,3))
+	    or issign(sprat(4,3))
+	    or issign(sprat(3,4))
+	    or issign(sprat(4,4))
 end
 
 function issign(s, x, y)

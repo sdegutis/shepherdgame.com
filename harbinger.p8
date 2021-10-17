@@ -433,6 +433,7 @@ function handlecontrols()
  
  if btnp(🅾️) and shot==nil then
  	shot = {
+ 		strength=4,
  	 x=hero.x,
  	 y=hero.y,
 			mx=hero.dx,
@@ -554,16 +555,8 @@ function checkshot()
 			end
 		else
 			sfx(12)
-		 local x = 0
-		 if(f.x<shot.x-2) x=-1
-		 if(f.x>shot.x+2) x=1
-		 
-		 local y = 0
-		 if(f.y<shot.y-2) y=-1
-		 if(f.y>shot.y+2) y=1
-		 
-		 f.vx = x*4
-		 f.vy = y*4
+		 f.vx = shot.dx * shot.strength
+		 f.vy = shot.dy * shot.strength
 		end
 		shot=nil
 	end

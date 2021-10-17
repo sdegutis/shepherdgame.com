@@ -410,72 +410,72 @@ function handlecontrols()
 end
 
 function handlemoving(e)
-	hero.moving=false
+	e.moving=false
 	
-	if hero.mx != 0 and
-	   hero.my != 0 then
-	 hero.dx = hero.mx
-	 hero.dy = hero.my
+	if e.mx != 0 and
+	   e.my != 0 then
+	 e.dx = e.mx
+	 e.dy = e.my
 	end
 	
-	if hero.mx < 0 then
-	 hero.vx -= hero.movv
-	 if (hero.vx<-hero.maxv) hero.vx=-hero.maxv
-	elseif hero.mx > 0 then
-	 hero.vx += hero.movv
-	 if (hero.vx>hero.maxv) hero.vx=hero.maxv
+	if e.mx < 0 then
+	 e.vx -= e.movv
+	 if (e.vx<-e.maxv) e.vx=-e.maxv
+	elseif e.mx > 0 then
+	 e.vx += e.movv
+	 if (e.vx>e.maxv) e.vx=e.maxv
 	else
-	 if hero.vx != 0 then
-		 hero.vx -= hero.movv * sgn(hero.vx)
+	 if e.vx != 0 then
+		 e.vx -= e.movv * sgn(e.vx)
 	 end
 	end
 
-	if hero.vx < 0 then
-	 local canskirt = hero.my==0
-	 for i = 1,ceil(-hero.vx) do
+	if e.vx < 0 then
+	 local canskirt = e.my==0
+	 for i = 1,ceil(-e.vx) do
 		 local s1 = sprat(-1,0)
 		 local s2 = sprat(-1,7)
-		 trymove(s1,s2,-1,0,canskirt)
+		 trymove(e,s1,s2,-1,0,canskirt)
 		end
-	elseif hero.vx > 0 then
-	 local canskirt = hero.my==0
-	 for i = 1,flr(hero.vx) do
+	elseif e.vx > 0 then
+	 local canskirt = e.my==0
+	 for i = 1,flr(e.vx) do
 		 local s1 = sprat(8,0)
 		 local s2 = sprat(8,7)
-		 trymove(s1,s2,1,0,canskirt)
+		 trymove(e,s1,s2,1,0,canskirt)
 		end
 	end
 	
-	if hero.my < 0 then
-	 hero.vy -= hero.movv
-	 if (hero.vy<-hero.maxv) hero.vy=-hero.maxv
-	elseif hero.my > 0 then
-	 hero.vy += hero.movv
-	 if (hero.vy>hero.maxv) hero.vy=hero.maxv
+	if e.my < 0 then
+	 e.vy -= e.movv
+	 if (e.vy<-e.maxv) e.vy=-e.maxv
+	elseif e.my > 0 then
+	 e.vy += e.movv
+	 if (e.vy>e.maxv) e.vy=e.maxv
 	else
-	 if hero.vy != 0 then
-		 hero.vy -= hero.movv * sgn(hero.vy)
+	 if e.vy != 0 then
+		 e.vy -= e.movv * sgn(e.vy)
 	 end
  end
  
- if hero.vy < 0 then
-	 local canskirt = hero.mx==0
-  for i = 1, ceil(-hero.vy) do
+ if e.vy < 0 then
+	 local canskirt = e.mx==0
+  for i = 1, ceil(-e.vy) do
 		 local s1 = sprat(0,-1)
 	  local s2 = sprat(7,-1)
-		 trymove(s1,s2,0,-1,canskirt)
+		 trymove(e,s1,s2,0,-1,canskirt)
 		end
- elseif hero.vy > 0 then
-	 local canskirt = hero.mx==0
-  for i = 1, flr(hero.vy) do
+ elseif e.vy > 0 then
+	 local canskirt = e.mx==0
+  for i = 1, flr(e.vy) do
 		 local s1 = sprat(0,8)
 	  local s2 = sprat(7,8)
-		 trymove(s1,s2,0,1,canskirt)
+		 trymove(e,s1,s2,0,1,canskirt)
 		end
  end
 end
 
-function trymove(s1,s2,x,y,canskirt)
+function trymove(e,s1,s2,x,y,canskirt)
  local moved = false
  
  if slowarea() then

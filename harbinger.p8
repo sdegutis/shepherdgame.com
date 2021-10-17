@@ -409,131 +409,6 @@ function handlecontrols()
 	else                hero.my=0	end
 end
 
-function handlemoving(e)
-	e.moving=false
-	
-	if e.mx != 0 and
-	   e.my != 0 then
-	 e.dx = e.mx
-	 e.dy = e.my
-	end
-	
-	if e.mx < 0 then
-	 e.vx -= e.movv
-	 if (e.vx<-e.maxv) e.vx=-e.maxv
-	elseif e.mx > 0 then
-	 e.vx += e.movv
-	 if (e.vx>e.maxv) e.vx=e.maxv
-	else
-	 if e.vx != 0 then
-		 e.vx -= e.movv * sgn(e.vx)
-	 end
-	end
-
-	if e.vx < 0 then
-	 local canskirt = e.my==0
-	 for i = 1,ceil(-e.vx) do
-		 local s1 = sprat(-1,0)
-		 local s2 = sprat(-1,7)
-		 trymove(e,s1,s2,-1,0,canskirt)
-		end
-	elseif e.vx > 0 then
-	 local canskirt = e.my==0
-	 for i = 1,flr(e.vx) do
-		 local s1 = sprat(8,0)
-		 local s2 = sprat(8,7)
-		 trymove(e,s1,s2,1,0,canskirt)
-		end
-	end
-	
-	if e.my < 0 then
-	 e.vy -= e.movv
-	 if (e.vy<-e.maxv) e.vy=-e.maxv
-	elseif e.my > 0 then
-	 e.vy += e.movv
-	 if (e.vy>e.maxv) e.vy=e.maxv
-	else
-	 if e.vy != 0 then
-		 e.vy -= e.movv * sgn(e.vy)
-	 end
- end
- 
- if e.vy < 0 then
-	 local canskirt = e.mx==0
-  for i = 1, ceil(-e.vy) do
-		 local s1 = sprat(0,-1)
-	  local s2 = sprat(7,-1)
-		 trymove(e,s1,s2,0,-1,canskirt)
-		end
- elseif e.vy > 0 then
-	 local canskirt = e.mx==0
-  for i = 1, flr(e.vy) do
-		 local s1 = sprat(0,8)
-	  local s2 = sprat(7,8)
-		 trymove(e,s1,s2,0,1,canskirt)
-		end
- end
-end
-
-function trymove(e,s1,s2,x,y,canskirt)
- local moved = false
- 
- if slowarea(e) then
- 	x/=2
- 	y/=2
- end
- 
- if e==hero then
-	 if hero.boat and notwater() then
-			hero.boat=false
-		 add(items,{
-	   x=hero.x,
-	   y=hero.y+1,
-	   t='boat',
-	   s1=57,
-	   s2=58,
-	  })
-	  hero.blinkmode=15
-	 end
-	 
-	 local gotsign = onsign()
-	 if gotsign then
-	 	local sx, sy =
-	 		gotsign[1], gotsign[2]
-	 	
-	 	for i = 1,#signs do
-	 		local x1,y1,msg = unpack(signs[i])
-	 		if sx==x1 and sy==y1 then
-	 			message = msg
-		 		break
-	 		end
-	 	end
-	 else
-	 	message = nil
-	 end
- end
- 
- if e.boat or air(s1) and air(s2) then
-  moved = true
-  e.x += x
-  e.y += y
- elseif canskirt then
-	 if air(s1) then
-	 	moved=true
-	 	if     x==0 then e.x-=1
-	 	elseif y==0 then e.y-=1	end
-	 elseif air(s2) then
-	 	moved=true
-	 	if     x==0 then e.x+=1
-	 	elseif y==0 then e.y+=1	end
-	 end
-	end
- 
- if moved then
-  e.moving=true
- end
-end
-
 -->8
 -- util
 
@@ -753,6 +628,130 @@ end
 -->8
 -- moving
 
+function handlemoving(e)
+	e.moving=false
+	
+	if e.mx != 0 and
+	   e.my != 0 then
+	 e.dx = e.mx
+	 e.dy = e.my
+	end
+	
+	if e.mx < 0 then
+	 e.vx -= e.movv
+	 if (e.vx<-e.maxv) e.vx=-e.maxv
+	elseif e.mx > 0 then
+	 e.vx += e.movv
+	 if (e.vx>e.maxv) e.vx=e.maxv
+	else
+	 if e.vx != 0 then
+		 e.vx -= e.movv * sgn(e.vx)
+	 end
+	end
+
+	if e.vx < 0 then
+	 local canskirt = e.my==0
+	 for i = 1,ceil(-e.vx) do
+		 local s1 = sprat(-1,0)
+		 local s2 = sprat(-1,7)
+		 trymove(e,s1,s2,-1,0,canskirt)
+		end
+	elseif e.vx > 0 then
+	 local canskirt = e.my==0
+	 for i = 1,flr(e.vx) do
+		 local s1 = sprat(8,0)
+		 local s2 = sprat(8,7)
+		 trymove(e,s1,s2,1,0,canskirt)
+		end
+	end
+	
+	if e.my < 0 then
+	 e.vy -= e.movv
+	 if (e.vy<-e.maxv) e.vy=-e.maxv
+	elseif e.my > 0 then
+	 e.vy += e.movv
+	 if (e.vy>e.maxv) e.vy=e.maxv
+	else
+	 if e.vy != 0 then
+		 e.vy -= e.movv * sgn(e.vy)
+	 end
+ end
+ 
+ if e.vy < 0 then
+	 local canskirt = e.mx==0
+  for i = 1, ceil(-e.vy) do
+		 local s1 = sprat(0,-1)
+	  local s2 = sprat(7,-1)
+		 trymove(e,s1,s2,0,-1,canskirt)
+		end
+ elseif e.vy > 0 then
+	 local canskirt = e.mx==0
+  for i = 1, flr(e.vy) do
+		 local s1 = sprat(0,8)
+	  local s2 = sprat(7,8)
+		 trymove(e,s1,s2,0,1,canskirt)
+		end
+ end
+end
+
+function trymove(e,s1,s2,x,y,canskirt)
+ local moved = false
+ 
+ if slowarea(e) then
+ 	x/=2
+ 	y/=2
+ end
+ 
+ if e==hero then
+	 if hero.boat and notwater() then
+			hero.boat=false
+		 add(items,{
+	   x=hero.x,
+	   y=hero.y+1,
+	   t='boat',
+	   s1=57,
+	   s2=58,
+	  })
+	  hero.blinkmode=15
+	 end
+	 
+	 local gotsign = onsign()
+	 if gotsign then
+	 	local sx, sy =
+	 		gotsign[1], gotsign[2]
+	 	
+	 	for i = 1,#signs do
+	 		local x1,y1,msg = unpack(signs[i])
+	 		if sx==x1 and sy==y1 then
+	 			message = msg
+		 		break
+	 		end
+	 	end
+	 else
+	 	message = nil
+	 end
+ end
+ 
+ if e.boat or air(s1) and air(s2) then
+  moved = true
+  e.x += x
+  e.y += y
+ elseif canskirt then
+	 if air(s1) then
+	 	moved=true
+	 	if     x==0 then e.x-=1
+	 	elseif y==0 then e.y-=1	end
+	 elseif air(s2) then
+	 	moved=true
+	 	if     x==0 then e.x+=1
+	 	elseif y==0 then e.y+=1	end
+	 end
+	end
+ 
+ if moved then
+  e.moving=true
+ end
+end
 
 __gfx__
 0000000000888800666666610000000076600000222222225555555500bab00000000000088008800000000000000000000bb0000000b0005555555500000000

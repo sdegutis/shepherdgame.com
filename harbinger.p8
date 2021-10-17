@@ -114,10 +114,8 @@ function load_items()
 					dy=1,
 					vx=0,
 					vy=0,
-					maxv=1,
-					maxv1=1,
-					maxv2=2,
-					movv=0.5,
+					maxv=3,
+					movv=1,
 	 	  t='enemy',
 	 	  s1=s,
 	 	  s2=s+1,
@@ -369,7 +367,7 @@ function moveenemies()
 					e.my=-1
 					if (rnd()<0.5) e.my=1
 				end
-			elseif t == 15 then
+			elseif t == 5 then
 				e.mx=0
 				e.my=0
 			end

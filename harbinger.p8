@@ -41,7 +41,7 @@ hero = {
 	dy=1,
 	vx=0,
 	vy=0,
-	maxv=2,
+	maxv=1,
 	maxv1=1,
 	maxv2=2,
 	movv=0.5,
@@ -114,7 +114,7 @@ function load_items()
 					dy=1,
 					vx=0,
 					vy=0,
-					maxv=2,
+					maxv=1,
 					maxv1=1,
 					maxv2=2,
 					movv=0.5,
@@ -422,7 +422,6 @@ function getitem()
 end
 
 function sprat(x,y,e)
- if e==nil then e=hero end
  local tx = flr((e.x+x) / 8)
  local ty = flr((e.y+y) / 8)
  return mget(tx,ty), tx, ty
@@ -442,17 +441,17 @@ function slowarea(e)
 end
 
 function notwater()
-	return not water(sprat(0,0))
-	   and not water(sprat(7,0))
-	   and not water(sprat(0,7))
-	   and not water(sprat(7,7))
+	return not water(sprat(0,0,hero))
+	   and not water(sprat(7,0,hero))
+	   and not water(sprat(0,7,hero))
+	   and not water(sprat(7,7,hero))
 end
 
 function onsign()
-	return issign(sprat(3,3))
-	    or issign(sprat(4,3))
-	    or issign(sprat(3,4))
-	    or issign(sprat(4,4))
+	return issign(sprat(3,3,hero))
+	    or issign(sprat(4,3,hero))
+	    or issign(sprat(3,4,hero))
+	    or issign(sprat(4,4,hero))
 end
 
 function issign(s, x, y)
@@ -645,15 +644,15 @@ function handlemoving(e)
 	if e.vx < 0 then
 	 local canskirt = e.my==0
 	 for i = 1,ceil(-e.vx) do
-		 local s1 = sprat(-1,0)
-		 local s2 = sprat(-1,7)
+		 local s1 = sprat(-1,0,e)
+		 local s2 = sprat(-1,7,e)
 		 trymove(e,s1,s2,-1,0,canskirt)
 		end
 	elseif e.vx > 0 then
 	 local canskirt = e.my==0
 	 for i = 1,flr(e.vx) do
-		 local s1 = sprat(8,0)
-		 local s2 = sprat(8,7)
+		 local s1 = sprat(8,0,e)
+		 local s2 = sprat(8,7,e)
 		 trymove(e,s1,s2,1,0,canskirt)
 		end
 	end
@@ -673,15 +672,15 @@ function handlemoving(e)
  if e.vy < 0 then
 	 local canskirt = e.mx==0
   for i = 1, ceil(-e.vy) do
-		 local s1 = sprat(0,-1)
-	  local s2 = sprat(7,-1)
+		 local s1 = sprat(0,-1,e)
+	  local s2 = sprat(7,-1,e)
 		 trymove(e,s1,s2,0,-1,canskirt)
 		end
  elseif e.vy > 0 then
 	 local canskirt = e.mx==0
   for i = 1, flr(e.vy) do
-		 local s1 = sprat(0,8)
-	  local s2 = sprat(7,8)
+		 local s1 = sprat(0,8,e)
+	  local s2 = sprat(7,8,e)
 		 trymove(e,s1,s2,0,1,canskirt)
 		end
  end

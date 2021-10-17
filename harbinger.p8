@@ -446,6 +446,9 @@ function handlecontrols()
 			movv=2,
  	 t=10,
  	}
+ 	if hero.invincible then
+ 		shot.strength = 8
+ 	end
  end
  
  if     btn(⬅️) then	hero.mx=-1

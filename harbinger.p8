@@ -108,8 +108,16 @@ function load_items()
 	 	 add(items,{
 	 	  x=x*8,
 	 	  y=y*8,
-	 	  dx=0,
-	 	  dy=0,
+					mx=0,
+					my=0,
+					dx=0,
+					dy=1,
+					vx=0,
+					vy=0,
+					maxv=2,
+					maxv1=1,
+					maxv2=2,
+					movv=0.5,
 	 	  t='enemy',
 	 	  s1=s,
 	 	  s2=s+1,
@@ -346,43 +354,28 @@ function _update()
  end
 end
 
-function pick_enemy_dir(e)
-	repeat
-	 local s = 1
-	 if rnd() < .5 then s=-1 end
-	 if rnd() < .5 then
-	  e.dx=s
-	  e.dy=0
-	 else
-	  e.dx=0
-	  e.dy=s
-	 end
-	until notsolidat(e.x + e.dx*8,
-	                 e.y + e.dy*8)
-end
-
-function notsolidat(x,y)
- local s = _sprat(x,y)
- return air(s)
-end
-
 function moveenemies()
-	if t == 0 then
-	 for i = 1, #items do
-	  local e = items[i]
-	  if e.t == 'enemy' then
-	   pick_enemy_dir(e)
-	  end
-	 end
-	elseif t > 29-8 then
-	 for i = 1, #items do
-	  local e = items[i]
-	  if e.t == 'enemy' then
-	   e.x += e.dx
-	   e.y += e.dy
-	  end
-	 end
- end
+	for i=1,#items do
+		local e = items[i]
+		if e.t == 'enemy' then
+			if t == 0 then
+				-- pick direction
+				e.mx=0
+				e.my=0
+				if rnd() < .5 then
+					e.mx=-1
+					if (rnd()<0.5) e.mx=1
+				else
+					e.my=-1
+					if (rnd()<0.5) e.my=1
+				end
+			elseif t == 15 then
+				e.mx=0
+				e.my=0
+			end
+			handlemoving(e)
+		end
+	end
 end
 
 function handlecontrols()

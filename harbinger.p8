@@ -405,7 +405,7 @@ end
 -->8
 -- util
 
-function getitem()
+function getitem(e)
  for i = 1, #items do
   local item = items[i]
 
@@ -414,8 +414,8 @@ function getitem()
   local x2 = item.x+4
   local y2 = item.y+4
 
-  if hero.x>=x1 and hero.x<=x2 and
-     hero.y>=y1 and hero.y<=y2 then
+  if e.x>=x1 and e.x<=x2 and
+     e.y>=y1 and e.y<=y2 then
    return item, i
   end
  end
@@ -425,12 +425,6 @@ function sprat(x,y,e)
  local tx = flr((e.x+x) / 8)
  local ty = flr((e.y+y) / 8)
  return mget(tx,ty), tx, ty
-end
-
-function _sprat(x,y)
- local tx = flr(x / 8)
- local ty = flr(y / 8)
- return mget(tx,ty)
 end
 
 function slowarea(e)
@@ -481,7 +475,7 @@ end
 -- collide
 
 function docollide()
-	local f, fi = getitem()
+	local f, fi = getitem(hero)
 	if f then
 		if f.t == 'heart' then
 			if not hero.invincible then

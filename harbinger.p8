@@ -593,45 +593,50 @@ function docollide()
 			 del(items, f)
 			end
 		elseif f.t == 'portal' then
-			if hero.blinkmode==0 then
-				local i = fi
-				local nxt
-				repeat
-					i+=1
-					if (i > #items) i = 1
-					nxt=items[i]
-				until nxt.t=='portal'
-				
-				sfx(5)
-				
-				--[[
-				for i=0,3 do
-					for j=1,4 do
-						pal(i*4+j,0)
+			if hero.keys < 1 then
+				message = "sorry, you need a key to go here"
+			else
+				hero.keys -= 1
+				if hero.blinkmode==0 then
+					local i = fi
+					local nxt
+					repeat
+						i+=1
+						if (i > #items) i = 1
+						nxt=items[i]
+					until nxt.t=='portal'
+					
+					sfx(5)
+					
+					--[[
+					for i=0,3 do
+						for j=1,4 do
+							pal(i*4+j,0)
+							_draw()
+							flip()
+						end
+					end
+					pal()
+					--]]
+					
+					for i=1,90 do
+						circ(64,64,90-i,1)
+						if (i%5==0)	flip()
+					end
+					
+					hero.x=nxt.x+8
+					hero.y=nxt.y
+					
+					for i=1,90 do
 						_draw()
-						flip()
+						for j=i,90 do
+							circ(64,64,j,1)
+						end
+						if (i%5==0)	flip()
 					end
+					
+				 hero.blinkmode=30
 				end
-				pal()
-				--]]
-				
-				for i=1,90 do
-					circ(64,64,90-i,1)
-					if (i%5==0)	flip()
-				end
-				
-				hero.x=nxt.x+8
-				hero.y=nxt.y
-				
-				for i=1,90 do
-					_draw()
-					for j=i,90 do
-						circ(64,64,j,1)
-					end
-					if (i%5==0)	flip()
-				end
-				
-			 hero.blinkmode=30
 			end
 		elseif f.t == 'enemy' then
 		 if hero.blinkmode == 0 then

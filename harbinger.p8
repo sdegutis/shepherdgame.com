@@ -35,6 +35,8 @@ hero = {
 	hp=3,
 	x=0,
 	y=0,
+	mx=0,
+	my=0,
 	dx=0,
 	dy=1,
 	vx=0,
@@ -398,26 +400,29 @@ function moveenemies()
 end
 
 function handlecontrols()
- handlemoving()
+	if     btn(⬅️) then	hero.mx=-1
+	elseif btn(➡️) then	hero.mx=1
+	else                hero.mx=0	end
+	if     btn(⬆️) then	hero.my=-1
+	elseif btn(⬇️) then	hero.my=1
+	else                hero.my=0	end
+
+ handlemoving(hero)
 end
 
-function handlemoving()
+function handlemoving(e)
 	hero.moving=false
 	
-	if btn(⬆️) or btn(⬇️) or
-	   btn(⬅️) or btn(➡️) then
-		if     btn(⬅️) then	hero.dx=-1
-		elseif btn(➡️) then	hero.dx=1
-		else                hero.dx=0	end
-		if     btn(⬆️) then	hero.dy=-1
-		elseif btn(⬇️) then	hero.dy=1
-		else                hero.dy=0	end
+	if hero.mx != 0 and
+	   hero.my != 0 then
+	 hero.dx = hero.mx
+	 hero.dy = hero.my
 	end
 	
-	if btn(⬅️) then
+	if hero.mx < 0 then
 	 hero.vx -= hero.movv
 	 if (hero.vx<-hero.maxv) hero.vx=-hero.maxv
-	elseif btn(➡️) then
+	elseif hero.mx > 0 then
 	 hero.vx += hero.movv
 	 if (hero.vx>hero.maxv) hero.vx=hero.maxv
 	else
@@ -427,16 +432,14 @@ function handlemoving()
 	end
 
 	if hero.vx < 0 then
-	 local canskirt =
-	  not btn(⬆️) and not btn(⬇️)
+	 local canskirt = hero.my==0
 	 for i = 1,ceil(-hero.vx) do
 		 local s1 = sprat(-1,0)
 		 local s2 = sprat(-1,7)
 		 trymove(s1,s2,-1,0,canskirt)
 		end
 	elseif hero.vx > 0 then
-	 local canskirt =
-	  not btn(⬆️) and not btn(⬇️)
+	 local canskirt = hero.my==0
 	 for i = 1,flr(hero.vx) do
 		 local s1 = sprat(8,0)
 		 local s2 = sprat(8,7)
@@ -444,10 +447,10 @@ function handlemoving()
 		end
 	end
 	
-	if btn(⬆️) then
+	if hero.my < 0 then
 	 hero.vy -= hero.movv
 	 if (hero.vy<-hero.maxv) hero.vy=-hero.maxv
-	elseif btn(⬇️) then
+	elseif hero.my > 0 then
 	 hero.vy += hero.movv
 	 if (hero.vy>hero.maxv) hero.vy=hero.maxv
 	else
@@ -457,16 +460,14 @@ function handlemoving()
  end
  
  if hero.vy < 0 then
-	 local canskirt =
-	  not btn(⬅️) and not btn(➡️)
+	 local canskirt = hero.mx==0
   for i = 1, ceil(-hero.vy) do
 		 local s1 = sprat(0,-1)
 	  local s2 = sprat(7,-1)
 		 trymove(s1,s2,0,-1,canskirt)
 		end
  elseif hero.vy > 0 then
-	 local canskirt =
-	  not btn(⬅️) and not btn(➡️)
+	 local canskirt = hero.mx==0
   for i = 1, flr(hero.vy) do
 		 local s1 = sprat(0,8)
 	  local s2 = sprat(7,8)
@@ -748,6 +749,10 @@ function docollide()
 		end
 	end
 end
+
+-->8
+-- moving
+
 
 __gfx__
 0000000000888800666666610000000076600000222222225555555500bab00000000000088008800000000000000000000bb0000000b0005555555500000000

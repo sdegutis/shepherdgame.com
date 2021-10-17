@@ -478,59 +478,59 @@ end
 function trymove(e,s1,s2,x,y,canskirt)
  local moved = false
  
- if slowarea() then
+ if slowarea(e) then
  	x/=2
  	y/=2
  end
  
- if hero.boat and notwater() then
-		hero.boat=false
-	 add(items,{
-   x=hero.x,
-   y=hero.y+1,
-   t='boat',
-   s1=57,
-   s2=58,
-  })
-  hero.blinkmode=15
+ if e==hero then
+	 if hero.boat and notwater() then
+			hero.boat=false
+		 add(items,{
+	   x=hero.x,
+	   y=hero.y+1,
+	   t='boat',
+	   s1=57,
+	   s2=58,
+	  })
+	  hero.blinkmode=15
+	 end
+	 
+	 local gotsign = onsign()
+	 if gotsign then
+	 	local sx, sy =
+	 		gotsign[1], gotsign[2]
+	 	
+	 	for i = 1,#signs do
+	 		local x1,y1,msg = unpack(signs[i])
+	 		if sx==x1 and sy==y1 then
+	 			message = msg
+		 		break
+	 		end
+	 	end
+	 else
+	 	message = nil
+	 end
  end
  
- local gotsign = onsign()
- if gotsign then
- 	local sx, sy =
- 		gotsign[1], gotsign[2]
- 	
- 	for i = 1,#signs do
- 		local x1,y1,msg = unpack(signs[i])
- 		if sx==x1 and sy==y1 then
- 			message = msg
-	 		break
- 		end
- 	end
- else
- 	message = nil
- end
- 
- if hero.boat or air(s1) and air(s2) then
+ if e.boat or air(s1) and air(s2) then
   moved = true
-  hero.x += x
-  hero.y += y
+  e.x += x
+  e.y += y
  elseif canskirt then
 	 if air(s1) then
 	 	moved=true
-	 	if x==0 then hero.x-=1
-	 	elseif y==0 then hero.y-=1
-	 	end
+	 	if     x==0 then e.x-=1
+	 	elseif y==0 then e.y-=1	end
 	 elseif air(s2) then
 	 	moved=true
-	 	if x==0 then hero.x+=1
-	 	elseif y==0 then hero.y+=1
-	 	end
+	 	if     x==0 then e.x+=1
+	 	elseif y==0 then e.y+=1	end
 	 end
 	end
  
  if moved then
-  hero.moving=true
+  e.moving=true
  end
 end
 
@@ -553,9 +553,10 @@ function getitem()
  end
 end
 
-function sprat(x,y)
- local tx = flr((hero.x+x) / 8)
- local ty = flr((hero.y+y) / 8)
+function sprat(x,y,e)
+ if e==nil then e=hero end
+ local tx = flr((e.x+x) / 8)
+ local ty = flr((e.y+y) / 8)
  return mget(tx,ty), tx, ty
 end
 
@@ -565,11 +566,11 @@ function _sprat(x,y)
  return mget(tx,ty)
 end
 
-function slowarea()
-	return slow(sprat(0,0))
-	    or slow(sprat(7,0))
-	    or slow(sprat(0,7))
-	    or slow(sprat(7,7))
+function slowarea(e)
+	return slow(sprat(0,0,e))
+	    or slow(sprat(7,0,e))
+	    or slow(sprat(0,7,e))
+	    or slow(sprat(7,7,e))
 end
 
 function notwater()

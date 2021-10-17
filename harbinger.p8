@@ -327,6 +327,7 @@ function _update()
  handlemoving(hero)
  moveenemies()
  docollide()
+ checkshot()
  
  if shot then
  	handlemoving(shot)
@@ -476,6 +477,16 @@ end
 
 -->8
 -- collide
+
+function checkshot()
+	if not shot then return end
+	local f, fi = getitem(shot)
+	if not f then return end
+	if f.t == 'enemy' then
+		del(items, f)
+		shot=nil
+	end
+end
 
 function docollide()
 	local f, fi = getitem(hero)
@@ -638,15 +649,14 @@ function handlemoving(e)
 	 end
 	end
 
+ local canskirt = e.my==0
 	if e.vx < 0 then
-	 local canskirt = e.my==0
 	 for i = 1,ceil(-e.vx) do
 		 local s1 = sprat(-1,0,e)
 		 local s2 = sprat(-1,7,e)
 		 trymove(e,s1,s2,-1,0,canskirt)
 		end
 	elseif e.vx > 0 then
-	 local canskirt = e.my==0
 	 for i = 1,flr(e.vx) do
 		 local s1 = sprat(8,0,e)
 		 local s2 = sprat(8,7,e)
@@ -666,15 +676,14 @@ function handlemoving(e)
 	 end
  end
  
+ local canskirt = e.mx==0
  if e.vy < 0 then
-	 local canskirt = e.mx==0
   for i = 1, ceil(-e.vy) do
 		 local s1 = sprat(0,-1,e)
 	  local s2 = sprat(7,-1,e)
 		 trymove(e,s1,s2,0,-1,canskirt)
 		end
  elseif e.vy > 0 then
-	 local canskirt = e.mx==0
   for i = 1, flr(e.vy) do
 		 local s1 = sprat(0,8,e)
 	  local s2 = sprat(7,8,e)
@@ -725,16 +734,20 @@ function trymove(e,s1,s2,x,y,canskirt)
   moved = true
   e.x += x
   e.y += y
- elseif canskirt then
-	 if air(s1) then
-	 	moved=true
-	 	if     x==0 then e.x-=1
-	 	elseif y==0 then e.y-=1	end
-	 elseif air(s2) then
-	 	moved=true
-	 	if     x==0 then e.x+=1
-	 	elseif y==0 then e.y+=1	end
-	 end
+ else
+ 	if e==shot then
+ 		shot.t=1
+ 	elseif canskirt then
+		 if air(s1) then
+		 	moved=true
+		 	if     x==0 then e.x-=1
+		 	elseif y==0 then e.y-=1	end
+		 elseif air(s2) then
+		 	moved=true
+		 	if     x==0 then e.x+=1
+		 	elseif y==0 then e.y+=1	end
+		 end
+		end
 	end
  
  if moved then

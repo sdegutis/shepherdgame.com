@@ -188,7 +188,7 @@ function _draw()
 	 		local i2=(i-1)*2
 	 		local x1=s.x+i2+1
 	 		local x2=s.x+i2+2
-	 		local y=s.y
+	 		local y=s.y-2
 		 	line(x1,y,x2,y)
 		 end
 	 end

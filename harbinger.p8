@@ -329,8 +329,7 @@ function _update()
  docollide()
  
  if shot then
-  shot.x += shot.dx
-  shot.y += shot.dy
+ 	handlemoving(shot)
   shot.t -= 1
   if shot.t == 0 then
   	shot = nil
@@ -386,8 +385,14 @@ function handlecontrols()
  	shot = {
  	 x=hero.x,
  	 y=hero.y,
+			mx=hero.dx,
+			my=hero.dy,
  	 dx=hero.dx,
  	 dy=hero.dy,
+			vx=0,
+			vy=0,
+			maxv=2,
+			movv=1,
  	 t=30,
  	}
  end

@@ -433,7 +433,7 @@ function handlecontrols()
  
  if btnp(🅾️) and shot==nil then
  	shot = {
- 		strength=4,
+ 		strength=1,
  	 x=hero.x,
  	 y=hero.y,
 			mx=hero.dx,
@@ -447,7 +447,7 @@ function handlecontrols()
  	 t=10,
  	}
  	if hero.invincible then
- 		shot.strength = 8
+ 		shot.strength = 3
  	end
  end
  
@@ -536,7 +536,7 @@ function checkshot()
 	local f, fi = getitem(shot)
 	if not f then return end
 	if f.t == 'enemy' then
-		f.hp -= 1
+		f.hp -= shot.strength
 		if f.hp == 0 then
 			sfx(13)
 			del(items, f)
@@ -558,8 +558,8 @@ function checkshot()
 			end
 		else
 			sfx(12)
-		 f.vx = shot.dx * shot.strength
-		 f.vy = shot.dy * shot.strength
+		 f.vx = shot.dx * shot.strength*4
+		 f.vy = shot.dy * shot.strength*4
 		end
 		shot=nil
 	end

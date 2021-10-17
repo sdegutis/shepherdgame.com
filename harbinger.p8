@@ -318,23 +318,9 @@ function _update()
 	if t == 30 then t = 0 end
 	
 	handlecontrols()
+ handlemoving(hero)
  moveenemies()
  docollide()
- 
- hero.maxv=hero.maxv1
- if btn(❎) then
-  hero.maxv=hero.maxv2
- end
- 
- if btnp(🅾️) then
- 	shot = {
- 	 x=hero.x,
- 	 y=hero.y,
- 	 dx=hero.dx,
- 	 dy=hero.dy,
- 	 t=30,
- 	}
- end
  
  if shot then
   shot.x += shot.dx
@@ -400,14 +386,27 @@ function moveenemies()
 end
 
 function handlecontrols()
-	if     btn(⬅️) then	hero.mx=-1
+ hero.maxv=hero.maxv1
+ if btn(❎) then
+  hero.maxv=hero.maxv2
+ end
+ 
+ if btnp(🅾️) then
+ 	shot = {
+ 	 x=hero.x,
+ 	 y=hero.y,
+ 	 dx=hero.dx,
+ 	 dy=hero.dy,
+ 	 t=30,
+ 	}
+ end
+ 
+ if     btn(⬅️) then	hero.mx=-1
 	elseif btn(➡️) then	hero.mx=1
 	else                hero.mx=0	end
 	if     btn(⬆️) then	hero.my=-1
 	elseif btn(⬇️) then	hero.my=1
 	else                hero.my=0	end
-
- handlemoving(hero)
 end
 
 function handlemoving(e)

@@ -431,7 +431,7 @@ function handlecontrols()
   hero.maxv=hero.maxv2
  end
  
- if btnp(🅾️) then
+ if btnp(🅾️) and shot==nil then
  	shot = {
  	 x=hero.x,
  	 y=hero.y,

@@ -615,7 +615,7 @@ end
 function handlemoving(e)
 	e.moving=false
 	
-	if e.mx != 0 and
+	if e.mx != 0 or
 	   e.my != 0 then
 	 e.dx = e.mx
 	 e.dy = e.my

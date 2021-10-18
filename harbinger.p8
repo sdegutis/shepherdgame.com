@@ -732,8 +732,8 @@ function handlemoving(e)
 		
 		e.t1+=1
 		
-		e.x = e.cx+sin(e.t1/20)*e.t1/3
-		e.y = e.cy+cos(e.t1/20)*e.t1/3
+		e.x = e.cx+sin(e.t1/10)*e.t1/2
+		e.y = e.cy+cos(e.t1/10)*e.t1/2
 		
 		return
 	end

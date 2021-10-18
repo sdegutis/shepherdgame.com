@@ -22,28 +22,61 @@ ideas for later:
   respawn so you don't run out
   of energy for basic needs.
 
+* turn the blue treasure chest
+  into a cape since sarah thinks
+  it looks like one when the guy
+  walks over it.
+  what can it do? maybe fly over
+  solid objects for 400 ticks?
+
 --]]
 
-x=0
-y=0
+hero = {
+	hp=3,
+	strength=1,
+	enemies=0,
+	keys=0,
+	x=0,
+	y=0,
+	mx=0,
+	my=0,
+	dx=0,
+	dy=1,
+	vx=0,
+	vy=0,
+	maxv=1,
+	maxv1=1,
+	maxv2=2,
+	movv=0.5,
+	boat=false,
+	moving=false,
+	blinkmode=0,
+	invincible=false,
+}
+
+key=nil
+fairie=nil
+
 items={}
-hp=3
+anims={}
 debug=true
 heartanim=0
 t=0
-dx=1
-dy=1
-moving=false
-vx=0
-vy=0
-maxv=2
-maxv1=1
-maxv2=2
-movv=0.5
-blinkmode=0
-invincible=false
 shot=nil
 
+message = nil
+signs = {
+ {14,7,'hai how are you doing sarah girl?'},
+ {11,11,'hi'},
+ {23,10,'this is a super long message with lots of really long words and things'},
+ {21,22,'😐 < wanted: link the wanted soldier!'},
+ {105,61,"🐱 castle of fire 🐱"},
+ {123,56,"🐱 destroy the roaming enemies 🐱"},
+ {112,43,"🐱 arsenal 🐱"},
+ {125,38,"🐱 view point 🐱"},
+ {118,44,"🐱 castle garden 🐱"},
+ {79,45,"🐱 hint 🐱 you can go in some walls"},
+}
 
 function _init()
 	get_initial()
@@ -52,14 +85,14 @@ function _init()
 end
 
 function get_initial()
-	for x1 = 0, 127 do
-	 for y1 = 0, 63 do
-	 	local s = mget(x1,y1)
+	for x = 0, 127 do
+	 for y = 0, 63 do
+	 	local s = mget(x,y)
 	 	if s == 1 then
-	 		local rs = mget(x1+1,y1)
-	 	 mset(x1,y1,rs)
-	 		x = x1 * 8
-	 		y = y1 * 8
+	 		local rs = mget(x+1,y)
+	 	 mset(x,y,rs)
+	 		hero.x = x * 8
+	 		hero.y = y * 8
 	 		return
 	 	end
 	 end
@@ -67,40 +100,65 @@ function get_initial()
 end
 
 function load_items()
-	for x1 = 0, 127 do
-	 for y1 = 0, 63 do
-	 	local s = mget(x1,y1)
+	for x = 0, 127 do
+	 for y = 0, 63 do
+	 	local s = mget(x,y)
 	 	if fget(s, 2) then
-	 		local rs = mget(x1+1,y1)
-	 	 mset(x1,y1,rs)
+	 		local rs = mget(x+1,y)
+	 	 mset(x,y,rs)
 	 	 add(items,{
-	 	  x=x1*8,
-	 	  y=y1*8,
+	 	  x=x*8,
+	 	  y=y*8,
 	 	  t='heart',
 	 	  s1=s,
 	 	  s2=s+1,
 	 	 })
 	 	elseif fget(s, 3) then
-	 		local rs = mget(x1+1,y1)
-	 	 mset(x1,y1,rs)
+	 		local rs = mget(x+1,y)
+	 	 mset(x,y,rs)
 	 	 add(items,{
-	 	  x=x1*8,
-	 	  y=y1*8,
-	 	  dx=0,
-	 	  dy=0,
+	 	  x=x*8,
+	 	  y=y*8,
+					mx=0,
+					my=0,
+					dx=0,
+					dy=1,
+					vx=0,
+					vy=0,
+					maxv=2,
+					movv=0.5,
 	 	  t='enemy',
+	 	  hp=3,
 	 	  s1=s,
 	 	  s2=s+1,
 	 	 })
 	 	elseif fget(s, 4) then
-	 		local rs = mget(x1+1,y1)
-	 	 mset(x1,y1,rs)
+	 		local rs = mget(x+1,y)
+	 	 mset(x,y,rs)
 	 	 add(items,{
-	 	  x=x1*8,
-	 	  y=y1*8,
-	 	  dx=0,
-	 	  dy=0,
+	 	  x=x*8,
+	 	  y=y*8,
 	 	  t='powerup',
+	 	  s1=s,
+	 	  s2=s+1,
+	 	 })
+	 	elseif fget(s, 5) then
+	 		local rs = mget(x+1,y)
+	 	 mset(x,y,rs)
+	 	 add(items,{
+	 	  x=x*8,
+	 	  y=y*8,
+	 	  t='boat',
+	 	  s1=s,
+	 	  s2=s+1,
+	 	 })
+	 	elseif fget(s, 7) then
+	 		local rs = mget(x+1,y)
+	 	 mset(x,y,rs)
+	 	 add(items,{
+	 	  x=x*8,
+	 	  y=y*8,
+	 	  t='portal',
 	 	  s1=s,
 	 	  s2=s+1,
 	 	 })
@@ -113,8 +171,8 @@ end
 -- draw
 
 function _draw()
-	local mx = mid(0, x-60, (128-16)*8)
-	local my = mid(-8, y-60, (64 -16)*8)
+	local mx = mid(0, hero.x-60, (128-16)*8)
+	local my = mid(-8, hero.y-60, (64 -16)*8)
 	camera(mx,my)
 	
 	cls(3)
@@ -124,7 +182,23 @@ function _draw()
 	 local s = items[i]
 	 local sp = s.s1
 	 if time() % 1 < .5 then sp=s.s2 end
+	 
+	 for i=1,15 do pal(i,1) end
+	 spr(sp, s.x+1, s.y+1)
+	 pal()
 	 spr(sp, s.x, s.y)
+	 
+	 if s.hp then
+	 	for i=1,3 do
+		 	color(10)
+	 		if (i > s.hp) color(1)
+	 		local i2=(i-1)*2
+	 		local x1=s.x+i2+1
+	 		local x2=s.x+i2+2
+	 		local y=s.y-2
+		 	line(x1,y,x2,y)
+		 end
+	 end
 	end
 	
 	if shot then
@@ -132,19 +206,61 @@ function _draw()
 	end
 	
 	drawguy()
+	drawfairie()
 	
+	foreach(anims,drawanim)
+	
+	if key and key.ready then
+		local i2=(30-key.t)/2
+		local x=key.x+sin(key.t/30)*i2
+		local y=key.y+cos(key.t/30)*i2
+		spr(63,x,y)
+	end
+
 	camera()
 	
 	drawbanner()
+	drawmessage()
+	
+	spr(63,95,0)
+	print(tostr(hero.enemies),124,2,7)
+	
+	spr(21,115,-1)
+	print(tostr(hero.keys),104,2,7)
+end
+
+function drawanim(a)
+ local s = flr((16-a.t) / 4)
+	spr(a.s+s,a.x,a.y)
+	
+ a.t-=1
+	if (a.t==0) del(anims,a)
+end
+
+function drawfairie()
+	if fairie then
+	 local x1 = fairie.x+sin(fairie.t/30)*fairie.t/2
+	 local y1 = fairie.y+cos(fairie.t/20)*fairie.t/2
+		
+	 local x2 = fairie.x+sin(fairie.t/(30*1.05))*fairie.t/2
+	 local y2 = fairie.y+cos(fairie.t/(20*1.05))*fairie.t/2
+		
+		for i=1,15 do pal(i,1) end
+		spr(fairie.s+2, x2+1, y2+1)
+		spr(fairie.s, x1+1, y1+1)
+		pal()
+		spr(fairie.s+2, x2, y2)
+		spr(fairie.s, x1, y1)
+	end
 end
 
 function drawbanner()
 	color(0)
 	rectfill(0,0,127,7)
-	for i = 1,hp do
+	for i = 1,hero.hp do
 	 local s = 10
 	 local p = false
-	 if heartanim>0 and i==hp then
+	 if heartanim>0 and i==hero.hp then
 	  pal(8, 2)
 	  p = true
 	  if heartanim % 2 == 0 then
@@ -157,33 +273,94 @@ function drawbanner()
 end
 
 function drawguy()
+	_drawguy(true)
+	_drawguy(false)
+	
+	if hero.boat then
+		for i=1,15 do pal(i,1) end
+		drawboat(hero.x, hero.y+1)
+		pal()
+		drawboat(hero.x, hero.y)
+	end
+end
+
+function drawboat(x,y)
+ local s = 57
+ if t < 15 then s=58 end
+	spr(s,x,y+1)
+end
+
+function _drawguy(shadow)
  local fl=false
 	local s = 1
-	if (dx==-1) fl=true
+	if (hero.dx==-1) fl=true
 
-	if moving then
+	if hero.moving then
 		s=32
-		if (dy==-1) s=48
+		if (hero.dy==-1) s=48
 		if (t%15<8) s+=1
 	else
-		if (dy==-1) s=17
-	end	
+		if (hero.dy==-1) s=17
+	end
 	
-	if blinkdmode==0 and not invincible then
-	elseif invincible then
+	if shadow then
+		for i=1,15 do pal(i,1) end
+		local j = 1
+		spr(s,hero.x+j,hero.y+j,1,1,fl)
+		pal()
 	else
-	end
-
- local shouldblink = t % 3 < 1
- if blinkmode > 0 and shouldblink then
-  if invincible then
-	 	pal(12,9)
-			spr(s,x,y,1,1,fl)
+		if hero.invincible then
+		 if t % 15 < 5 then
+	   for i=1,15 do
+			 	pal(i,(i+3)%3+10)
+	   end
+			end
+			spr(s,hero.x,hero.y,1,1,fl)
 			pal()
-  end
- else
-		spr(s,x,y,1,1,fl)
+		elseif hero.blinkmode > 0 then
+		 if t % 3 < 1 then
+				spr(s,hero.x,hero.y,1,1,fl)
+			end
+		else
+			spr(s,hero.x,hero.y,1,1,fl)
+		end
 	end
+end
+
+function drawmessage()
+	if (not message) return
+	
+	local x1=20
+	local y1=20
+	local x2=108
+	
+	local w = x2-x1-4
+	local h = 8
+	local lines = {""}
+	local words = split(message," ")
+	
+	for i=1,#words do
+	 local word = words[i]
+	 local newline = lines[#lines] .. " " .. word
+	 if #newline * 4 <= w then
+	  lines[#lines] = newline
+	 else
+	 	add(lines, word)
+	 end
+	end
+	lines[1] = sub(lines[1], 2)
+	
+	local y2=y1+(h*#lines)+2
+	
+	rectfill(x1,y1,x2,y2,1)
+	rect(x1,y1,x2,y2,6)
+	
+	for i=1,#lines do
+	 local msg = lines[i]
+		local y = h*(i-1)
+		print(msg,x1+3,y1+3+y,7)
+	end
+	
 end
 
 -->8
@@ -194,27 +371,22 @@ function _update()
 	if t == 30 then t = 0 end
 	
 	handlecontrols()
+ handlemoving(hero)
  moveenemies()
  docollide()
+ checkshot()
  
- maxv=maxv1
- if btn(❎) then
-  maxv=maxv2
- end
- 
- if btnp(🅾️) then
- 	shot = {
- 	 x=x,
- 	 y=y,
- 	 dx=dx,
- 	 dy=dy,
- 	 t=30,
- 	}
+ if key and #anims==0 then
+ 	if not key.ready then
+  	key.ready = true
+	 	sfx(14)
+		end
+		key.t -= 1
+ 	if (key.t==0) key=nil
  end
  
  if shot then
-  shot.x += shot.dx
-  shot.y += shot.dy
+ 	handlemoving(shot)
   shot.t -= 1
   if shot.t == 0 then
   	shot = nil
@@ -227,166 +399,78 @@ function _update()
 		end
  end
  
- if blinkmode > 0 then
-  blinkmode -= 1
-  if blinkmode==0 and invincible then
-  	invincible=false
+ if hero.blinkmode > 0 then
+  hero.blinkmode -= 1
+  if hero.blinkmode==0 and hero.invincible then
+  	hero.invincible=false
+  	hero.strength=1
+  	music()
   end
  end
 end
 
-function pick_enemy_dir(e)
-	repeat
-	 local s = 1
-	 if rnd() < .5 then s=-1 end
-	 if rnd() < .5 then
-	  e.dx=s
-	  e.dy=0
-	 else
-	  e.dx=0
-	  e.dy=s
-	 end
-	until notsolidat(e.x + e.dx*8,
-	                 e.y + e.dy*8)
-end
-
-function notsolidat(x1,y1)
- local s = _sprat(x1,y1)
- return air(s)
-end
-
 function moveenemies()
-	if t == 0 then
-	 for i = 1, #items do
-	  local e = items[i]
-	  if e.t == 'enemy' then
-	   pick_enemy_dir(e)
-	  end
-	 end
-	elseif t > 29-8 then
-	 for i = 1, #items do
-	  local e = items[i]
-	  if e.t == 'enemy' then
-	   e.x += e.dx
-	   e.y += e.dy
-	  end
-	 end
- end
+	for i=1,#items do
+		local e = items[i]
+		if e.t == 'enemy' then
+			if t == 0 then
+				-- pick direction
+				e.mx=0
+				e.my=0
+				if rnd() < .5 then
+					e.mx=-1
+					if (rnd()<0.5) e.mx=1
+				else
+					e.my=-1
+					if (rnd()<0.5) e.my=1
+				end
+			elseif t == 5 then
+				e.mx=0
+				e.my=0
+			end
+			handlemoving(e)
+		end
+	end
 end
 
 function handlecontrols()
- handlemoving()
-end
-
-function handlemoving()
-	moving=false
-	
-	if btn(⬆️) or btn(⬇️) or
-	   btn(⬅️) or btn(➡️) then
-		if     btn(⬅️) then	dx=-1
-		elseif btn(➡️) then	dx=1
-		else                dx=0	end
-		if     btn(⬆️) then	dy=-1
-		elseif btn(⬇️) then	dy=1
-		else                dy=0	end
-	end
-	
-	if btn(⬅️) then
-	 vx -= movv
-	 if (vx<-maxv) vx=-maxv
-	elseif btn(➡️) then
-	 vx += movv
-	 if (vx>maxv) vx=maxv
-	else
-	 if vx != 0 then
-		 vx -= movv * sgn(vx)
-	 end
-	end
-
-	if vx < 0 then
-	 local canskirt =
-	  not btn(⬆️) and not btn(⬇️)
-	 for i = 1,ceil(-vx) do
-		 local s1 = sprat(-1,0)
-		 local s2 = sprat(-1,7)
-		 trymove(s1,s2,-1,0,canskirt)
-		end
-	elseif vx > 0 then
-	 local canskirt =
-	  not btn(⬆️) and not btn(⬇️)
-	 for i = 1,flr(vx) do
-		 local s1 = sprat(8,0)
-		 local s2 = sprat(8,7)
-		 trymove(s1,s2,1,0,canskirt)
-		end
-	end
-	
-	if btn(⬆️) then
-	 vy -= movv
-	 if (vy<-maxv) vy=-maxv
-	elseif btn(⬇️) then
-	 vy += movv
-	 if (vy>maxv) vy=maxv
-	else
-	 if vy != 0 then
-		 vy -= movv * sgn(vy)
-	 end
+ hero.maxv=hero.maxv1
+ if btn(❎) then
+  hero.maxv=hero.maxv2
  end
  
- if vy < 0 then
-	 local canskirt =
-	  not btn(⬅️) and not btn(➡️)
-  for i = 1, ceil(-vy) do
-		 local s1 = sprat(0,-1)
-	  local s2 = sprat(7,-1)
-		 trymove(s1,s2,0,-1,canskirt)
-		end
- elseif vy > 0 then
-	 local canskirt =
-	  not btn(⬅️) and not btn(➡️)
-  for i = 1, flr(vy) do
-		 local s1 = sprat(0,8)
-	  local s2 = sprat(7,8)
-		 trymove(s1,s2,0,1,canskirt)
-		end
- end
-end
-
-function trymove(s1,s2,x1,y1,canskirt)
- local moved = false
- 
- if slowarea() then
- 	x1/=2
- 	y1/=2
+ if btnp(🅾️) and shot==nil then
+ 	shot = {
+ 		strength=hero.strength,
+ 	 x=hero.x,
+ 	 y=hero.y,
+			mx=hero.dx,
+			my=hero.dy,
+ 	 dx=hero.dx,
+ 	 dy=hero.dy,
+			vx=0,
+			vy=0,
+			maxv=5,
+			movv=2,
+ 	 t=10,
+ 	}
+ 	if shot.strength > 2 then
+ 		shot.t = 20
+ 	end
  end
  
- if air(s1) and air(s2) then
-  moved = true
-  x += x1
-  y += y1
- elseif canskirt then
-	 if air(s1) then
-	 	moved=true
-	 	if x1==0 then x-=1
-	 	elseif y1==0 then y-=1
-	 	end
-	 elseif air(s2) then
-	 	moved=true
-	 	if x1==0 then x+=1
-	 	elseif y1==0 then y+=1
-	 	end
-	 end
-	end
- 
- if moved then
-  moving=true
- end
+ if     btn(⬅️) then	hero.mx=-1
+	elseif btn(➡️) then	hero.mx=1
+	else                hero.mx=0	end
+	if     btn(⬆️) then	hero.my=-1
+	elseif btn(⬇️) then	hero.my=1
+	else                hero.my=0	end
 end
 
 -->8
 -- util
 
-function getitem()
+function getitem(e)
  for i = 1, #items do
   local item = items[i]
 
@@ -395,34 +479,53 @@ function getitem()
   local x2 = item.x+4
   local y2 = item.y+4
 
-  if x>=x1 and x<=x2 and
-     y>=y1 and y<=y2 then
-   return item
+  if e.x>=x1 and e.x<=x2 and
+     e.y>=y1 and e.y<=y2 then
+   return item, i
   end
  end
 end
 
-function sprat(x1,y1)
- local tx = flr((x+x1) / 8)
- local ty = flr((y+y1) / 8)
- return mget(tx,ty)
+function sprat(x,y,e)
+ local tx = flr((e.x+x) / 8)
+ local ty = flr((e.y+y) / 8)
+ return mget(tx,ty), tx, ty
 end
 
-function _sprat(x1,y1)
- local tx = flr(x1 / 8)
- local ty = flr(y1 / 8)
- return mget(tx,ty)
+function slowarea(e)
+	return slow(sprat(0,0,e))
+	    or slow(sprat(7,0,e))
+	    or slow(sprat(0,7,e))
+	    or slow(sprat(7,7,e))
 end
 
-function slowarea()
-	return slow(sprat(0,0))
-	    or slow(sprat(7,0))
-	    or slow(sprat(0,7))
-	    or slow(sprat(7,7))
+function notwater()
+	return not water(sprat(0,0,hero))
+	   and not water(sprat(7,0,hero))
+	   and not water(sprat(0,7,hero))
+	   and not water(sprat(7,7,hero))
+end
+
+function onsign()
+	return issign(sprat(3,3,hero))
+	    or issign(sprat(4,3,hero))
+	    or issign(sprat(3,4,hero))
+	    or issign(sprat(4,4,hero))
+end
+
+function issign(s, x, y)
+	if s == 14 then
+		 return {x, y}
+ end
 end
 
 function slow(s)
  return fget(s,1)
+end
+
+function water(s)
+	return (s>=26 and s<=31)
+	    or (s>=41 and s<=47)
 end
 
 function air(s)
@@ -436,38 +539,329 @@ end
 -->8
 -- collide
 
+function checkshot()
+	if not shot then return end
+	local f, fi = getitem(shot)
+	if not f then return end
+	if f.t == 'enemy' then
+		f.hp -= shot.strength
+		if f.hp <= 0 then
+			sfx(13)
+			del(items, f)
+			add(anims, {
+				s=59,
+				x=f.x,
+				y=f.y,
+				t=16,
+			})
+			hero.enemies+=1
+			if hero.enemies==3 then
+				hero.enemies=0
+				hero.keys+=1
+				key={
+					x=f.x,
+					y=f.y,
+					t=60,
+				}
+			end
+		else
+			sfx(12)
+		 f.vx = shot.dx * shot.strength*4
+		 f.vy = shot.dy * shot.strength*4
+		end
+		if shot.strength < 4 then
+			shot=nil
+		end
+	end
+end
+
 function docollide()
-	local f = getitem()
+	local f, fi = getitem(hero)
 	if f then
 		if f.t == 'heart' then
-		 hp += 1
-		 del(items, f)
-		 sfx(0)
-		 heartanim=7
+			if not hero.invincible then
+			 hero.hp += 1
+			 del(items, f)
+			 sfx(0)
+			 heartanim=7
+			end
 		elseif f.t == 'powerup' then
-		 blinkmode = 400
-		 invincible=true
+		 music(1)
+		 if not hero.invincible then
+			 hero.blinkmode = 400
+			 hero.invincible=true
+			end
+		 hero.strength+=1
 		 del(items, f)
 		 sfx(0)
+		elseif f.t == 'boat' then
+			if hero.blinkmode==0 then
+			 hero.boat = true
+			 del(items, f)
+			end
+		elseif f.t == 'portal' then
+			if hero.blinkmode==0 then
+				if hero.keys < 1 then
+					message = "sorry, you need a key to go here"
+				else
+					hero.keys -= 1
+					local i = fi
+					local nxt
+					repeat
+						i+=1
+						if (i > #items) i = 1
+						nxt=items[i]
+					until nxt.t=='portal'
+					
+					sfx(5)
+					
+					--[[
+					for i=0,3 do
+						for j=1,4 do
+							pal(i*4+j,0)
+							_draw()
+							flip()
+						end
+					end
+					pal()
+					--]]
+					
+					for i=1,90 do
+						circ(64,64,90-i,1)
+						if (i%5==0)	flip()
+					end
+					
+					hero.x=nxt.x+8
+					hero.y=nxt.y
+					
+					for i=1,90 do
+						_draw()
+						for j=i,90 do
+							circ(64,64,j,1)
+						end
+						if (i%5==0)	flip()
+					end
+					
+				 hero.blinkmode=30
+				end
+			end
 		elseif f.t == 'enemy' then
-		 if blinkmode == 0 then
-			 blinkmode=15
-			 hp -= 1
-			 sfx(4)
+		 if hero.blinkmode == 0 then
+			 hero.hp -= 1
 			 
-			 local x1 = 0
-			 if(x<f.x-2) x1=-1
-			 if(x>f.x+2) x1=1
+			 if hero.hp == 0 then
 			 
-			 local y1 = 0
-			 if(y<f.y-2) y1=-1
-			 if(y>f.y+2) y1=1
+			 	music(-1)
+			 	
+			 	sfx(10)
+			 	for i=1,2 do
+			 		for x=-1,1 do
+			 			for y=-1,0 do
+			 				hero.dx=x
+			 				hero.dy=y
+			 				_draw()
+								flip()
+								flip()
+								flip()
+			 			end
+			 		end
+			 	end
+			 	
+			 	for i=1,15 do flip() end
+			 	
+			 	fairie={
+			 	 x=hero.x,
+			 	 y=hero.y,
+			 	 t=0,
+			 	 s=53,
+			 	}
+			 	
+			 	for i=1,7 do
+			 		
+			 		sfx(9)
+			 		hero.hp+=1
+			 		
+			 		for j=1,10 do
+				 		heartanim=0
+				 		if (j<=5) heartanim=2
+				 		_draw()
+			 		 fairie.t += 1
+			 		 fairie.s = 53
+			 		 if (j<5) fairie.s=54
+			 		 flip()
+			 		end
+			 		
+			 	end
+			 	
+			 	fairie=nil
+		 		heartanim=0
+			 	hero.blinkmode=30
+			 	music()
 			 
-			 vx = x1*4
-			 vy = y1*4
+			 else
+				 hero.blinkmode=15
+				 sfx(4)
+				 
+				 local x = 0
+				 if(hero.x<f.x-2) x=-1
+				 if(hero.x>f.x+2) x=1
+				 
+				 local y = 0
+				 if(hero.y<f.y-2) y=-1
+				 if(hero.y>f.y+2) y=1
+				 
+				 hero.vx = x*4
+				 hero.vy = y*4
+			 end
 			end
 		end
 	end
+end
+
+-->8
+-- moving
+
+function handlemoving(e)
+	if e==shot and e.strength>=5 then
+		if e.cx == nil then
+			e.cx=e.x
+			e.cy=e.y
+			e.t1 = 0
+			e.t = 60
+		end
+		
+		e.t1+=1
+		
+		e.x = e.cx+sin(e.t1/10)*e.t1/2
+		e.y = e.cy+cos(e.t1/10)*e.t1/2
+		
+		return
+	end
+
+	e.moving=false
+	
+	if e.mx != 0 or
+	   e.my != 0 then
+	 e.dx = e.mx
+	 e.dy = e.my
+	end
+	
+	if e.mx < 0 then
+	 e.vx -= e.movv
+	 if (e.vx<-e.maxv) e.vx=-e.maxv
+	elseif e.mx > 0 then
+	 e.vx += e.movv
+	 if (e.vx>e.maxv) e.vx=e.maxv
+	else
+	 if e.vx != 0 then
+		 e.vx -= e.movv * sgn(e.vx)
+	 end
+	end
+
+ local canskirt = e.my==0
+	if e.vx < 0 then
+	 for i = 1,ceil(-e.vx) do
+		 local s1 = sprat(-1,0,e)
+		 local s2 = sprat(-1,7,e)
+		 trymove(e,s1,s2,-1,0,canskirt)
+		end
+	elseif e.vx > 0 then
+	 for i = 1,flr(e.vx) do
+		 local s1 = sprat(8,0,e)
+		 local s2 = sprat(8,7,e)
+		 trymove(e,s1,s2,1,0,canskirt)
+		end
+	end
+	
+	if e.my < 0 then
+	 e.vy -= e.movv
+	 if (e.vy<-e.maxv) e.vy=-e.maxv
+	elseif e.my > 0 then
+	 e.vy += e.movv
+	 if (e.vy>e.maxv) e.vy=e.maxv
+	else
+	 if e.vy != 0 then
+		 e.vy -= e.movv * sgn(e.vy)
+	 end
+ end
+ 
+ local canskirt = e.mx==0
+ if e.vy < 0 then
+  for i = 1, ceil(-e.vy) do
+		 local s1 = sprat(0,-1,e)
+	  local s2 = sprat(7,-1,e)
+		 trymove(e,s1,s2,0,-1,canskirt)
+		end
+ elseif e.vy > 0 then
+  for i = 1, flr(e.vy) do
+		 local s1 = sprat(0,8,e)
+	  local s2 = sprat(7,8,e)
+		 trymove(e,s1,s2,0,1,canskirt)
+		end
+ end
+end
+
+function trymove(e,s1,s2,x,y,canskirt)
+ local moved = false
+ 
+ if slowarea(e) then
+ 	x/=2
+ 	y/=2
+ end
+ 
+ if e==hero then
+	 if hero.boat and notwater() then
+			hero.boat=false
+		 add(items,{
+	   x=hero.x,
+	   y=hero.y+1,
+	   t='boat',
+	   s1=57,
+	   s2=58,
+	  })
+	  hero.blinkmode=15
+	 end
+	 
+	 local gotsign = onsign()
+	 if gotsign then
+	 	local sx, sy =
+	 		gotsign[1], gotsign[2]
+	 	
+	 	for i = 1,#signs do
+	 		local x1,y1,msg = unpack(signs[i])
+	 		if sx==x1 and sy==y1 then
+	 			message = msg
+		 		break
+	 		end
+	 	end
+	 else
+	 	message = nil
+	 end
+ end
+ 
+ if e.boat or air(s1) and air(s2) then
+  moved = true
+  e.x += x
+  e.y += y
+ else
+ 	if e==shot then
+ 		shot.t=1
+ 	elseif canskirt then
+		 if air(s1) then
+		 	moved=true
+		 	if     x==0 then e.x-=1
+		 	elseif y==0 then e.y-=1	end
+		 elseif air(s2) then
+		 	moved=true
+		 	if     x==0 then e.x+=1
+		 	elseif y==0 then e.y+=1	end
+		 end
+		end
+	end
+ 
+ if moved then
+  e.moving=true
+ end
 end
 
 __gfx__

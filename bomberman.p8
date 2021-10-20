@@ -1,7 +1,7 @@
 pico-8 cartridge // http://www.pico-8.com
 version 33
 __lua__
-
+bombs={}
 
 -- note: make them waterbombs
 -- that way no one gets hurt.
@@ -9,6 +9,8 @@ __lua__
 function _init()
 	p1=makeplayer(8,8,16)
 	p2=makeplayer(104,104,32)
+	
+	makebomb(40,40,4,2)
 end
 
 function _draw()
@@ -18,6 +20,8 @@ function _draw()
 	drawplayer(p2)
 	
 	-- test
+	
+	foreach(bombs,drawbomb)
 	
 	if t() < 3.2 then
 	
@@ -47,6 +51,10 @@ function _update()
 	
 end
 
+function drawbomb(b)
+	
+end
+
 function drawplayer(p)
 	for i=1,15 do pal(i,1) end
 	_drawplayer(p,p.x+1,p.y+1)
@@ -72,6 +80,17 @@ function makeplayer(x,y,s)
 		power=2,
 		s=s,
 	}
+end
+
+function makebomb(x,y,pow,sec)
+	add(bombs,{
+		t='reg',
+		x=x,
+		y=y,
+		range=pow,
+		exploding=false,
+		t=sec*30,
+	})
 end
 
 __gfx__

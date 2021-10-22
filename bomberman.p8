@@ -5,6 +5,12 @@ __lua__
 
 bombs={}
 
+-- interactions
+--    pl bm it br st xp
+-- pl go sp gt sp sp ot
+-- bm sp sp rm sp sp bl
+-- xp ot bl rm im sp go
+
 function _init()
 	p1=makeplayer(8,8,16)
 	p2=makeplayer(104,104,32)
@@ -17,7 +23,6 @@ function _draw()
 	map()
 	drawplayer(p1)
 	drawplayer(p2)
-	
 	foreach(bombs,drawbomb)
 end
 

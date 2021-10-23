@@ -210,7 +210,24 @@ function updatebomb(b)
 end
 
 function drawbomb(b)
-	spr(7, b.x, b.y)
+	if b.exploding then
+		spr(9, b.x, b.y)
+		
+		b.t -= 1
+		if b.t == 0 then
+			del(bombs, b)
+		end
+	else
+		local s = 7
+		if (time()%1 < 0.5) s=8
+		spr(s, b.x, b.y)
+		
+		b.t -= 1
+		if b.t == 0 then
+			b.exploding = true
+			b.t = 24
+		end
+	end
 end
 
 -->8

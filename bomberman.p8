@@ -6,6 +6,7 @@ __lua__
 players={}
 bombs={}
 bricks={}
+debug=nil
 
 -- interactions
 --    pl bm it br st xp
@@ -26,6 +27,20 @@ function _draw()
 	foreach(bricks,drawbrick)
 	foreach(bombs,drawbomb)
 	foreach(players,drawplayer)
+	
+	if debug then
+	 if debug.text then
+		 local y=1
+	 	for k,v in pairs(debug) do
+	 	 rectfill(0,y-1,20,y+5,1)
+		 	print(tostr(k)..'='..tostr(v), 0, y, 7)
+		 	y += 8
+		 end
+	 elseif debug.pset then
+	 	pset(debug.x1, debug.y1, 11)
+	 	pset(debug.x2, debug.y2, 11)
+	 end
+	end
 end
 
 function _update()
@@ -137,7 +152,19 @@ function col_player_solid(p,b,x,y)
 	local chx = cx + x*3
 	local chy = cy + y*3
 	
+	local x1 = chx - y*4
+	local x2 = chx + y*4
 	
+	local y1 = chy - x*4
+	local y2 = chy + x*4
+	
+	debug = {
+		text=true,
+	 x1=x1,
+	 x2=x2,
+	 y1=y1,
+	 y2=y2,
+	}
 	
 	--[[
 	

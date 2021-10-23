@@ -29,16 +29,16 @@ function _draw()
 	foreach(players,drawplayer)
 	
 	if debug then
-	 if debug.text then
+	 if debug.pset then
+	 	pset(debug.x1, debug.y1, 11)
+	 	pset(debug.x2, debug.y2, 11)
+	 else
 		 local y=1
 	 	for k,v in pairs(debug) do
 	 	 rectfill(0,y-1,20,y+5,1)
 		 	print(tostr(k)..'='..tostr(v), 0, y, 7)
 		 	y += 8
 		 end
-	 elseif debug.pset then
-	 	pset(debug.x1, debug.y1, 11)
-	 	pset(debug.x2, debug.y2, 11)
 	 end
 	end
 end
@@ -46,6 +46,13 @@ end
 function _update()
 	foreach(players,updateplayer)
 	foreach(bombs,updatebomb)
+end
+
+function didcol(e,x,y)
+	return x >= e.x
+	   and y >= e.y
+	   and x <= e.x+7
+	   and y <= e.y+7
 end
 
 -->8
@@ -149,56 +156,27 @@ function col_player_solid(p,b,x,y)
 	local cy = p.y + 4
 	
 	-- get center of moving edge
-	local chx = cx + x*3
-	local chy = cy + y*3
+	local chx = cx + x*2
+	local chy = cy + y*2
 	
-	local x1 = chx - y*4
-	local x2 = chx + y*4
+	local x1 = chx - y*2
+	local x2 = chx + y*2
 	
-	local y1 = chy - x*4
-	local y2 = chy + x*4
+	local y1 = chy - x*2
+	local y2 = chy + x*2
 	
 	debug = {
-		text=true,
-	 x1=x1,
-	 x2=x2,
-	 y1=y1,
-	 y2=y2,
+		pset=true,
+	 x1=x1,x2=x2,
+	 y1=y1,y2=y2,
 	}
 	
-	--[[
-	
-	if left edge:
-	  x=-1
-	  y=0
-	       chx=0
-	       chy=4
-	  x1=0
-	  x2=0
-	  y1=chy-4
-	  y2=chy+4
-	
-	if top edge:
-	  x=0
-	  y=-1
-	        chx=4
-	        chy=0
-	  x1=chx-4
-	  x2=chx-4
-	  y1=0
-	  y2=0
-	
-	if right edge:
-	  x=1
-	  y=0
-	       chx=8
-	       chy=4
-	  x1=8
-	  x2=8
-	  y1=chy-4
-	  y2=chy-4
-	
-	--]]
+	if didcol(b,x1,y1)
+	or didcol(b,x2,y2)
+	then
+		p.x += -x
+		p.y += -y
+	end
 end
 
 -->8
@@ -296,7 +274,7 @@ function makebrick(x,y)
 end
 
 function drawbrick(b)
-	if b.stone then return end
+	--if b.stone then return end
 	
 	spr(16,b.x,b.y)
 end

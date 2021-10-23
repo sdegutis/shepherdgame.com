@@ -49,7 +49,7 @@ function makeplayer(n,x,y)
 		vx=0,
 		vy=0,
 		vel=0.5,
-		spd=2,
+		spd=1,
 		pwr=2,
 		s=n*16+1,
 	})
@@ -104,12 +104,14 @@ function updateplayer(p)
 	
 	-- try moving
 	for x=1,ceil(abs(p.vx)) do
-		p.x += sgn(p.vx)
-		collideplayer(p)
+	 local mv = sgn(p.vx)
+		p.x += mv
+		collideplayer(p,mv,0)
 	end
 	for y=1,ceil(abs(p.vy)) do
-		p.y += sgn(p.vy)
-		collideplayer(p)
+	 local mv = sgn(p.vy)
+		p.y += mv
+		collideplayer(p,0,mv)
 	end
 end
 
@@ -117,21 +119,59 @@ function placebomb(p)
 	makebomb(p.x, p.y, p.pwr, 3)
 end
 
-function collideplayer(p)
+function collideplayer(p,x,y)
 	for i=1,#bricks do
-		col_player_brick(p, bricks[i])
+		col_player_solid(p,bricks[i],x,y)
 	end
 	for i=1,#bombs do
-		col_player_bomb(p, bombs[i])
+		col_player_solid(p,bombs[i],x,y)
 	end
 end
 
-function col_player_brick(p,b)
+function col_player_solid(p,b,x,y)
+ -- get center of sprite
+	local cx = p.x + 4
+	local cy = p.y + 4
 	
-end
-
-function col_player_bomb(p,b)
+	-- get center of moving edge
+	local chx = cx + x*3
+	local chy = cy + y*3
 	
+	
+	
+	--[[
+	
+	if left edge:
+	  x=-1
+	  y=0
+	       chx=0
+	       chy=4
+	  x1=0
+	  x2=0
+	  y1=chy-4
+	  y2=chy+4
+	
+	if top edge:
+	  x=0
+	  y=-1
+	        chx=4
+	        chy=0
+	  x1=chx-4
+	  x2=chx-4
+	  y1=0
+	  y2=0
+	
+	if right edge:
+	  x=1
+	  y=0
+	       chx=8
+	       chy=4
+	  x1=8
+	  x2=8
+	  y1=chy-4
+	  y2=chy-4
+	
+	--]]
 end
 
 -->8

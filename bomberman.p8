@@ -220,7 +220,12 @@ function collidep(p,t1,t2,x,y)
 		if (y!=0) p.vy = 0
 		
 		-- skirting
-		if not t2 or t2.type=='item' then
+		if (not t2 or t2.type=='item')
+		   and
+		   -- can't skirt if moving
+		   -- in two axes at once
+		   (p.mx == 0 or p.my == 0)
+		then
 			local x1 = abs(y) * sgn(p.x-t1.x)
 			local y1 = abs(x) * sgn(p.y-t1.y)
 			p.x += x1

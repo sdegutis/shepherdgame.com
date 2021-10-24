@@ -451,6 +451,11 @@ function addflame(b,x,y,s)
 		pbomb=b.pbomb,
 	})
 	
+	local item = getitem(px,py)
+	if item then
+		del(items,item)
+	end
+	
 	local brick=getbrick(px,py)
 	if brick then
 		del(bricks,brick)
@@ -462,11 +467,6 @@ function addflame(b,x,y,s)
 		if not b.pbomb then
 			return true
 		end
-	end
-	
-	local item = getitem(px,py)
-	if item then
-		del(items,item)
 	end
 	
 	local bomb = getbomb(px,py)

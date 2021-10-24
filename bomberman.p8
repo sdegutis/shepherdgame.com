@@ -247,8 +247,17 @@ function collideplayer(p,x,y)
 end
 
 function hit(e,x1,y1,x2,y2)
-	return didcol(e,x1,y1)
-	    or didcol(e,x2,y2)
+	return col(e,x1,y1)
+	    or col(e,x2,y2)
+end
+
+function col(e,x,y)
+	if x >= e.x   and
+	   y >= e.y   and
+	   x <= e.x+7 and
+	   y <= e.y+7 then
+	 return e
+	end
 end
 
 function getbombon(p)
@@ -347,13 +356,6 @@ end
 -->8
 -- util
 
-
-function didcol(e,x,y)
-	return x >= e.x
-	   and y >= e.y
-	   and x <= e.x+7
-	   and y <= e.y+7
-end
 
 function round(n)
  if n%1 < 0.5 then

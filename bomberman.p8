@@ -90,7 +90,7 @@ function makeplayer(n,x,y)
 		vy=0,
 		vel=0.5,
 		spd=1,
-		pwr=1,
+		pwr=2,
 		s=n*16+1,
 		bombs_max=3,
 		bombs_live=0,
@@ -332,16 +332,17 @@ function round(n)
  end
 end
 
-function getsolidthing(x,y)
-	for i=1,#bricks do
-		local brick = bricks[i]
-		if brick.x == x and
-		   brick.y == y
-		then
-			return brick
+function getthing(a,x,y)
+	for i=1,#a do
+		local z = a[i]
+		if z.x==x and z.y==y then
+			return z
 		end
 	end
-	return nil
+end
+
+function getsolidthing(x,y)
+	return getthing(bricks,x,y)
 end
 
 function hasstone(x,y)
@@ -357,12 +358,11 @@ function getbrick(x,y)
 end
 
 function getbomb(x,y)
-	for i=1,#bombs do
-		local b = bombs[i]
-		if b.x==x and b.y==y then
-			return b
-		end
-	end
+	return getthing(bombs,x,y)
+end
+
+function getitem(x,y)
+	return getthing(items,x,y)
 end
 
 -->8
@@ -410,9 +410,15 @@ function addflame(b,x,y,s)
 		return true
 	end
 	
+	local item = getitem(px,py)
+	if item then
+		del(items,item)
+	end
+	
 	local bomb = getbomb(px,py)
 	if bomb then
 		bomb.t=1
+		return true
 	end
 	
 	return false

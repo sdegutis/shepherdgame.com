@@ -27,6 +27,7 @@ function startgame(numplayers)
 		'pbomb',
 	}
 	
+	gameover=nil
 	players={}
 	bombs={}
 	bricks={}
@@ -73,6 +74,26 @@ function drawgame()
 	foreach(bombs,drawbomb)
 	foreach(flames,drawflame)
 	foreach(items,drawitem)
+	
+	if gameover then
+		if gameover.winner then
+			local p = gameover.winner
+			local x1=p.x-2
+			local y1=p.y-2
+			local x2=p.x+10
+			local y2=p.y+10
+			rectfill(x1,y1,x2,y2,13)
+			rect(x1,y1,x2,y2,2)
+			box(p.x-12,p.y-13,"winner!")
+		else
+			box(40,40,"no winner")
+		end
+		
+		if gameover.t == 0 then
+			box(23,60,"press (x) to start")
+		end
+	end
+	
 	foreach(players,drawplayer)
 	
 	if debug then
@@ -91,9 +112,37 @@ function drawgame()
 end
 
 function updategame()
+	if gameover then
+		if gameover.t > 0 then
+			gameover.t -= 1
+		else
+			if btnp(❎) then
+				starttitle()
+			end
+		end
+	end
+	
 	foreach(players,updateplayer)
 	foreach(bombs,updatebomb)
 	foreach(flames,updateflame)
+end
+
+function checkgameover()
+	local live = {}
+	for i = 1,#players do
+		local p = players[i]
+		if (not p.out) add(live,p)
+	end
+	if #live == 1 then
+		gameover = {
+			t=90,
+			winner=live[1],
+		}
+	elseif #live == 0 then
+		gameover = {
+			t=90,
+		}
+	end
 end
 
 -->8
@@ -123,10 +172,17 @@ function makeplayer(n,x,y)
 end
 
 function drawplayer(p)
+	if p.out and p.t == 0 then
+		return
+	end
+	
 	for i=1,15 do pal(i,1) end
 	_drawplayer(p,p.x+1,p.y+1)
 	pal()
-	_drawplayer(p,p.x,p.y)
+	
+	if not p.out or p.t % 4 < 2 then
+		_drawplayer(p,p.x,p.y)
+	end
 end
 
 function _drawplayer(p,x,y)
@@ -144,7 +200,14 @@ function _drawplayer(p,x,y)
 end
 
 function updateplayer(p)
-	if btnp(❎,p.n) then
+	if p.out then
+		if (p.t > 0) p.t -= 1
+		return
+	end
+	
+	if btnp(❎,p.n)
+   	and not gameover
+	then
 		placebomb(p)
 	end
 	
@@ -298,6 +361,7 @@ function makebomb(p)
 end
 
 function updatebomb(b)
+	if gameover then return end
 	b.t -= 1
 	if b.t == 0 then
 		del(bombs,b)
@@ -450,6 +514,32 @@ function getitem(x,y)
 	return getthing(items,x,y)
 end
 
+function getplayers(x,y)
+	-- x,y = top left of flame
+	local ps = {}
+	
+	for i = 1,#players do
+		local p = players[i]
+		if not p.out and
+		   p.x >= x - 7 and
+		   p.y >= y - 7 and
+		   p.x <= x + 6 and
+		   p.y <= y + 6
+		then
+			add(ps,p)
+		end
+	end
+	
+	return ps
+end
+
+function box(x,y,s)
+	local w = #s*4+4
+	rectfill(x,y,x+w,y+10,1)
+	rect    (x,y,x+w,y+10,12)
+	print(s,x+3,y+3,7)
+end
+
 -->8
 -- flames
 
@@ -513,6 +603,14 @@ function addflame(b,x,y,s)
 		end
 	end
 	
+	local ps = getplayers(px,py)
+	for i=1,#ps do
+		local player = ps[i]
+		player.out = true
+		player.t = 30
+		checkgameover()
+	end
+	
 	return false
 end
 
@@ -568,7 +666,7 @@ function starttitle()
 	_draw=drawtitle
 	_update=updatetitle
 	
-	c=1
+	if not c then c=1 end
 	choices={
 		"2 players",
 		"3 players",

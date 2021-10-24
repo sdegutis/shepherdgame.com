@@ -214,6 +214,14 @@ function collidep(p,t1,t2,x,y)
 		p.y += -y
 		if (x!=0) p.vx = 0
 		if (y!=0) p.vy = 0
+		
+		-- skirting
+		if not t2 or t2.type=='item' then
+			local x1 = abs(y) * sgn(p.x-t1.x)
+			local y1 = abs(x) * sgn(p.y-t1.y)
+			p.x += x1
+			p.y += y1
+		end
 	elseif t1.type == 'bomb' then
 		if t1 != p.inbomb then
 			p.x += -x

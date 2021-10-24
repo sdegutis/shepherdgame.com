@@ -17,6 +17,8 @@ powers={
 	'bomb',
 }
 
+debug={}
+
 -- interactions
 --    pl bm it br st xp
 -- pl -- sp gt sp sp ot
@@ -320,7 +322,7 @@ function makebrick(x,y)
 	if rnd() < 0.8 then
 		if not getsolidthing(x*8,y*8) then
 			local k
-			if rnd() < 0.9 then
+			if rnd() < 0.4 then
 				k = flr(rnd(#powers))
 			end
 			add(bricks,{
@@ -337,6 +339,11 @@ function drawbrick(b)
 	if b.stone then return end
 	
 	spr(9,b.x,b.y)
+	
+	if debug and b.k then
+		local s = b.k+42
+		spr(s,b.x,b.y)
+	end
 end
 
 -->8

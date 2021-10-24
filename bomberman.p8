@@ -219,13 +219,7 @@ end
 function getbombon(p)
  local px = round(p.x/8)*8
  local py = round(p.y/8)*8
- 
-	for i=1,#bombs do
-		local b = bombs[i]
-		if b.x==px and b.y==py then
-			return b
-		end
-	end
+ return getthing(bombs,px,py)
 end
 
 -->8

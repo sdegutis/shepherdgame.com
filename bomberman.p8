@@ -16,7 +16,7 @@ function _init()
 	_update=updatetitle
 end
 
-function startgame(numplayers)
+function startgame()
 	_draw=drawgame
 	_update=updategame
 	
@@ -117,7 +117,8 @@ function updategame()
 			gameover.t -= 1
 		else
 			if btnp(❎) then
-				starttitle()
+				startgame()
+				return
 			end
 		end
 	end
@@ -706,7 +707,8 @@ function updatetitle()
 		if c == 4 then
 			stop()
 		else
-			startgame(c+1)
+			numplayers = c+1
+			startgame()
 		end
 	end
 end

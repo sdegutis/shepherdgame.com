@@ -198,43 +198,32 @@ function collideplayer(p,x,y)
 	local y1 = chy - x*2
 	local y2 = chy + x*2
 	
-	-- try hitting bricks
-	for i=1,#bricks do
-		local b = bricks[i]
-		if hit(b,x1,y1,x2,y2) then
+	local t1 = getthing1(x1,y1)
+	local t2 = getthing1(x2,y2)
+	
+	if t1 then
+		collidep(p,t1,t2,x,y)
+	elseif t2 then
+		collidep(p,t2,t1,x,y)
+	end
+end
+
+function collidep(p,t1,t2,x,y)
+	if t1.type == 'brick' then
+		p.x += -x
+		p.y += -y
+		if (x!=0) p.vx = 0
+		if (y!=0) p.vy = 0
+	elseif t1.type == 'bomb' then
+		if t1 != p.inbomb then
 			p.x += -x
 			p.y += -y
-			if (x!=0) p.vx = 0
-			if (y!=0) p.vy = 0
+			if(x!=0)p.vx=-sgn(x)*2
+			if(y!=0)p.vy=-sgn(y)*2
 		end
-	end
-	
-	-- try hitting bombs
-	for i=1,#bombs do
-		local b = bombs[i]
-		if b != p.inbomb then
-			if hit(b,x1,y1,x2,y2) then
-				p.x += -x
-				p.y += -y
-				if(x!=0)p.vx=-sgn(x)*2
-				if(y!=0)p.vy=-sgn(y)*2
-			end
-		end
-	end
-	
-	-- try getting items
-	local got
-	for i=1,#items do
-		local it = items[i]
-		if hit(it,x1,y1,x2,y2) then
-			got=it
-			break
-		end
-	end
-	
-	if got then
-		del(items,got)
-		local kind = powers[got.k+1]
+	elseif t1.type == 'item' then
+		del(items,t1)
+		local kind = powers[t1.k+1]
 		
 		if kind == 'fire' then
 			p.pwr += 1
@@ -243,20 +232,6 @@ function collideplayer(p,x,y)
 		elseif kind == 'bomb' then
 			p.bombs_max += 1
 		end
-	end
-end
-
-function hit(e,x1,y1,x2,y2)
-	return col(e,x1,y1)
-	    or col(e,x2,y2)
-end
-
-function col(e,x,y)
-	if x >= e.x   and
-	   y >= e.y   and
-	   x <= e.x+7 and
-	   y <= e.y+7 then
-	 return e
 	end
 end
 
@@ -275,6 +250,7 @@ function makebomb(p)
  local x = round(p.x/8)*8
  local y = round(p.y/8)*8
 	add(bombs,{
+		type='bomb',
 		x=x,
 		y=y,
 		player=p,
@@ -309,6 +285,7 @@ function decodemap()
 			local solid=fget(s,0)
 			if solid then
 				add(bricks,{
+					type='brick',
 					x=x*8,
 					y=y*8,
 					stone=true,
@@ -339,6 +316,7 @@ function makebrick(x,y)
 				k = flr(rnd(#powers))
 			end
 			add(bricks,{
+				type='brick',
 				x=x*8,
 				y=y*8,
 				k=k,
@@ -363,6 +341,14 @@ function round(n)
  else
  	return ceil(n)
  end
+end
+
+function getthing1(x,y)
+	x = flr(x/8)*8
+	y = flr(y/8)*8
+	return getthing(bricks,x,y)
+	    or getthing(bombs,x,y)
+	    or getthing(items,x,y)
 end
 
 function getthing(a,x,y)
@@ -479,6 +465,7 @@ end
 
 function makeitem(brick)
 	add(items, {
+		type='item',
 		x=brick.x,
 		y=brick.y,
 		k=brick.k,

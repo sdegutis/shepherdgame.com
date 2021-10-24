@@ -211,6 +211,8 @@ function collideplayer(p,x,y)
 			if hit(b,x1,y1,x2,y2) then
 				p.x += -x
 				p.y += -y
+				if(x!=0)p.vx=-sgn(x)*2
+				if(y!=0)p.vy=-sgn(y)*2
 			end
 		end
 	end

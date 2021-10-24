@@ -28,6 +28,7 @@ function _draw()
 	foreach(bricks,drawbrick)
 	foreach(bombs,drawbomb)
 	foreach(players,drawplayer)
+	foreach(flames,drawflame)
 	
 	if debug then
 	 if debug.pset then
@@ -47,6 +48,7 @@ end
 function _update()
 	foreach(players,updateplayer)
 	foreach(bombs,updatebomb)
+	foreach(flames,updateflame)
 end
 
 -->8
@@ -66,7 +68,7 @@ function makeplayer(n,x,y)
 		vy=0,
 		vel=0.5,
 		spd=1,
-		pwr=2,
+		pwr=1,
 		s=n*16+1,
 		bombs_max=1,
 		bombs_live=0,
@@ -309,16 +311,25 @@ end
 -- flames
 
 function makeflames(b)
-	
+	-- todo: make b.range all dirs
+	add(flames,{
+		x=b.x,
+		y=b.y,
+		t=30,
+	})
 end
 
-function drawflame(b)
-	spr(9, b.x, b.y)
+function drawflame(f)
+	spr(9, f.x, f.y)
 	
-	b.t -= 1
-	if b.t == 0 then
-		del(bombs, b)
+	f.t -= 1
+	if f.t == 0 then
+		del(flames, f)
 	end
+end
+
+function updateflame(f)
+	
 end
 
 __gfx__

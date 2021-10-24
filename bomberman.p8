@@ -181,18 +181,6 @@ function placebomb(p)
 end
 
 function collideplayer(p,x,y)
-	for i=1,#bricks do
-		col_player_solid(p,bricks[i],x,y)
-	end
-	for i=1,#bombs do
-		local b = bombs[i]
-		if b != p.inbomb then
-			col_player_solid(p,b,x,y)
-		end
-	end
-end
-
-function col_player_solid(p,b,x,y)
  -- get center of sprite
 	local cx = p.x + 4
 	local cy = p.y + 4
@@ -207,13 +195,38 @@ function col_player_solid(p,b,x,y)
 	local y1 = chy - x*2
 	local y2 = chy + x*2
 	
-	-- bricks and bombs stop you
-	if didcol(b,x1,y1)
-	or didcol(b,x2,y2)
-	then
-		p.x += -x
-		p.y += -y
+	-- try hitting bricks
+	for i=1,#bricks do
+		local b = bricks[i]
+		if hit(b,x1,y1,x2,y2) then
+			p.x += -x
+			p.y += -y
+		end
 	end
+	
+	-- try hitting bombs
+	for i=1,#bombs do
+		local b = bombs[i]
+		if b != p.inbomb then
+			if hit(b,x1,y1,x2,y2) then
+				p.x += -x
+				p.y += -y
+			end
+		end
+	end
+	
+	-- try getting items
+	for i=1,#items do
+		local it = items[i]
+		if hit(it,x1,y1,x2,y2) then
+			del(items,it)
+		end
+	end
+end
+
+function hit(e,x1,y1,x2,y2)
+	return didcol(e,x1,y1)
+	    or didcol(e,x2,y2)
 end
 
 function getbombon(p)

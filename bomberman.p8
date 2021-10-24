@@ -68,6 +68,8 @@ function makeplayer(n,x,y)
 		spd=1,
 		pwr=2,
 		s=n*16+1,
+		bombs_max=1,
+		bombs_live=0,
 	})
 end
 
@@ -148,8 +150,10 @@ function updateplayer(p)
 end
 
 function placebomb(p)
- -- todo: limit bombs with "if"
-	makebomb(p)
+ if p.bombs_live < p.bombs_max then
+ 	p.bombs_live += 1
+		makebomb(p)
+ end
 end
 
 function collideplayer(p,x,y)
@@ -211,6 +215,7 @@ function makebomb(p)
 	add(bombs,{
 		x=x,
 		y=y,
+		player=p,
 		range=p.pwr,
 		t=sec*30,
 	})
@@ -220,6 +225,7 @@ function updatebomb(b)
 	b.t -= 1
 	if b.t == 0 then
 		del(bombs,b)
+		b.player.bombs_live-=1
 		makeflames(b)
 	end
 end
@@ -228,10 +234,6 @@ function drawbomb(b)
 	local s = 7
 	if (time()%1 < 0.5) s=8
 	spr(s, b.x, b.y)
-end
-
-function makeflames(b)
-	
 end
 
 -->8
@@ -305,6 +307,10 @@ end
 
 -->8
 -- flames
+
+function makeflames(b)
+	
+end
 
 function drawflame(b)
 	spr(9, b.x, b.y)

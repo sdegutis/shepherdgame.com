@@ -343,6 +343,15 @@ function getbrick(x,y)
  end
 end
 
+function getbomb(x,y)
+	for i=1,#bombs do
+		local b = bombs[i]
+		if b.x==x and b.y==y then
+			return b
+		end
+	end
+end
+
 -->8
 -- flames
 
@@ -381,6 +390,11 @@ function addflame(b,x,y,s)
 	if brick then
 		del(bricks,brick)
 		return true
+	end
+	
+	local bomb = getbomb(px,py)
+	if bomb then
+		bomb.t=1
 	end
 	
 	return false

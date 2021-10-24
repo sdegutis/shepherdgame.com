@@ -90,7 +90,7 @@ function makeplayer(n,x,y)
 		dy=0,
 		vx=0,
 		vy=0,
-		vel=0.5,
+		vel=0.25,
 		spd=1,
 		pwr=1,
 		qwk=3,
@@ -239,7 +239,7 @@ function collideplayer(p,x,y)
 		if kind == 'fire' then
 			p.pwr += 1
 		elseif kind == 'speed' then
-			p.spd += 0.5
+			p.spd += 0.25
 		elseif kind == 'bomb' then
 			p.bombs_max += 1
 		end

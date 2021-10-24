@@ -189,14 +189,14 @@ function collideplayer(p,x,y)
 	local cy = p.y + 4
 	
 	-- get center of moving edge
-	local chx = cx + x*2
-	local chy = cy + y*2
+	local chx = cx + x*3
+	local chy = cy + y*3
 	
 	-- get two corners
-	local x1 = chx - y*2
-	local x2 = chx + y*2
-	local y1 = chy - x*2
-	local y2 = chy + x*2
+	local x1 = chx - y*3
+	local x2 = chx + y*3
+	local y1 = chy - x*3
+	local y2 = chy + x*3
 	
 	local t1 = getthing1(x1,y1)
 	local t2 = getthing1(x2,y2)

@@ -284,16 +284,28 @@ function updatebomb(b)
 end
 
 function drawbomb(b)
+	_drawbomb(b,true)
+	_drawbomb(b,false)
+end
+
+function _drawbomb(b,shadow)
 	local s = 7
+	local x = b.x
+	local y = b.y
 	if (time()%1 < 0.5) s+=1
 	
 	local palled = false
-	if b.pbomb then
+	if shadow then
+		palled = true
+		x+=1
+		y+=1
+		pal({1,1,1,1,1,1,1,1,1,1,1,1,1,1,1})
+	elseif b.pbomb then
 		palled = true
 		pal(12,2)
 	end
 	
-	spr(s, b.x, b.y)
+	spr(s,x,y)
 	
 	if palled then
 		pal()

@@ -218,11 +218,17 @@ function collideplayer(p,x,y)
 	end
 	
 	-- try getting items
+	local got
 	for i=1,#items do
 		local it = items[i]
 		if hit(it,x1,y1,x2,y2) then
-			del(items,it)
+			got=it
+			break
 		end
+	end
+	
+	if got then
+		del(items,got)
 	end
 end
 
@@ -242,7 +248,7 @@ end
 
 
 function makebomb(p)
- local sec=3
+ local sec=1
  local x = round(p.x/8)*8
  local y = round(p.y/8)*8
 	add(bombs,{

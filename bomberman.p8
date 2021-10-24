@@ -115,7 +115,7 @@ function _drawplayer(p,x,y)
 	
 	if p.mx!=0 or p.my!=0 then
 		s+=1
-		if (time()%1<0.5) s+=1
+		if (time()%0.5<0.25) s+=1
 	end
 	
 	local fx = p.dx < 0

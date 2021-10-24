@@ -84,8 +84,8 @@ function drawgame()
 			local y1=p.y-2
 			local x2=p.x+10
 			local y2=p.y+10
-			rectfill(x1,y1,x2,y2,13)
-			rect(x1,y1,x2,y2,2)
+			rectfill(x1,y1,x2,y2,10)
+			rect(x1,y1,x2,y2,9)
 			box(p.x-12,p.y-13,"winner!")
 		else
 			box(40,40,"no winner")

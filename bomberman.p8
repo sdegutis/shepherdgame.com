@@ -20,6 +20,21 @@ function _init()
 	makeplayer(1,104,104)
 	decodemap()
 	spawnbricks()
+	
+	for i=1,#bricks-1 do
+		for j=i+1,#bricks do
+			local a = bricks[i]
+			local b = bricks[j]
+			if a.x == b.x and a.y == b.y then
+				cls()
+				print(a.x)
+				print(a.y)
+				print(b.x)
+				print(b.y)
+				stop()
+			end
+		end
+	end
 end
 
 function _draw()
@@ -70,7 +85,7 @@ function makeplayer(n,x,y)
 		spd=1,
 		pwr=1,
 		s=n*16+1,
-		bombs_max=1,
+		bombs_max=3,
 		bombs_live=0,
 	})
 end
@@ -272,9 +287,7 @@ end
 
 function makebrick(x,y)
 	if rnd() < 0.8 then
-	 local s = mget(x,y)
-	 local solid = fget(s,0)
-		if not solid then
+		if not getsolidthing(x*8,y*8) then
 			add(bricks,{
 				x=x*8,
 				y=y*8,

@@ -68,6 +68,7 @@ function startgame()
 end
 
 function drawgame()
+	camera(-4,-4)
 	cls(0)
 	map(mapx*16,mapy*16,0,0,15,15)
 	foreach(bricks,drawbrick)
@@ -110,9 +111,16 @@ function drawgame()
 		 end
 	 end
 	end
+	camera()
 end
 
 function updategame()
+	cheat=cheat or 0
+	if (btnp(🅾️,1)) cheat += 1
+	if cheat == 5 and not debug then
+		debug = {}
+	end
+	
 	if gameover then
 		if gameover.t > 0 then
 			gameover.t -= 1

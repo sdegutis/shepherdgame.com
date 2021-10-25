@@ -119,6 +119,11 @@ function updategame()
 	if (btnp(🅾️,1)) cheat += 1
 	if cheat == 5 and not debug then
 		debug = {}
+		cheat = -30
+	elseif cheat < 0 then
+		cheat += 1
+	elseif cheat==0 and debug then
+		debug=nil
 	end
 	
 	if gameover then

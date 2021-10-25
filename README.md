@@ -1,12 +1,30 @@
 About 2-3 years of Pico-8 games made with and for my kids.
 
+Bomberman:
+
+![bomberman sshot 1](bomberman_6.gif)
+
+![bomberman sshot 2](bomberman_7.gif)
+
+![bomberman sshot 3](bomberman_8.gif)
+
+![bomberman sshot 4](bomberman_9.gif)
+
+Newer:
+
+| File      | What                             |
+| --------- | -------------------------------- |
+| bomberman | Bomberman clone with waterbombs. |
+| harbinger | Top-down zelda-style RPG thing.  |
+
+Older:
+
 | File      | What                                                     |
 | --------- | -------------------------------------------------------- |
 | bariospr  | Using math to draw a bouncing ice-ball with a trail.     |
 | bman      | Eventual bomberman clone. Got stuck on collision.        |
 | drawline  | Draw lines with mouse in spr/map memory using only poke. |
 | gong      | Multiplayer game, with basic bouncing physics.           |
-| harbinger | Finally, my zelda like idea, slowly coming to life.      |
 | lasers    | Tried to emulate Super Metroid's wave beam using math.   |
 | lems      | Lemmings with a few features.                            |
 | lems2     | Like lems but 2x-size to try solving CPU issues.         |

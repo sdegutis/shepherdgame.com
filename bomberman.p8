@@ -21,11 +21,11 @@ function startgame()
 	_update=updategame
 	
 	powers={
-		'speed',
-		'fire',
-		'bomb',
-		'pbomb',
-		'sbomb',
+		{'speed',30},
+		{'fire',50},
+		{'bomb',45},
+		{'pbomb',20},
+		{'sbomb',15},
 	}
 	
 	gameover=nil
@@ -328,7 +328,7 @@ function collidep(p,t1,t2,x,y)
 		end
 	elseif t1.type == 'item' then
 		del(items,t1)
-		local kind = powers[t1.k+1]
+		local kind = powers[t1.k+1][1]
 		sfx(4)
 		
 		if kind == 'fire' then
@@ -454,8 +454,14 @@ function makebrick(x,y)
 	if rnd() < 0.8 then
 		if not getsolidthing(x*8,y*8) then
 			local k
-			if rnd() < 0.4 then
-				k = flr(rnd(#powers))
+			
+			local per = flr(rnd()*100)
+			for i=1,#powers do
+				local p = flr(rnd(#powers))
+				if per < powers[p+1][2] then
+					k=p
+					break
+				end
 			end
 			add(bricks,{
 				type='brick',

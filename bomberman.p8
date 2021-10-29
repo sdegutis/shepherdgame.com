@@ -169,15 +169,12 @@ function checkcheat(c)
 		c.on = false
 	end
 	
-	debug = c
-	
 	-- count down if active
 	if c.i > 0 then
 		c.t -= 1
 		-- reset if times up
 		if c.t == 0 then
 			c.i = 0
-			c.on = false
 		end
 	end
 	
@@ -195,7 +192,9 @@ function checkcheat(c)
 end
 
 cheats = {
-	showitems={⬆️,⬇️,⬅️,➡️},
+	showitems={
+		⬆️,⬇️,⬅️,➡️,⬆️,⬇️,⬅️,➡️,
+	},
 }
 
 -->8

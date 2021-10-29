@@ -58,7 +58,8 @@ function makeplayer(n)
 		vy=0,
 		spd=0.25,
 		jspd=4,
-		maxv=2,
+		maxvx=2,
+		maxvy=4,
 	})
 end
 
@@ -101,8 +102,9 @@ function updateplayer(p)
 	gravity = 0.25
 	p.vy += gravity
 	
-	if (p.vx> p.maxv) p.vx= p.maxv
-	if (p.vx<-p.maxv) p.vx=-p.maxv
+	if (p.vx> p.maxvx) p.vx= p.maxvx
+	if (p.vx<-p.maxvx) p.vx=-p.maxvx
+	if (p.vy> p.maxvy) p.vy= p.maxvy
 	
 	p.x += p.vx
 	p.y += p.vy

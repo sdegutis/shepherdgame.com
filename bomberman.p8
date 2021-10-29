@@ -299,12 +299,11 @@ function updateplayer(p)
 	
 	if not gameover then
 		if btnp(❎,p.n) then
-			placebomb(p)
-		end
-		if btnp(🅾️,p.n) then
 			if p.livemine then
 				explodebomb(p.livemine)
 				p.livemine = nil
+			else
+				placebomb(p)
 			end
 		end
 	end

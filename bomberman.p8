@@ -119,15 +119,8 @@ function drawgame()
 end
 
 function updategame()
-	cheat=cheat or 0
-	if (btnp(🅾️,1)) cheat += 1
-	if cheat == 5 and not debug then
-		debug = {}
-		cheat = -30
-	elseif cheat < 0 then
-		cheat += 1
-	elseif cheat==0 and debug then
-		debug=nil
+	for k,v in pairs(cheats) do
+		checkcheat(v)
 	end
 	
 	if gameover then
@@ -167,6 +160,43 @@ function checkgameover()
 		}
 	end
 end
+
+function checkcheat(c)
+ -- initial state
+	if not c.t then
+		c.t = 0
+		c.i = 0
+		c.on = false
+	end
+	
+	debug = c
+	
+	-- count down if active
+	if c.i > 0 then
+		c.t -= 1
+		-- reset if times up
+		if c.t == 0 then
+			c.i = 0
+			c.on = false
+		end
+	end
+	
+	-- is current button pressed?
+	if btnp(c[c.i+1]) then
+		c.i += 1
+		c.t = 15 -- time limit
+		if c.i == #c then
+			-- finished!
+			c.on = not c.on
+			c.i = 0
+			c.t = 0
+		end
+	end
+end
+
+cheats = {
+	showitems={⬆️,⬇️,⬅️,➡️},
+}
 
 -->8
 -- players
@@ -543,7 +573,9 @@ function drawbrick(b)
 	
 	spr(mapb,b.x,b.y)
 	
-	if debug and b.k then
+	if cheats.showitems.on
+	   and b.k
+	then
 		local s = b.k+112
 		spr(s,b.x,b.y)
 	end

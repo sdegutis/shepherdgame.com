@@ -199,10 +199,16 @@ function checkcheat(p,name,codes)
 end
 
 cheats = {
-	showitems={
+	itemshow={
 		⬆️,⬇️,⬅️,➡️,⬆️,⬇️,⬅️,➡️,
 		function(p)
 			showitems = not showitems
+		end
+	},
+	invincibility={
+		⬅️,⬅️,➡️,➡️,⬅️,⬅️,➡️,➡️,
+		function(p)
+			p.invincible=not p.invincible
 		end
 	},
 }
@@ -248,7 +254,9 @@ function drawplayer(p)
 	if not p.out
 	   or  p.t % 4 < 2
 	then
-		if p.t == 0 and noloss then
+		if p.invincible then
+			pal({9,9,9,9,9,9,9,9,9,9,9,9,9,9,10})
+		elseif p.t == 0 and noloss then
 			pal({5,5,5,5,5,5,5,5,5,5,5,5,5,5,6})
 		end
 		_drawplayer(p,p.x,p.y)
@@ -743,9 +751,11 @@ function addflame(b,x,y,s)
 	local ps = getplayers(px,py)
 	for i=1,#ps do
 		local player = ps[i]
-		player.out = true
-		player.t = 30
-		checkgameover()
+		if not player.invincible then
+			player.out = true
+			player.t = 30
+			checkgameover()
+		end
 	end
 	
 	return false

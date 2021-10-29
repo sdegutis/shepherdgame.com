@@ -30,7 +30,7 @@ function startgame()
 		{'sbomb',15},
 		{'wbomb',50},
 		{'mine',30},
-		{'brick',40},
+		{'brick',10},
 		{'blinkmode',40},
 	}
 	

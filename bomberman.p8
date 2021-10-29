@@ -361,15 +361,15 @@ function updateplayer(p)
 end
 
 function placebomb(p)
-	if p.mine then
-		if not p.livemine then
-			makebomb(p)
-		end
-	elseif p.brick then
+	if p.brick then
 		local x = round(p.x/8)
 		local y = round(p.y/8)
 		makebrick(x,y)
 		p.brick = false
+	elseif p.mine then
+		if not p.livemine then
+			makebomb(p)
+		end
 	elseif p.bombs_live < p.bombs_max then
  	p.bombs_live += 1
 		makebomb(p)

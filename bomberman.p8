@@ -38,6 +38,7 @@ function startgame()
 	bricks={}
 	flames={}
 	items={}
+	showitems=false
 	
 	spots = {
 		{8,8},
@@ -120,7 +121,10 @@ end
 
 function updategame()
 	for k,v in pairs(cheats) do
-		checkcheat(v)
+		for i=1,#players do
+		 local p=players[i]
+			checkcheat(p,k,v)
+		end
 	end
 	
 	if gameover then
@@ -161,14 +165,16 @@ function checkgameover()
 	end
 end
 
-function checkcheat(c)
+function checkcheat(p,name,codes)
  -- initial state
-	if not c.t then
+ local c = p[name]
+ if not c then
+ 	c = {}
 		c.t = 0
 		c.i = 0
-		c.on = false
-	end
-	
+ 	p[name] = c
+ end
+ 
 	-- count down if active
 	if c.i > 0 then
 		c.t -= 1
@@ -179,12 +185,13 @@ function checkcheat(c)
 	end
 	
 	-- is current button pressed?
-	if btnp(c[c.i+1]) then
+	if btnp(codes[c.i+1],p.n) then
 		c.i += 1
 		c.t = 15 -- time limit
-		if c.i == #c then
+		if c.i == #codes-1 then
+			local fn = codes[#codes]
 			-- finished!
-			c.on = not c.on
+			fn(p)
 			c.i = 0
 			c.t = 0
 		end
@@ -194,6 +201,9 @@ end
 cheats = {
 	showitems={
 		⬆️,⬇️,⬅️,➡️,⬆️,⬇️,⬅️,➡️,
+		function(p)
+			showitems = not showitems
+		end
 	},
 }
 
@@ -572,9 +582,7 @@ function drawbrick(b)
 	
 	spr(mapb,b.x,b.y)
 	
-	if cheats.showitems.on
-	   and b.k
-	then
+	if showitems and b.k then
 		local s = b.k+112
 		spr(s,b.x,b.y)
 	end

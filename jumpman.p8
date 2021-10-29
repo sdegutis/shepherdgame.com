@@ -57,6 +57,7 @@ function makeplayer(n)
 		vx=0,
 		vy=0,
 		spd=0.25,
+		jspd=4,
 		maxv=2,
 	})
 end
@@ -81,20 +82,30 @@ function updateplayer(p)
 	if (btn(⬅️, p.n)) p.md = -1
 	if (btn(➡️, p.n)) p.md =  1
 	
+	if btnp(❎, p.n) then
+		p.vy = -p.jspd
+	end
+	
 	-- set facing dir (if moving)
 	if (p.md != 0) p.fd = p.md
 	
-	-- adjust velocity
+	-- adjust x velocity
 	if p.md != 0 then
 		p.vx += p.spd * sgn(p.md)
 	elseif p.vx != 0 then
 		p.vx -= p.spd * sgn(p.vx)*2
 	end
 	
+	-- adjust y velocity
+	-- e.g. gravity and jumping
+	gravity = 0.25
+	p.vy += gravity
+	
 	if (p.vx> p.maxv) p.vx= p.maxv
 	if (p.vx<-p.maxv) p.vx=-p.maxv
 	
 	p.x += p.vx
+	p.y += p.vy
 end
 
 __gfx__

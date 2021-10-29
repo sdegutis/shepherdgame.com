@@ -742,6 +742,7 @@ function addflame(b,x,y,s)
 		s=s,
 		pbomb=b.pbomb,
 		sbomb=b.sbomb,
+		bricks={},
 	}
 	add(flames,f)
 	return updateflame(f)
@@ -781,7 +782,7 @@ function updateflame(f)
 		del(bricks,brick)
 		
 		if brick.k then
-			makeitem(brick)
+			add(f.bricks, brick)
 		end
 		
 		if not b.pbomb then
@@ -811,6 +812,7 @@ function updateflame(f)
 	f.t -= 1
 	if f.t == 0 then
 		del(flames, f)
+		foreach(f.bricks, makeitem)		
 	end
 	
 	return false	

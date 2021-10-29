@@ -3,6 +3,8 @@ version 33
 __lua__
 -- game
 
+noloss=true
+
 -- interactions
 --    pl bm it br st xp
 -- pl -- sp gt sp sp ot
@@ -194,16 +196,24 @@ function makeplayer(n,x,y)
 end
 
 function drawplayer(p)
-	if p.out and p.t == 0 then
-		return
+	if not noloss then
+		if p.out and p.t == 0 then
+			return
+		end
 	end
 	
 	for i=1,15 do pal(i,1) end
 	_drawplayer(p,p.x+1,p.y+1)
 	pal()
 	
-	if not p.out or p.t % 4 < 2 then
+	if not p.out
+	   or  p.t % 4 < 2
+	then
+		if p.t == 0 and noloss then
+			pal({5,5,5,5,5,5,5,5,5,5,5,5,5,5,6})
+		end
 		_drawplayer(p,p.x,p.y)
+		pal()
 	end
 end
 
@@ -224,7 +234,9 @@ end
 function updateplayer(p)
 	if p.out then
 		if (p.t > 0) p.t -= 1
-		return
+		if not noloss then
+			return
+		end
 	end
 	
 	if not gameover then

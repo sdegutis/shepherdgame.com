@@ -261,7 +261,7 @@ function drawplayer(p)
 		if p.invincible then
 			pal({9,9,9,9,9,9,9,9,9,9,9,9,9,9,10})
 		elseif p.t == 0 and noloss then
-			pal({5,5,5,5,5,5,5,5,5,5,5,5,5,5,6})
+			pal({12,12,12,12,12,12,12,12,12,12,12,12,12,12,6})
 		end
 		_drawplayer(p,p.x,p.y)
 		pal()

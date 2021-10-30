@@ -256,6 +256,8 @@ function youreout(p)
 	p.sbomb=false
 	p.wbomb=false
 	p.invincible=false
+	p._outt=2*30
+	p.outt=0
 end
 
 function drawplayer(p)
@@ -298,6 +300,7 @@ end
 
 function updateplayer(p)
 	if p.out then
+		if (p.outt > 0) p.outt -= 1
 		if (p.t > 0) p.t -= 1
 		if not noloss then
 			return
@@ -374,6 +377,14 @@ function updateplayer(p)
 end
 
 function placebomb(p)
+	if p.out then
+		if p.outt == 0 then
+			p.outt = p._outt
+		elseif p.outt > 0 then
+			return
+		end
+	end
+
 	if p.brick then
 		local x = round(p.x/8)
 		local y = round(p.y/8)

@@ -218,6 +218,8 @@ cheats = {
 -->8
 -- players
 
+out_bomb_delay = 2 -- seconds
+
 
 function makeplayer(n,x,y)
 	add(players,{
@@ -256,7 +258,6 @@ function youreout(p)
 	p.sbomb=false
 	p.wbomb=false
 	p.invincible=false
-	p._outt=2*30
 	p.outt=0
 end
 
@@ -379,7 +380,7 @@ end
 function placebomb(p)
 	if p.out then
 		if p.outt == 0 then
-			p.outt = p._outt
+			p.outt = out_bomb_delay*30
 		elseif p.outt > 0 then
 			return
 		end

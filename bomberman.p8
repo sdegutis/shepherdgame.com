@@ -244,6 +244,20 @@ function makeplayer(n,x,y)
 	})
 end
 
+function youreout(p)
+	p.out=true
+	p.t=30
+	p.spd=1
+	p.pwr=1
+	p.mine=false
+	p.brick=false
+	p.bombs_max=1
+	p.pbomb=false
+	p.sbomb=false
+	p.wbomb=false
+	p.invincible=false
+end
+
 function drawplayer(p)
 	if not noloss then
 		if p.out and p.t == 0 then
@@ -349,13 +363,11 @@ function updateplayer(p)
 	-- try moving
 	for x=1,ceil(abs(p.vx)) do
 	 local mv = sgn(p.vx)
-	 if (p.out) mv = .5*sgn(mv)
 		p.x += mv
 		collideplayer(p,mv,0)
 	end
 	for y=1,ceil(abs(p.vy)) do
 	 local mv = sgn(p.vy)
-	 if (p.out) mv = .5*sgn(mv)
 		p.y += mv
 		collideplayer(p,0,mv)
 	end
@@ -430,7 +442,7 @@ function collidep(p,t1,t2,x,y)
 				if(y!=0)p.vy=-sgn(y)*2
 			end
 		end
-	elseif t1.type == 'item' then
+	elseif t1.type == 'item' and not p.out then
 		del(items,t1)
 		local kind = powers[t1.k+1][1]
 		sfx(4)
@@ -804,8 +816,7 @@ function updateflame(f)
 	for i=1,#ps do
 		local player = ps[i]
 		if not player.invincible then
-			player.out = true
-			player.t = 30
+		 youreout(player)
 			checkgameover()
 		end
 	end

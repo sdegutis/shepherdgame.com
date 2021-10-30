@@ -349,11 +349,13 @@ function updateplayer(p)
 	-- try moving
 	for x=1,ceil(abs(p.vx)) do
 	 local mv = sgn(p.vx)
+	 if (p.out) mv = .5*sgn(mv)
 		p.x += mv
 		collideplayer(p,mv,0)
 	end
 	for y=1,ceil(abs(p.vy)) do
 	 local mv = sgn(p.vy)
+	 if (p.out) mv = .5*sgn(mv)
 		p.y += mv
 		collideplayer(p,0,mv)
 	end

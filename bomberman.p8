@@ -832,8 +832,13 @@ end
 
 function drawitem(item)
 	local s = 112+item.k
-	--local kind = powers[item.k]
-	spr(s, item.x, item.y)
+	local y = round(sin(time()%1)*100*2)/100
+	
+	for i=1,15 do pal(i,0) end
+	spr(s, item.x+1, item.y+y+1)
+	pal()
+	
+	spr(s, item.x, item.y+y)
 end
 
 -->8

@@ -843,7 +843,7 @@ function updateflame(f)
 	
 	local bomb = getbomb(px,py)
 	if bomb then
-		bomb.t=1
+		explodebomb(bomb)
 		
 		if not b.pbomb then
 			return true

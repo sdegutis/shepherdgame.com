@@ -31,7 +31,7 @@ function startgame()
 		{'wbomb',50},
 		{'mine',30},
 		{'brick',10},
-		{'blinkmode',40},
+		{'blinkmode',10},
 	}
 	
 	gameover=nil
@@ -384,6 +384,10 @@ function placebomb(p)
 		elseif p.outt > 0 then
 			return
 		end
+	end
+	
+	if p.invincible then
+		return
 	end
 
 	if p.brick then

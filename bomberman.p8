@@ -952,8 +952,8 @@ end
 -- maps
 
 
-mapx=0
-mapy=0
+_mapx=0
+_mapy=0
 
 function choosemap()
 	_update=updatemapchooser
@@ -975,7 +975,7 @@ function drawmapchooser()
 		
 		local d = round(cos(time()%1)/3*4)+2
 		
-		if dx==mapx and dy==mapy then
+		if dx==_mapx and dy==_mapy then
 			rect(px-1-d, py-1-d,
 			     px+24+d,py+24+d,
 			     7)
@@ -990,24 +990,24 @@ end
 function updatemapchooser()
 	if btnp(⬆️,0) then
 		sfx(2)
-		mapy -= 1
-		if (mapy<0) mapy = 4-1
+		_mapy -= 1
+		if (_mapy<0) _mapy = 4-1
 	elseif btnp(⬇️,0) then
 		sfx(2)
-		mapy += 1
-		if (mapy==4) mapy=0
+		_mapy += 1
+		if (_mapy==4) _mapy=0
 	elseif btnp(⬅️,0) then
 		sfx(2)
-		mapx -= 1
-		if (mapx<0) mapx = 4-1
+		_mapx -= 1
+		if (_mapx<0) _mapx = 4-1
 	elseif btnp(➡️,0) then
 		sfx(2)
-		mapx += 1
-		if (mapx==4) mapx=0
+		_mapx += 1
+		if (_mapx==4) _mapx=0
 	elseif btnp(❎,0) then
 		sfx(3)
 		
-		local i = mapy*4+mapx
+		local i = _mapy*4+_mapx
 		mapy = flr(i/8)
 		mapx = i%8
 		

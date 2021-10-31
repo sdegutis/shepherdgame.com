@@ -32,7 +32,7 @@ function startgame()
 		{'mine',30},
 		{'brick',10},
 		{'blinkmode',10},
-		{'invisible',50},
+		{'invisible',30},
 	}
 	
 	gameover=nil
@@ -499,9 +499,12 @@ function collidep(p,t1,t2,x,y)
 			p.brick=true
 		elseif kind == 'invisible' then
 			p.invisible_t=30*invisible_timer
+			p.invincible = false
+			p.invincible_t = 0
 		elseif kind == 'blinkmode' then
 			p.invincible=true
 			p.invincible_t=7*30
+			p.invisible_t = 0
 		end
 	end
 end

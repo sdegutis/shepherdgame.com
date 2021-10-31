@@ -4,6 +4,7 @@ __lua__
 -- game
 
 noloss=true
+shakes=true
 
 -- interactions
 --    pl bm it br st xp
@@ -76,7 +77,16 @@ function startgame()
 end
 
 function drawgame()
-	camera(-4,-4)
+	
+	local camx=-4
+	local camy=-4
+	if shaking then
+		camx+=rnd(2)*sgn(rnd(2)-1)
+		camy+=rnd(2)*sgn(rnd(2)-1)
+	end
+	
+	camera(camx,camy)
+	
 	cls(0)
 	map(mapx*16,mapy*16,0,0,15,15)
 	foreach(bricks,drawbrick)
@@ -123,6 +133,13 @@ function drawgame()
 end
 
 function updategame()
+	if shaking then
+		shaking -= 1
+		if shaking == 0 then
+			shaking=nil
+		end
+	end
+
 	for k,v in pairs(cheats) do
 		for i=1,#players do
 		 local p=players[i]
@@ -553,6 +570,7 @@ function updatebomb(b)
 end
 
 function explodebomb(b)
+	if (shakes) shaking=10
 	del(bombs,b)
 	b.player.bombs_live-=1
 	makeflames(b)

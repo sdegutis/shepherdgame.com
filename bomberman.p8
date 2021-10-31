@@ -471,12 +471,18 @@ function collidep(p,t1,t2,x,y)
 			p.bombs_max += 1
 		elseif kind == 'pbomb' then
 			p.pbomb=true
+			p.sbomb=false
+			p.mine=false
 		elseif kind == 'sbomb' then
+			p.pbomb=false
 			p.sbomb=true
+			p.mine=false
 		elseif kind == 'wbomb' then
 			p.wbomb=true
 		elseif kind == 'mine' then
 			p.mine=true
+			p.pbomb=false
+			p.sbomb=false
 		elseif kind == 'brick' then
 			p.brick=true
 		elseif kind == 'blinkmode' then

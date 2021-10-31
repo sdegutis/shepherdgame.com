@@ -408,9 +408,7 @@ function placebomb(p)
 		makebrick(x,y)
 		p.brick = false
 	elseif p.mine then
-		if not p.livemine then
-			makebomb(p)
-		end
+		makebomb(p)
 	elseif p.bombs_live < p.bombs_max then
  	p.bombs_live += 1
 		makebomb(p)

@@ -325,6 +325,33 @@ function _drawplayer(p,x,y)
 end
 
 function updateplayer(p)
+ -- set moving dir if any
+	if     btn(⬅️,p.n)then p.mx=-1
+	elseif btn(➡️,p.n)then p.mx=1
+	else   p.mx=0 end
+	if     btn(⬆️,p.n)then p.my=-1
+	elseif btn(⬇️,p.n)then p.my=1
+	else   p.my=0 end
+	
+	if btnp(❎,p.n) then
+		dobombbutton(p)
+	end
+	
+	_updateplayer(p)
+end
+
+function dobombbutton(p)
+	if not gameover then
+		if p.livemine then
+			explodebomb(p.livemine)
+			p.livemine = nil
+		else
+			placebomb(p)
+		end
+	end
+end
+
+function _updateplayer(p)
 	if p.out then
 		if (p.outt > 0) p.outt -= 1
 		if (p.t > 0) p.t -= 1
@@ -343,25 +370,6 @@ function updateplayer(p)
 	if p.invisible_t > 0 then
 		p.invisible_t -= 1
 	end
-	
-	if not gameover then
-		if btnp(❎,p.n) then
-			if p.livemine then
-				explodebomb(p.livemine)
-				p.livemine = nil
-			else
-				placebomb(p)
-			end
-		end
-	end
-	
- -- set moving dir if any
-	if     btn(⬅️,p.n)then p.mx=-1
-	elseif btn(➡️,p.n)then p.mx=1
-	else   p.mx=0 end
-	if     btn(⬆️,p.n)then p.my=-1
-	elseif btn(⬇️,p.n)then p.my=1
-	else   p.my=0 end
 	
 	-- set action dir if moving
 	-- (for d-actions while still)

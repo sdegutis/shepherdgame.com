@@ -56,7 +56,7 @@ function startgame()
 end
 
 function drawgame()
-	cls()
+	cls(1)
 	drawview(players[1])
 	drawview(players[2])
 end
@@ -72,10 +72,12 @@ function drawview(p)
 	offx -= 32
 	offy -= 64
 	
-	-- for halfscreen
+	-- adjust for halfscreen
 	offx -= p.viewx
 	
-	--offx = mid(-16, offx, 100)
+	-- ????
+	offx = mid(0, offx, 192)
+	offy = mid(0, offy, 50)
 	
 	camera(offx, offy)
 	
@@ -141,10 +143,10 @@ function drawplayer(p)
 end
 
 function updateplayer(p)
-	if(btn(➡️,p.n)) p.x+=1
-	if(btn(⬅️,p.n)) p.x-=1
-	if(btn(⬆️,p.n)) p.y-=1
-	if(btn(⬇️,p.n)) p.y+=1
+	if(btn(➡️,p.n)) p.x+=10
+	if(btn(⬅️,p.n)) p.x-=10
+	if(btn(⬆️,p.n)) p.y-=10
+	if(btn(⬇️,p.n)) p.y+=10
 end
 
 __gfx__

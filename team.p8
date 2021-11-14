@@ -7,14 +7,12 @@ __lua__
 --   to practice teamwork
 --   in a slightly fun way
 
-debug={
-	skiptitle=false,
-}
+skiptitle=true
 
 function _init()
 	_level=1
 	starttitle()
-	if(debug.skiptitle)startgame()
+	if(skiptitle)startgame()
 end
 
 function starttitle()

@@ -7,9 +7,14 @@ __lua__
 --   to practice teamwork
 --   in a slightly fun way
 
+debug={
+	skiptitle=false,
+}
+
 function _init()
-	level=1
+	_level=1
 	starttitle()
+	if(debug.skiptitle)startgame()
 end
 
 function starttitle()
@@ -18,9 +23,14 @@ function starttitle()
 	_update=updatetitle
 end
 
+function nextlevel()
+	_level+=1
+	starttitle()
+end
+
 function drawtitle()
 	cls(1)
-	print("level "..level,50,50,7)
+	print("level ".._level,50,50,7)
 	local w = progress * (80-45)
 	line(45,60,80  ,60,0)
 	line(45,60,45+w,60,2)
@@ -37,6 +47,8 @@ end
 function startgame()
 	_draw=drawgame
 	_update=updategame
+	
+	
 end
 
 function drawgame()

@@ -1,21 +1,11 @@
 About 2-3 years of Pico-8 games made with and for my kids.
-
-Bomberman:
-
-![bomberman sshot 1](bomberman_6.gif)
-
-![bomberman sshot 2](bomberman_7.gif)
-
-![bomberman sshot 3](bomberman_8.gif)
-
-![bomberman sshot 4](bomberman_9.gif)
-
 Newer:
 
 | File      | What                             |
 | --------- | -------------------------------- |
 | bomberman | Bomberman clone with waterbombs. |
 | harbinger | Top-down zelda-style RPG thing.  |
+| team      | 2-P teamwork game with buttons.  |
 
 Older:
 
@@ -37,4 +27,17 @@ Older:
 | war       | Eventual warcraft1 clone (but without occult).           |
 | windows   | Emulation of Windows 8 loading circles.                  |
 
-LICENSE: MIT
+License: MIT
+
+Screenshots:
+
+Bomberman:
+
+![bomberman sshot 1](bomberman_6.gif)
+
+![bomberman sshot 2](bomberman_7.gif)
+
+![bomberman sshot 3](bomberman_8.gif)
+
+![bomberman sshot 4](bomberman_9.gif)
+

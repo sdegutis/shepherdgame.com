@@ -49,8 +49,8 @@ function startgame()
 	_update=updategame
 	
 	players={}
-	add(players, makeplayer(0))
-	add(players, makeplayer(1))
+	add(players, makeplayer())
+	add(players, makeplayer())
 	
 	parselevel()
 end
@@ -63,8 +63,21 @@ end
 
 function drawview(p)
 	clip(p.viewx, 0, 63, 128)
+
+	-- start where the player is
+	local offx = p.x
+	local offy = p.y
 	
-	camera(-p.viewx+p.x, -0+p.y)
+	-- center it in view
+	offx -= 32
+	offy -= 64
+	
+	-- for halfscreen
+	offx -= p.viewx
+	
+	--offx = mid(-16, offx, 100)
+	
+	camera(offx, offy)
 	
 	map(mapx, mapy)
 	
@@ -83,7 +96,6 @@ function parselevel()
 	mapx, mapy = getmapspot()
 	
 	for y=0,31 do
-		local row = {}
 		for x=0,31 do
 			local s = mget(x,y)
 			if s == 16 then
@@ -113,7 +125,8 @@ end
 -->8
 -- players
 
-function makeplayer(n)
+function makeplayer()
+	local n = #players
 	return {
 		n=n,
 		viewx=n*65,

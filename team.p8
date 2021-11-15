@@ -49,22 +49,20 @@ function startgame()
 	_update=updategame
 	
 	players={}
-	add(players, makeplayer(0,0))
-	add(players, makeplayer(1,65))
+	add(players, makeplayer(0))
+	add(players, makeplayer(1))
 	
 	parselevel()
 end
 
 function drawgame()
 	cls(1)
-	drawview(players[1])
-	drawview(players[2])
+	drawview(players[1],0)
+	drawview(players[2],65)
 end
 
-function drawview(p)
-	clip(p.viewx, 0, 63, 128)
-	
-	local vx = p.viewx
+function drawview(p,vx)
+	clip(vx, 0, 63, 128)
 	
 	-- start where the player is
 	local offx = p.x
@@ -91,11 +89,6 @@ function drawview(p)
 	
 	camera()
 	clip()
-	
-	if p==players[1] then
-	print("offx="..offx)
-	print("p.x="..p.x)
-	end
 end
 
 function updategame()
@@ -135,10 +128,9 @@ end
 -->8
 -- players
 
-function makeplayer(n,viewx)
+function makeplayer(n)
 	return {
 		n=n,
-		viewx=viewx,
 		s=(n+1)*16,
 		x=0,
 		y=0,

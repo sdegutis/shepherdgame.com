@@ -49,8 +49,8 @@ function startgame()
 	_update=updategame
 	
 	players={}
-	add(players, makeplayer())
-	add(players, makeplayer())
+	add(players, makeplayer(0,0))
+	add(players, makeplayer(1,65))
 	
 	parselevel()
 end
@@ -63,31 +63,39 @@ end
 
 function drawview(p)
 	clip(p.viewx, 0, 63, 128)
-
+	
+	local vx = p.viewx
+	
 	-- start where the player is
 	local offx = p.x
 	local offy = p.y
 	
-	-- center it in view
-	offx -= 32
-	offy -= 64
-	
 	-- adjust for halfscreen
-	offx -= p.viewx
+	offx -= vx
+	
+	-- center it in view
+	offx -= 28
+	offy -= 60
 	
 	-- ????
-	offx = mid(0, offx, 192)
-	offy = mid(0, offy, 50)
+	-- still don't understand this
+	-- but it works.
+	offx = mid(-vx, offx, 128+64-vx)
+	offy = mid(0, offy, 128)
 	
 	camera(offx, offy)
 	
-	map(mapx, mapy)
+	map(mapx, mapy,0,0,32,32)
 	
 	foreach(players, drawplayer)
 	
 	camera()
-	
 	clip()
+	
+	if p==players[1] then
+	print("offx="..offx)
+	print("p.x="..p.x)
+	end
 end
 
 function updategame()
@@ -127,11 +135,10 @@ end
 -->8
 -- players
 
-function makeplayer()
-	local n = #players
+function makeplayer(n,viewx)
 	return {
 		n=n,
-		viewx=n*65,
+		viewx=viewx,
 		s=(n+1)*16,
 		x=0,
 		y=0,

@@ -63,7 +63,7 @@ function drawgame()
 end
 
 function drawview(p)
-	local x = p.n == 0 and 0 or 65
+	local x = p.n * 65
 	local y = 0
 	local w = 63
 	local h = 127
@@ -97,10 +97,16 @@ function drawview(p)
 	
 	map(mapx, mapy,0,0,32,32)
 	
-	foreach(players, drawplayer)
+	local dplayers = {unpack(players)}
+	del(dplayers,p)
+	add(dplayers,p)
+	foreach(dplayers, drawplayer)
 	
 	camera()
 	clip()
+	
+	print("x="..x)
+	print("y="..y)
 end
 
 function updategame()

@@ -8,6 +8,7 @@ __lua__
 --   in a slightly fun way
 
 skiptitle=true
+flipview=false
 
 function _init()
 	level=1
@@ -57,29 +58,40 @@ end
 
 function drawgame()
 	cls(1)
-	drawview(players[1],0)
-	drawview(players[2],65)
+	drawview(players[1])
+	drawview(players[2])
 end
 
-function drawview(p,vx)
-	clip(vx, 0, 63, 128)
+function drawview(p)
+	local x = p.n == 0 and 0 or 65
+	local y = 0
+	local w = 63
+	local h = 127
+	
+	if flipview then
+		x,y = y,x
+		w,h = h,w
+	end
+	
+	clip(x,y,w,h)
 	
 	-- start where the player is
 	local offx = p.x
 	local offy = p.y
 	
 	-- adjust for halfscreen
-	offx -= vx
+	offx -= x
+	offy -= y
 	
 	-- center it in view
-	offx -= 28
-	offy -= 60
+	offx -= flr(w/2)-2
+	offy -= flr(h/2)-2
 	
 	-- ????
 	-- still don't understand this
 	-- but it works.
-	offx = mid(-vx, offx, 128+64-vx)
-	offy = mid(0, offy, 128)
+	--offx = mid(-x, offx, 128-x+w)
+	--offy = mid(-y, offy, 128-vy)
 	
 	camera(offx, offy)
 	
@@ -146,6 +158,10 @@ function updateplayer(p)
 	if(btn(⬅️,p.n)) p.x-=10
 	if(btn(⬆️,p.n)) p.y-=10
 	if(btn(⬇️,p.n)) p.y+=10
+	
+	if btnp(❎,p.n) then
+		flipview=not flipview
+	end
 end
 
 __gfx__

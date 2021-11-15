@@ -66,7 +66,7 @@ function drawview(p)
 	local x = p.n * 65
 	local y = 0
 	local w = 63
-	local h = 127
+	local h = 128
 	
 	if flipview then
 		x,y = y,x
@@ -87,15 +87,13 @@ function drawview(p)
 	offx -= flr(w/2)-2
 	offy -= flr(h/2)-2
 	
-	-- ????
-	-- still don't understand this
-	-- but it works.
-	--offx = mid(-x, offx, 128-x+w)
-	--offy = mid(-y, offy, 128-vy)
+	-- bound to level
+	offx = mid(-x, offx, 256-x-w)
+	offy = mid(-y, offy, 256-y-h)
 	
 	camera(offx, offy)
 	
-	map(mapx, mapy,0,0,32,32)
+	map(mapx,mapy,0,0,32,32)
 	
 	local dplayers = {unpack(players)}
 	del(dplayers,p)
@@ -104,9 +102,6 @@ function drawview(p)
 	
 	camera()
 	clip()
-	
-	print("x="..x)
-	print("y="..y)
 end
 
 function updategame()
@@ -165,7 +160,7 @@ function updateplayer(p)
 	if(btn(⬆️,p.n)) p.y-=10
 	if(btn(⬇️,p.n)) p.y+=10
 	
-	if btnp(❎,p.n) then
+	if btnp(🅾️,p.n) then
 		flipview=not flipview
 	end
 end

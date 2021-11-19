@@ -277,15 +277,15 @@ function docollide(p,mx,my)
 			if e.k == 'solid' then
 			 p.x -= mx
 			 p.y -= my
-				p.vx = mx*-3
-				p.vy = my*-3
+				p.vx = mx*-2
+				p.vy = my*-2
 				return true
 			elseif e.k == 'brick' then
 				if e.up then
 					p.x -= mx
 					p.y -= my
-					p.vx = mx*-3
-					p.vy = my*-3
+					p.vx = mx*-2
+					p.vy = my*-2
 					return true
 				end
 			end

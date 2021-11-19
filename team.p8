@@ -126,6 +126,8 @@ function parselevel()
 			local s = mget(x,y)
 			if s == 16 then
 				makestartspot(1,x,y)
+			elseif s == 4 then
+				makebox(x,y)
 			elseif s == 32 then
 				makestartspot(2,x,y)
 			elseif s == 8 then
@@ -150,6 +152,16 @@ end
 function makestartspot(pn,x,y)
 	players[pn].x = x*8
 	players[pn].y = y*8
+	mset(x,y, 2)
+end
+
+function makebox(x,y)
+	add(entities,{
+		k='box',
+		x=x*8,y=y*8,
+		cx=0,cw=8,
+		cy=0,ch=8,
+	})
 	mset(x,y, 2)
 end
 
@@ -298,6 +310,11 @@ function docollide(p,mx,my)
 					if (my!=0) p.vy = my*-3
 					return true
 				end
+			elseif e.k == 'box' then
+				p.x -= mx
+				p.y -= my
+				if (mx!=0) p.vx = 0
+				if (my!=0) p.vy = 0
 			end
 		end
 	end
@@ -332,6 +349,8 @@ function drawentity(e)
 		spr(s, e.x, e.y)
 	elseif e.k=='solid' then
 		spr(e.s, e.x, e.y)
+	elseif e.k=='box' then
+		spr(4, e.x, e.y)
 	end
 end
 

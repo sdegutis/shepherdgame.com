@@ -315,6 +315,9 @@ function docollide(p,mx,my)
 				p.y -= my
 				if (mx!=0) p.vx = 0
 				if (my!=0) p.vy = 0
+				
+				trymovebox(e,mx,my)
+				return true
 			end
 		end
 	end
@@ -355,6 +358,31 @@ function drawentity(e)
 end
 
 function updateentity(e)
+end
+
+function trymovebox(box,mx,my)
+	box.x += mx
+	box.y += my
+	
+	if boxstopped(box) then
+		box.x -= mx
+		box.y -= my
+		return
+	end
+end
+
+function boxstopped(box)
+	for i=1,#entities do
+		local e=entities[i]
+		if e != box then
+			if collided(box,e) then
+				if e.k == 'brick' or
+				   e.k == 'solid' then
+					return true
+				end
+			end
+		end
+	end
 end
 
 -->8

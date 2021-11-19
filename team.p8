@@ -211,11 +211,18 @@ function makeplayer(n)
 end
 
 function drawplayer(p)
+	pal({1,1,1,1,1,1,1,1,1,1,1,1,1,1,1})
+	_drawplayer(p,p.x+1,p.y+1)
+	pal()
+	_drawplayer(p,p.x,p.y)
+end
+
+function _drawplayer(p,x,y)
 	local s = p.s
 	if (p.dy==-1) s += 3
 	if (p.moving) s += ceil((time()%.5)*4)
 	local fx=p.dx==-1
-	spr(s, p.x, p.y, 1, 1, fx)
+	spr(s, x, y, 1, 1, fx)
 end
 
 function updateplayer(p)

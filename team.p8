@@ -191,12 +191,21 @@ end
 -->8
 -- players
 
+maxv=3 -- max velocity
+
 function makeplayer(n)
 	return {
 		n=n,
 		s=(n+1)*16,
 		x=0,
 		y=0,
+		mx=0,
+		my=0,
+		dx=1,
+		dy=1,
+		vx=0,
+		vy=0,
+		moving=false,
 	}
 end
 
@@ -205,10 +214,27 @@ function drawplayer(p)
 end
 
 function updateplayer(p)
-	if(btn(➡️,p.n)) p.x+=10
-	if(btn(⬅️,p.n)) p.x-=10
-	if(btn(⬆️,p.n)) p.y-=10
-	if(btn(⬇️,p.n)) p.y+=10
+	p.mx = btn(⬅️,p.n) and -1 or
+	       btn(➡️,p.n) and 1 or 0
+	p.my = btn(⬆️,p.n) and -1 or
+	       btn(⬇️,p.n) and 1 or 0
+	p.moving = p.mx!=0 or p.my!=0
+	
+	if p.moving then
+		p.dx = p.mx
+		p.dy = p.my
+	end
+	
+	p.vx=mid(-maxv,maxv,p.vx+p.mx)
+	p.vy=mid(-maxv,maxv,p.vy+p.my)
+	
+	for i=1,abs(p.vx) do
+		p.x += sgn(p.vx)
+	end
+	
+	for i=1,abs(p.vy) do
+		p.y += sgn(p.vy)
+	end
 	
 	if btnp(🅾️,p.n) then
 		flipview=not flipview

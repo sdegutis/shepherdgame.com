@@ -225,13 +225,27 @@ function updateplayer(p)
 		p.dy = p.my
 	end
 	
-	p.vx=mid(-maxv,maxv,p.vx+p.mx)
-	p.vy=mid(-maxv,maxv,p.vy+p.my)
+	-- find out moving directions
+	local dx=sgn(p.mx)
+	local dy=sgn(p.my)
 	
+	-- get new velocities
+	local b=maxv
+	local nx=p.vx+dx
+	local ny=p.vy+dy
+	
+	-- move in your moving dir
+	if (p.mx!=0) p.vx=mid(nx,b,-b)
+	if (p.my!=0) p.vy=mid(ny,b,-b)
+	
+	-- if not stopped, slow down
+	if (p.vx!=0) p.vx -= sgn(p.vx)/2
+	if (p.vy!=0) p.vy -= sgn(p.vy)/2
+	
+	-- take that many steps
 	for i=1,abs(p.vx) do
 		p.x += sgn(p.vx)
 	end
-	
 	for i=1,abs(p.vy) do
 		p.y += sgn(p.vy)
 	end

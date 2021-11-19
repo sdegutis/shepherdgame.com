@@ -157,6 +157,8 @@ function makebutton(n,x,y)
 	local e={
 		k='button',
 		x=x*8,y=y*8,
+		cx=1,cw=6,
+		cy=5,ch=4,
 		n=n,
 		on=false,
 	}
@@ -169,6 +171,8 @@ function makebrick(n,up,x,y)
 	local e={
 		k='brick',
 		x=x*8,y=y*8,
+		cx=0,cw=8,
+		cy=0,ch=8,
 		n=n,
 		up=up,
 	}
@@ -181,6 +185,8 @@ function makesolid(x,y,s)
 	add(entities,{
 		k='solid',
 		x=x*8,y=y*8,
+		cx=0,cw=8,
+		cy=0,ch=8,
 		s=s,
 	})
 	mset(x,y, 2)
@@ -208,6 +214,8 @@ function makeplayer(n)
 		mx=0,my=0,
 		dx=1,dy=1,
 		vx=0,vy=0,
+		cx=4,cw=2,
+		cy=5,ch=4,
 		moving=false,
 	}
 end
@@ -296,10 +304,18 @@ function docollide(p,mx,my)
 end
 
 function collided(p,e)
-	return p.x >= e.x - 4
-	   and p.y >= e.y - 7
-	   and p.x <= e.x + 4
-	   and p.y <= e.y + 4
+	local ax=p.x+p.cx
+	local aw=p.cw
+	local ay=p.y+p.cy
+	local ah=p.ch
+	
+	local bx=e.x+e.cx
+	local bw=e.cw
+	local by=e.y+e.cy
+	local bh=e.ch
+	
+	return ax>bx-aw and ax<bx+bw
+	   and ay>by-ah and ay<by+bh
 end
 
 -->8

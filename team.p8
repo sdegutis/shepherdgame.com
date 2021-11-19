@@ -226,7 +226,7 @@ function makeplayer(n)
 		mx=0,my=0,
 		dx=1,dy=1,
 		vx=0,vy=0,
-		cx=4,cw=2,
+		cx=3,cw=3,
 		cy=4,ch=4,
 		moving=false,
 	}
@@ -331,8 +331,8 @@ function collided(p,e)
 	local by=e.y+e.cy
 	local bh=e.ch
 	
-	return ax>=bx-aw and ax<bx+bw
-	   and ay>=by-ah and ay<by+bh
+	return ax>bx-aw and ax<bx+bw
+	   and ay>by-ah and ay<by+bh
 end
 
 -->8

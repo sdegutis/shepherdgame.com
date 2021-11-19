@@ -265,8 +265,8 @@ function docollide(p,mx,my)
 		   collided(p,e) then
 		 p.x -= mx
 		 p.y -= my
-			p.vx += mx*-20
-			p.vy += my*-20
+			p.vx = mx*-3
+			p.vy = my*-3
 			return true
 		end
 	end

@@ -240,8 +240,8 @@ function updateplayer(p)
 	if (p.my!=0) p.vy=mid(ny,b,-b)
 	
 	-- if not stopped, slow down
-	if (p.vx!=0) p.vx -= sgn(p.vx)/2
-	if (p.vy!=0) p.vy -= sgn(p.vy)/2
+	if (p.vx!=0) p.vx-=sgn(p.vx)/2
+	if (p.vy!=0) p.vy-=sgn(p.vy)/2
 	
 	-- take that many steps
 	for i=1,abs(p.vx) do

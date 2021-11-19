@@ -156,8 +156,7 @@ end
 function makebutton(n,x,y)
 	local e={
 		k='button',
-		x=x*8,
-		y=y*8,
+		x=x*8,y=y*8,
 		n=n,
 		on=false,
 	}
@@ -169,8 +168,7 @@ end
 function makebrick(n,up,x,y)
 	local e={
 		k='brick',
-		x=x*8,
-		y=y*8,
+		x=x*8,y=y*8,
 		n=n,
 		up=up,
 	}
@@ -182,8 +180,7 @@ end
 function makesolid(x,y,s)
 	add(entities,{
 		k='solid',
-		x=x*8,
-		y=y*8,
+		x=x*8,y=y*8,
 		s=s,
 	})
 	mset(x,y, 2)
@@ -207,14 +204,10 @@ function makeplayer(n)
 	return {
 		n=n,
 		s=(n+1)*16,
-		x=0,
-		y=0,
-		mx=0,
-		my=0,
-		dx=1,
-		dy=1,
-		vx=0,
-		vy=0,
+		x=0,y=0,
+		mx=0,my=0,
+		dx=1,dy=1,
+		vx=0,vy=0,
 		moving=false,
 	}
 end

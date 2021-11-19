@@ -225,16 +225,12 @@ function updateplayer(p)
 		p.dy = p.my
 	end
 	
-	-- find out moving directions
-	local dx=sgn(p.mx)
-	local dy=sgn(p.my)
-	
-	-- get new velocities
-	local b=maxv
-	local nx=p.vx+dx
-	local ny=p.vy+dy
+	-- get new velocities (maybe)
+	local nx=p.vx+sgn(p.mx)
+	local ny=p.vy+sgn(p.my)
 	
 	-- move in your moving dir
+	local b=maxv
 	if (p.mx!=0) p.vx=mid(nx,b,-b)
 	if (p.my!=0) p.vy=mid(ny,b,-b)
 	
@@ -244,15 +240,43 @@ function updateplayer(p)
 	
 	-- take that many steps
 	for i=1,abs(p.vx) do
-		p.x += sgn(p.vx)
+		local m = sgn(p.vx)
+		p.x += m
+		if (docollide(p,m,0)) break
 	end
 	for i=1,abs(p.vy) do
-		p.y += sgn(p.vy)
+		local m = sgn(p.vy)
+		p.y += m
+		if (docollide(p,0,m)) break
 	end
 	
 	if btnp(🅾️,p.n) then
 		flipview=not flipview
 	end
+end
+
+-- moved, now check collisions
+-- return true if stops player
+function docollide(p,mx,my)
+	for i=1,#entities do
+		local e = entities[i]
+		
+		if e.k == 'solid' and
+		   collided(p,e) then
+		 p.x -= mx
+		 p.y -= my
+			p.vx += mx*-20
+			p.vy += my*-20
+			return true
+		end
+	end
+end
+
+function collided(p,e)
+	return p.x >= e.x - 7
+	   and p.y >= e.y - 7
+	   and p.x <= e.x + 7
+	   and p.y <= e.y + 7
 end
 
 -->8

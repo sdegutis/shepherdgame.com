@@ -53,6 +53,10 @@ function startgame()
 	add(players, makeplayer(0))
 	add(players, makeplayer(1))
 	
+	buttons={}
+	add(buttons, makebutton(0))
+	add(buttons, makebutton(1))
+	
 	entities={}
 	
 	parselevel()
@@ -111,6 +115,7 @@ end
 function updategame()
 	foreach(players, updateplayer)
 	foreach(entities,updateentity)
+	updatebuttons()
 end
 
 function parselevel()
@@ -149,24 +154,28 @@ function makestartspot(pn,x,y)
 end
 
 function makebutton(n,x,y)
-	add(entities,{
+	local e={
 		k='button',
 		x=x*8,
 		y=y*8,
 		n=n,
 		on=false,
-	})
+	}
+	add(entities,e)
+	add(buttons[n].buttons,e)
 	mset(x,y, 2)
 end
 
 function makebrick(n,up,x,y)
-	add(entities,{
+	local e={
 		k='brick',
 		x=x*8,
 		y=y*8,
 		n=n,
 		up=up,
-	})
+	}
+	add(entities,e)
+	add(buttons[n].bricks,e)
 	mset(x,y, 2)
 end
 
@@ -318,6 +327,21 @@ function drawentity(e)
 end
 
 function updateentity(e)
+end
+
+-->8
+-- buttons
+
+function makebutton(n)
+	return {
+		n=n,
+		on=false,
+		buttons={},
+		bricks={},
+	}
+end
+
+function updatebuttons()
 end
 
 __gfx__

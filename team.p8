@@ -154,6 +154,7 @@ function makebutton(n,x,y)
 		x=x*8,
 		y=y*8,
 		n=n,
+		on=false,
 	})
 	mset(x,y, 2)
 end
@@ -261,13 +262,16 @@ function docollide(p,mx,my)
 	for i=1,#entities do
 		local e = entities[i]
 		
-		if e.k == 'solid' and
-		   collided(p,e) then
-		 p.x -= mx
-		 p.y -= my
-			p.vx = mx*-3
-			p.vy = my*-3
-			return true
+		if collided(p,e) then
+			if e.k == 'solid' then
+			 p.x -= mx
+			 p.y -= my
+				p.vx = mx*-3
+				p.vy = my*-3
+				return true
+			elseif e.k == 'button' then
+				e.on = true
+			end
 		end
 	end
 end
@@ -284,7 +288,9 @@ end
 
 function drawentity(e)
 	if e.k=='button' then
-		spr(8+e.n, e.x, e.y)
+		local s = 8+e.n
+		if (e.on) s += 16
+		spr(s, e.x, e.y)
 	elseif e.k=='brick' then
 		local s = 40+e.n
 		if (not e.up) s += 16

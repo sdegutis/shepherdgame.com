@@ -294,10 +294,10 @@ function docollide(p,mx,my)
 end
 
 function collided(p,e)
-	return p.x >= e.x - 7
+	return p.x >= e.x - 4
 	   and p.y >= e.y - 7
-	   and p.x <= e.x + 7
-	   and p.y <= e.y + 7
+	   and p.x <= e.x + 4
+	   and p.y <= e.y + 4
 end
 
 -->8

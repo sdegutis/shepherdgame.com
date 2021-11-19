@@ -54,8 +54,8 @@ function startgame()
 	add(players, makeplayer(1))
 	
 	buttons={}
-	add(buttons, makebutton(0))
-	add(buttons, makebutton(1))
+	add(buttons, makeallbutton())
+	add(buttons, makeallbutton())
 	
 	entities={}
 	
@@ -162,7 +162,7 @@ function makebutton(n,x,y)
 		on=false,
 	}
 	add(entities,e)
-	add(buttons[n].buttons,e)
+	add(buttons[n+1].buttons,e)
 	mset(x,y, 2)
 end
 
@@ -175,7 +175,7 @@ function makebrick(n,up,x,y)
 		up=up,
 	}
 	add(entities,e)
-	add(buttons[n].bricks,e)
+	add(buttons[n+1].bricks,e)
 	mset(x,y, 2)
 end
 
@@ -332,9 +332,8 @@ end
 -->8
 -- buttons
 
-function makebutton(n)
+function makeallbutton()
 	return {
-		n=n,
 		on=false,
 		buttons={},
 		bricks={},
@@ -342,6 +341,37 @@ function makebutton(n)
 end
 
 function updatebuttons()
+	for i=1,2 do
+		local b=buttons[i]
+		local p=players[i]
+		
+		local anypressed = false
+		for i=1,#b.buttons do
+			local bb=b.buttons[i]
+			if collided(p,bb) then
+				anypressed=true
+				break
+			end
+		end
+		
+		if b.on and not anypressed then
+			b.on=false
+			activate(b)
+		elseif not b.on and anypressed then
+			b.on=true
+			activate(b)
+		end
+	end
+end
+
+function activate(b)
+	for i=1,#b.buttons do
+		b.buttons[i].on = b.on
+	end
+	
+	for i=1,#b.bricks do
+		b.bricks[i].up = not b.on
+	end
 end
 
 __gfx__

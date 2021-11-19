@@ -370,7 +370,7 @@ function activate(b)
 	end
 	
 	for i=1,#b.bricks do
-		b.bricks[i].up = not b.on
+		b.bricks[i].up = not b.bricks[i].up
 	end
 end
 

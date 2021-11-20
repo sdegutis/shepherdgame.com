@@ -467,6 +467,12 @@ function updatebuttons()
 				anypressed=true
 				break
 			end
+			for i=1,#boxes do
+				if collided(bb,boxes[i]) then
+					anypressed=true
+					break
+				end
+			end
 		end
 		
 		if b.on and not anypressed then

@@ -44,5 +44,7 @@ Bomberman:
 
 Teamwork:
 
-![teamwork sshot 4](team_0.gif)
+![teamwork sshot 1](team_0.gif)
+
+![teamwork sshot 2](team_1.gif)
 

@@ -266,19 +266,6 @@ function updateplayer(p)
 		p.dy = p.my
 	end
 	
-	-- if holding box, you can
-	-- only walk in that axis
-	if p.heldbox then
-		if abs(p.box_mx) != abs(p.mx) or
-		   abs(p.box_my) != abs(p.my) then
-		 return
-		end
-		
-		-- and only slowly
-		if(p.vx!=0)p.vx=sgn(p.vx)*.5
-		if(p.vy!=0)p.vy=sgn(p.vy)*.5
-	end
-	
 	-- move in your moving dir
 	local nx=p.vx+sgn(p.mx)
 	local ny=p.vy+sgn(p.my)
@@ -290,13 +277,25 @@ function updateplayer(p)
 	if (p.vx!=0) p.vx-=sgn(p.vx)/2
 	if (p.vy!=0) p.vy-=sgn(p.vy)/2
 	
-	-- take that many steps
-	for i=1,abs(p.vx) do
+	-- take steps per velocity
+	local stepsx=abs(p.vx)
+	local stepsy=abs(p.vy)
+	
+	-- special steps for boxes
+	local dx=sgn(p.vx)
+	local dy=sgn(p.vy)
+	if p.heldbox then
+		stepsx=abs(p.box_mx)*p.mx*dx
+		stepsy=abs(p.box_my)*p.my*dy
+	end
+	
+	-- now do the steps
+	for i=1,stepsx do
 		local m = sgn(p.vx)
 		p.x += m
 		if (docollide(p,m,0)) break
 	end
-	for i=1,abs(p.vy) do
+	for i=1,stepsy do
 		local m = sgn(p.vy)
 		p.y += m
 		if (docollide(p,0,m)) break
@@ -310,6 +309,10 @@ end
 -- moved, now check collisions
 -- return true if stops player
 function docollide(p,mx,my)
+	if p.heldbox then
+		trymovebox(p.heldbox,mx,my)
+	end
+	
 	for i=1,#entities do
 		local e = entities[i]
 		
@@ -336,11 +339,10 @@ function docollide(p,mx,my)
 				
 				if p.grabbing then
 					p.heldbox = e
-					p.box_mx=-mx
-					p.box_my=-my
+					p.box_mx=mx
+					p.box_my=my
 				end
 				
-				trymovebox(e,mx,my)
 				return true
 			end
 		end

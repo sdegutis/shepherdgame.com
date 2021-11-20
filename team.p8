@@ -7,7 +7,7 @@ __lua__
 --   to practice teamwork
 --   in a slightly fun way
 
-skiptitle=false
+skiptitle=true
 flipview=false
 
 function _init()
@@ -115,6 +115,7 @@ function drawview(p)
 	map(mapx,mapy,0,0,32,32)
 	
 	foreach(entities,drawentity)
+	foreach(boxes,drawentity)
 	
 	local dplayers = {unpack(players)}
 	del(dplayers,p)

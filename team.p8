@@ -260,6 +260,10 @@ function updateplayer(p)
 	p.moving = p.mx!=0 or p.my!=0
 	p.grabbing = btn(❎,p.n)
 	
+	if btnp(🅾️,p.n) then
+		flipview=not flipview
+	end
+	
 	if p.moving and not p.box then
 		p.dx = p.mx
 		p.dy = p.my
@@ -274,6 +278,14 @@ function updateplayer(p)
 		p.box = nil
 	end
 	
+	if p.box then
+		trypushing(p)
+	else
+		trymoving(p)
+	end
+end
+
+function trymoving(p)
 	-- move in your moving dir
 	local nx=p.vx+sgn(p.mx)
 	local ny=p.vy+sgn(p.my)
@@ -289,14 +301,6 @@ function updateplayer(p)
 	local stepsx=abs(p.vx)
 	local stepsy=abs(p.vy)
 	
-	-- special steps for boxes
-	local dx=sgn(p.vx)
-	local dy=sgn(p.vy)
-	if p.box then
-		stepsx=abs(p.box_mx)*p.mx*dx
-		stepsy=abs(p.box_my)*p.my*dy
-	end
-	
 	-- now do the steps
 	for i=1,stepsx do
 		local m = sgn(p.vx)
@@ -308,9 +312,24 @@ function updateplayer(p)
 		p.y += m
 		if (docollide(p,0,m)) break
 	end
+end
+
+function trypushing(p)
+	-- you and the box move
+	-- together or not at all
 	
-	if btnp(🅾️,p.n) then
-		flipview=not flipview
+	local mx=p.mx*abs(p.box_mx)
+	local my=p.my*abs(p.box_my)
+	
+	p.x += mx
+	p.y += my
+	
+ local hit = docollide(p,mx,my)
+ if not hit or hit == p.box then
+		if not trymovebox(p.box,mx,my) then
+			p.x -= mx
+			p.y -= my
+		end
 	end
 end
 
@@ -331,24 +350,6 @@ end
 -- moved, now check collisions
 -- return true if stops player
 function docollide(p,mx,my)
- --[[
-	if p.heldbox then
-		local pushing=
-		 sgn(mx)==sgn(p.box_mx) and
-		 sgn(my)==sgn(p.box_my)
-		local pulling = not pushing
-		
-		local moved =
-			trymovebox(p.heldbox,mx,my)
-		
-		if pulling and not moved then
-			p.x-=mx
-			p.y-=my
-			return
-		end
-	end
-	--]]
-	
 	for i=1,#entities do
 		local e = entities[i]
 		
@@ -358,21 +359,21 @@ function docollide(p,mx,my)
 			 p.y -= my
 				if (mx!=0) p.vx = mx*-3
 				if (my!=0) p.vy = my*-3
-				return true
+				return e
 			elseif e.k == 'brick' then
 				if e.up then
 					p.x -= mx
 					p.y -= my
 					if (mx!=0) p.vx = mx*-3
 					if (my!=0) p.vy = my*-3
-					return true
+					return e
 				end
 			elseif e.k == 'box' then
 				p.x -= mx
 				p.y -= my
 				if (mx!=0) p.vx = 0
 				if (my!=0) p.vy = 0
-				return true
+				return e
 			end
 		end
 	end

@@ -130,6 +130,7 @@ function updategame()
 	updatebuttons()
 	
 	if party then
+		if (skiptitle) nextlevel()
 		if (party>0) party-=1
 		if party==0 and btnp(❎) then
 			nextlevel()

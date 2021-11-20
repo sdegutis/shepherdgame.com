@@ -486,6 +486,7 @@ function boxstopped(box)
 		if e != box then
 			if collided(box,e) then
 				if e.k == 'solid' or
+				   e.k == 'box' or
 				  (e.k == 'brick' and e.up)
 				then
 					return true

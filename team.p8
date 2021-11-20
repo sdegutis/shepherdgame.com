@@ -229,6 +229,8 @@ function makeplayer(n)
 		cx=3,cw=3,
 		cy=4,ch=4,
 		moving=false,
+		grabbing=false,
+		heldbox=nil,
 	}
 end
 
@@ -253,17 +255,33 @@ function updateplayer(p)
 	p.my = btn(⬆️,p.n) and -1 or
 	       btn(⬇️,p.n) and 1 or 0
 	p.moving = p.mx!=0 or p.my!=0
+	p.grabbing = btn(❎,p.n)
 	
-	if p.moving then
+	if not p.grabbing then
+		p.heldbox = nil
+	end
+	
+	if p.moving and not p.heldbox then
 		p.dx = p.mx
 		p.dy = p.my
 	end
 	
-	-- get new velocities (maybe)
-	local nx=p.vx+sgn(p.mx)
-	local ny=p.vy+sgn(p.my)
+	-- if holding box, you can
+	-- only walk in that axis
+	if p.heldbox then
+		if abs(p.box_mx) != abs(p.mx) or
+		   abs(p.box_my) != abs(p.my) then
+		 return
+		end
+		
+		-- and only slowly
+		if(p.vx!=0)p.vx=sgn(p.vx)*.5
+		if(p.vy!=0)p.vy=sgn(p.vy)*.5
+	end
 	
 	-- move in your moving dir
+	local nx=p.vx+sgn(p.mx)
+	local ny=p.vy+sgn(p.my)
 	local b=maxv
 	if (p.mx!=0) p.vx=mid(nx,b,-b)
 	if (p.my!=0) p.vy=mid(ny,b,-b)
@@ -315,6 +333,12 @@ function docollide(p,mx,my)
 				p.y -= my
 				if (mx!=0) p.vx = 0
 				if (my!=0) p.vy = 0
+				
+				if p.grabbing then
+					p.heldbox = e
+					p.box_mx=-mx
+					p.box_my=-my
+				end
 				
 				trymovebox(e,mx,my)
 				return true

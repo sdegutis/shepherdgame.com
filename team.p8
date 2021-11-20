@@ -57,6 +57,7 @@ function startgame()
 	add(buttons, makeallbutton())
 	add(buttons, makeallbutton())
 	
+	boxes={}
 	entities={}
 	
 	parselevel()
@@ -156,12 +157,14 @@ function makestartspot(pn,x,y)
 end
 
 function makebox(x,y)
-	add(entities,{
+	local e={
 		k='box',
 		x=x*8,y=y*8,
 		cx=0,cw=8,
 		cy=0,ch=8,
-	})
+	}
+	add(entities,e)
+	add(boxes,e)
 	mset(x,y, 2)
 end
 
@@ -230,7 +233,7 @@ function makeplayer(n)
 		cy=4,ch=4,
 		moving=false,
 		grabbing=false,
-		heldbox=nil,
+		box=nil,
 	}
 end
 
@@ -257,13 +260,18 @@ function updateplayer(p)
 	p.moving = p.mx!=0 or p.my!=0
 	p.grabbing = btn(❎,p.n)
 	
-	if not p.grabbing then
-		p.heldbox = nil
-	end
-	
-	if p.moving and not p.heldbox then
+	if p.moving and not p.box then
 		p.dx = p.mx
 		p.dy = p.my
+	end
+	
+	if p.grabbing then
+		if not p.box then
+			trygrabbing(p,p.dx,0)
+			trygrabbing(p,0,p.dy)
+		end
+	else
+		p.box = nil
 	end
 	
 	-- move in your moving dir
@@ -284,7 +292,7 @@ function updateplayer(p)
 	-- special steps for boxes
 	local dx=sgn(p.vx)
 	local dy=sgn(p.vy)
-	if p.heldbox then
+	if p.box then
 		stepsx=abs(p.box_mx)*p.mx*dx
 		stepsy=abs(p.box_my)*p.my*dy
 	end
@@ -306,9 +314,24 @@ function updateplayer(p)
 	end
 end
 
+function trygrabbing(p,mx,my)
+	p.x += mx
+	p.y += my
+	for i=1,#boxes do
+		if collided(p,boxes[i]) then
+			p.box=boxes[i]
+			p.box_mx=mx
+			p.box_my=my
+		end
+	end
+	p.x -= mx
+	p.y -= my
+end
+
 -- moved, now check collisions
 -- return true if stops player
 function docollide(p,mx,my)
+ --[[
 	if p.heldbox then
 		local pushing=
 		 sgn(mx)==sgn(p.box_mx) and
@@ -324,6 +347,7 @@ function docollide(p,mx,my)
 			return
 		end
 	end
+	--]]
 	
 	for i=1,#entities do
 		local e = entities[i]
@@ -348,13 +372,6 @@ function docollide(p,mx,my)
 				p.y -= my
 				if (mx!=0) p.vx = 0
 				if (my!=0) p.vy = 0
-				
-				if p.grabbing then
-					p.heldbox = e
-					p.box_mx=mx
-					p.box_my=my
-				end
-				
 				return true
 			end
 		end

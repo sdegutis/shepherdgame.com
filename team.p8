@@ -210,7 +210,7 @@ function makebutton(n,x,y)
 		n=n,
 		on=false,
 	}
-	add(entities,e)
+	add(entities,e,1)
 	add(buttons[n+1].buttons,e)
 	resetspot(x,y)
 end

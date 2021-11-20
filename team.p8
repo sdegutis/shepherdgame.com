@@ -310,7 +310,19 @@ end
 -- return true if stops player
 function docollide(p,mx,my)
 	if p.heldbox then
-		trymovebox(p.heldbox,mx,my)
+		local pushing=
+		 sgn(mx)==sgn(p.box_mx) and
+		 sgn(my)==sgn(p.box_my)
+		local pulling = not pushing
+		
+		local moved =
+			trymovebox(p.heldbox,mx,my)
+		
+		if pulling and not moved then
+			p.x-=mx
+			p.y-=my
+			return
+		end
 	end
 	
 	for i=1,#entities do
@@ -393,8 +405,10 @@ function trymovebox(box,mx,my)
 	if boxstopped(box) then
 		box.x -= mx
 		box.y -= my
-		return
+		return false
 	end
+	
+	return true
 end
 
 function boxstopped(box)

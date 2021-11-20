@@ -402,8 +402,9 @@ function boxstopped(box)
 		local e=entities[i]
 		if e != box then
 			if collided(box,e) then
-				if e.k == 'brick' or
-				   e.k == 'solid' then
+				if e.k == 'solid' or
+				  (e.k == 'brick' and e.up)
+				then
 					return true
 				end
 			end

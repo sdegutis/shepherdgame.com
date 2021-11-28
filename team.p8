@@ -406,7 +406,8 @@ end
 function trygrabbing(p,mx,my)
 	p.x += mx
 	p.y += my
-	local boxes = buttons[p.n+1].boxes
+	local nn = 1-p.n -- other player
+	local boxes = buttons[nn+1].boxes
 	for i=1,#boxes do
 		if collided(p,boxes[i]) then
 			p.box=boxes[i]

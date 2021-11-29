@@ -617,34 +617,38 @@ function draw_winner(g)
 	spr(s, g.x, g.y)
 end
 
+function stime()
+	return time()/3
+end
+
 function dance_smile(g)
-	g.x = 64 + sin(time()/2%1)*30
-	g.y = 64 + cos(time()%1)*15
+	g.x = 64 + sin(stime()/2%1)*30
+	g.y = 64 + cos(stime()%1)*15
 end
 
 function dance_lowcircle(g)
-	g.x = 64 + sin(time()%1)*30
-	g.y = 64 + cos(time()%1)*15
+	g.x = 64 + sin(stime()%1)*30
+	g.y = 64 + cos(stime()%1)*15
 end
 
 function dance_bigcircle(g)
-	g.x = 64 + sin(time()%1)*30
-	g.y = 64 + cos(time()%1)*30
+	g.x = 64 + sin(stime()%1)*30
+	g.y = 64 + cos(stime()%1)*30
 end
 
 function dance_eight(g)
-	g.x = 64 + sin(time()*2)*15
-	g.y = 64 + cos(time()%1)*30
+	g.x = 64 + sin(stime()*2)*15
+	g.y = 64 + cos(stime()%1)*30
 end
 
 function dance_slowbounceside(g)
-	g.x = 64 + sin(time())*30
-	g.y = 64 + cos((time()/5)*3)*15
+	g.x = 64 + sin(stime())*30
+	g.y = 64 + cos((stime()/5)*3)*15
 end
 
 function dance_test(g)
-	g.x = 64 + sin(time())*30
-	g.y = 64 + cos(time()/2.4)*15
+	g.x = 64 + sin(stime())*30
+	g.y = 64 + cos(stime()/2.4)*15
 end
 
 

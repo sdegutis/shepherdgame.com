@@ -598,6 +598,8 @@ function wongame()
 	
 	bgs={0,1,2,3,4,5,13}
 	
+	particles={}
+	
 	guy1 = {s=16}
 	guy2 = {s=32}
 	
@@ -605,6 +607,8 @@ function wongame()
 		guy1.dance = rnd(dances)
 		guy2.dance = rnd(dances)
 	until guy1.dance != guy2.dance
+	
+	p = {x=64,y=64}
 end
 
 function draw_winner(g)
@@ -654,6 +658,9 @@ dances = {
 
 function drawcredits()
 	cls(c)
+	
+	foreach(particles, drawparticle)
+	
 	draw_winner(guy1)
 	draw_winner(guy2)
 	
@@ -673,15 +680,12 @@ function updatecredits()
 	guy1:dance()
 	guy2:dance()
 	
-	t+=1
-	if (t==30)t=0
-	if t==1 then
-		local nc
-		repeat
-			nc=rnd(bgs)
-		until nc!=c
-		c=nc
+	t+=1 if (t==30)t=0
+	if rnd(200) < t then
+		shootfirework()
 	end
+	
+	foreach(particles,updateparticle)
 end
 
 function draw_banner()
@@ -693,6 +697,52 @@ function draw_banner()
 	rectfill(x1,y1,x2,y2,13)
 	rect    (x1,y1,x2,y2,9)
 	print("you won!", x1+3, y1+3, 10)
+end
+
+function shootfirework()
+	local x = rnd(64)+32
+	local y = rnd(64)+32
+	
+	local rx=rnd(2)+2
+	local ry=rnd(2)
+	
+	local c = ceil(rnd(15))
+	if (rnd() < 0.1) c=nil
+	
+	for i=1,100 do
+		local vx=rnd(rx)-(rx/2)
+		local vy=-(rnd(3+ry)+2)
+		
+		local c2
+		if not c then
+			c2 = ceil(rnd(15))
+		end
+		
+		add(particles,{
+			x=x,
+			y=y,
+			vx=vx,
+			vy=vy,
+			c=c or c2,
+			t=0,
+			te=rnd(10)+30,
+		})
+	end
+end
+
+function updateparticle(p)
+	p.x += p.vx
+	p.y += p.vy
+	
+	p.vx -= 0.01 * sgn(p.vx)
+	p.vy += 0.2
+	
+	p.t += 1
+	if (p.t >= p.te) del(particles,p)
+end
+
+function drawparticle(p)
+	pset(p.x, p.y, p.c)
 end
 
 __gfx__

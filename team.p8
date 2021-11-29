@@ -693,7 +693,9 @@ function shootfirework()
 	
 	for i=1,100 do
 		local vx=rnd(rx*2)-rx
-		local vy=-3-(rnd(ry*2)-ry)
+		local vy=rnd(ry*2)-ry
+		
+		vy = -3 - vy
 		
 		if (rainbow) c=ceil(rnd(15))
 		

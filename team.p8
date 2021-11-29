@@ -11,8 +11,11 @@ skiptitle=true
 flipview=false
 
 function _init()
-	level=5
+	level=1
 	starttitle()
+ 
+ -- for testing
+ wongame()
 end
 
 function starttitle()
@@ -589,16 +592,107 @@ end
 function wongame()
 	_update=updatecredits
 	_draw=drawcredits
+	
+	c=0
+	t=0
+	
+	bgs={0,1,2,3,4,5,13}
+	
+	guy1 = {s=16}
+	guy2 = {s=32}
+	
+	repeat
+		guy1.dance = rnd(dances)
+		guy2.dance = rnd(dances)
+	until guy1.dance != guy2.dance
 end
 
+function draw_winner(g)
+	local s = g.s + 1
+	if (time()%1 < 0.5) s += 1
+	spr(s, g.x, g.y)
+end
+
+function dance_smile(g)
+	g.x = 64 + sin(time()/2%1)*30
+	g.y = 64 + cos(time()%1)*15
+end
+
+function dance_lowcircle(g)
+	g.x = 64 + sin(time()%1)*30
+	g.y = 64 + cos(time()%1)*15
+end
+
+function dance_bigcircle(g)
+	g.x = 64 + sin(time()%1)*30
+	g.y = 64 + cos(time()%1)*30
+end
+
+function dance_eight(g)
+	g.x = 64 + sin(time()*2)*15
+	g.y = 64 + cos(time()%1)*30
+end
+
+function dance_slowbounceside(g)
+	g.x = 64 + sin(time())*30
+	g.y = 64 + cos((time()/5)*3)*15
+end
+
+function dance_test(g)
+	g.x = 64 + sin(time())*30
+	g.y = 64 + cos(time()/2.4)*15
+end
+
+
+dances = {
+	dance_smile,
+	dance_eight,
+	dance_lowcircle,
+	dance_bigcircle,
+	dance_slowbounceside,
+}
+
 function drawcredits()
-	cls()
-	color(7)
-	print("you won!")
-	print("(better win screen coming soon.)")
+	cls(c)
+	draw_winner(guy1)
+	draw_winner(guy2)
+	
+	if time() % 0.5 < 0.25 then
+		pal({ -- random monkey typed
+		 3,5,6,1, -- this. i don't
+		 3,6,7,4, -- mean the numbers
+		 6,7,3,3, -- were random. the
+		 4,5,6,9  -- monkey was. uh..
+		})        -- where'd it come
+	end        -- from? ...
+	draw_banner()
+	pal()
 end
 
 function updatecredits()
+	guy1:dance()
+	guy2:dance()
+	
+	t+=1
+	if (t==30)t=0
+	if t==1 then
+		local nc
+		repeat
+			nc=rnd(bgs)
+		until nc!=c
+		c=nc
+	end
+end
+
+function draw_banner()
+	local x1=47
+	local y1=10
+	local x2=83
+	local y2=20
+	
+	rectfill(x1,y1,x2,y2,13)
+	rect    (x1,y1,x2,y2,9)
+	print("you won!", x1+3, y1+3, 10)
 end
 
 __gfx__

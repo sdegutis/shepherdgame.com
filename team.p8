@@ -706,7 +706,7 @@ function shootfirework()
 	local c=ceil(rnd(15))
 	
 	local rad = rnd(0.5)+0.5
-	local hole = rnd(0.5)
+	local hole = (rnd()^3)*0.5
 	
 	local perif = 0.07
 	local sang = rnd(perif*2)-perif

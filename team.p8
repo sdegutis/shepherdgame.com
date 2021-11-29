@@ -532,6 +532,12 @@ function boxstopped(box)
 			end
 		end
 	end
+	for i=1,#players do
+		local p=players[i]
+		if collided(box,p) then
+			return true
+		end
+	end
 end
 
 -->8

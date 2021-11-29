@@ -12,7 +12,7 @@ skiptitle=false
 function _init()
 	level=1
 	starttitle()
- --wongame()
+ wongame()
 end
 
 function starttitle()
@@ -605,8 +605,6 @@ function wongame()
 		guy1.dance = rnd(dances)
 		guy2.dance = rnd(dances)
 	until guy1.dance != guy2.dance
-	
-	p = {x=64,y=64}
 end
 
 function draw_winner(g)
@@ -682,29 +680,29 @@ function shootfirework()
 	local x = rnd(64)+32
 	local y = rnd(64)+32
 	
-	local rx=rnd(2)+2
-	local ry=rnd(2)+2
+	local angle = rnd()
+	local dist = rnd(2)
 	
-	local c = ceil(rnd(15))
-	local snd=13
-	if (rnd() < 0.1) c=nil snd=14
-	sfx(snd)
+	local rx=1.5
+	local ry=3
+	
+	local rainbow=rnd()<0.1
+	sfx(rainbow and 14 or 13)
+	
+	local c=ceil(rnd(15))
 	
 	for i=1,100 do
-		local vx=rnd(rx)-(rx/2)
+		local vx=rnd(rx*2)-rx
 		local vy=-(rnd(ry)+2)
 		
-		local c2
-		if not c then
-			c2 = ceil(rnd(15))
-		end
+		if (rainbow) c=ceil(rnd(15))
 		
 		add(particles,{
 			x=x,
 			y=y,
 			vx=vx,
 			vy=vy,
-			c=c or c2,
+			c=c,
 			t=0,
 			snd=snd,
 			te=rnd(10)+30,

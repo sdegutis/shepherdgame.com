@@ -608,9 +608,11 @@ function wongame()
 end
 
 function draw_winner(g)
+	ovalfill(g.x-4, g.y,
+	         g.x+12,g.y+8, 5)
 	local s = g.s + 1
 	if (time()%1 < 0.5) s += 1
-	spr(s, g.x, g.y)
+	spr(s, g.x, g.y-1)
 end
 
 function stime()
@@ -667,6 +669,9 @@ end
 function updatecredits()
 	guy1:dance()
 	guy2:dance()
+	
+	guy1.y += 28
+	guy2.y += 28
 	
 	t+=1 if (t==30)t=0
 	if rnd(200) < t then

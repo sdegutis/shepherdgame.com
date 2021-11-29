@@ -683,7 +683,7 @@ end
 
 function shootfirework()
 	local x = rnd(64)+32
-	local y = rnd(64)+32
+	local y = rnd(64)+48
 	
 	local rainbow=rnd()<0.1
 	sfx(rainbow and 14 or 13)

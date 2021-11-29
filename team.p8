@@ -619,15 +619,15 @@ function wongame()
 end
 
 function draw_winner(g)
-	ovalfill(g.x-4, g.y,
-	         g.x+12,g.y+8, 5)
+	ovalfill(g.x-4, g.y+3,
+	         g.x+12,g.y+11, 5)
 	local s = g.s + 1
 	if (time()%1 < 0.5) s += 1
 	
 	for i=1,15 do pal(i,0) end
-		spr(s, g.x+1, g.y)
+		spr(s, g.x+1, g.y+1)
 	pal()
-	spr(s, g.x, g.y-1)
+	spr(s, g.x, g.y)
 end
 
 function stime()

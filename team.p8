@@ -13,9 +13,7 @@ flipview=false
 function _init()
 	level=1
 	starttitle()
- 
- -- for testing
- wongame()
+ --wongame()
 end
 
 function starttitle()
@@ -593,10 +591,7 @@ function wongame()
 	_update=updatecredits
 	_draw=drawcredits
 	
-	c=0
 	t=0
-	
-	bgs={0,1,2,3,4,5,13}
 	
 	particles={}
 	
@@ -661,23 +656,11 @@ dances = {
 }
 
 function drawcredits()
-	cls(c)
-	
+	cls()
 	foreach(particles, drawparticle)
-	
 	draw_winner(guy1)
 	draw_winner(guy2)
-	
-	if time() % 0.5 < 0.25 then
-		pal({ -- random monkey typed
-		 3,5,6,1, -- this. i don't
-		 3,6,7,4, -- mean the numbers
-		 6,7,3,3, -- were random. the
-		 4,5,6,9  -- monkey was. uh..
-		})        -- where'd it come
-	end        -- from? ...
-	draw_banner()
-	pal()
+	print("you won!", 50, 10, 10)
 end
 
 function updatecredits()
@@ -692,30 +675,19 @@ function updatecredits()
 	foreach(particles,updateparticle)
 end
 
-function draw_banner()
-	local x1=47
-	local y1=10
-	local x2=83
-	local y2=20
-	
-	rectfill(x1,y1,x2,y2,13)
-	rect    (x1,y1,x2,y2,9)
-	print("you won!", x1+3, y1+3, 10)
-end
-
 function shootfirework()
 	local x = rnd(64)+32
 	local y = rnd(64)+32
 	
 	local rx=rnd(2)+2
-	local ry=rnd(2)
+	local ry=rnd(2)+2
 	
 	local c = ceil(rnd(15))
 	if (rnd() < 0.1) c=nil
 	
 	for i=1,100 do
 		local vx=rnd(rx)-(rx/2)
-		local vy=-(rnd(3+ry)+2)
+		local vy=-(rnd(ry)+2)
 		
 		local c2
 		if not c then

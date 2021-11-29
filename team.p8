@@ -689,7 +689,7 @@ function shootfirework()
 	
 	for i=1,100 do
 		local angle = rnd()
-		local dist = rnd(2)
+		local dist = rnd(rad)
 		
 		local vx=rnd(rad*2)-rad
 		local vy=rnd(rad*2)-rad

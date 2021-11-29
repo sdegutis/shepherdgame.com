@@ -680,20 +680,19 @@ function shootfirework()
 	local x = rnd(64)+32
 	local y = rnd(64)+32
 	
-	local angle = rnd()
-	local dist = rnd(2)
-	
-	local rx=1
-	local ry=1
-	
 	local rainbow=rnd()<0.1
 	sfx(rainbow and 14 or 13)
 	
 	local c=ceil(rnd(15))
 	
+	local rad=1.5
+	
 	for i=1,100 do
-		local vx=rnd(rx*2)-rx
-		local vy=rnd(ry*2)-ry
+		local angle = rnd()
+		local dist = rnd(2)
+		
+		local vx=rnd(rad*2)-rad
+		local vy=rnd(rad*2)-rad
 		
 		vy = -3 - vy
 		

@@ -688,7 +688,15 @@ function shootfirework()
 	local rad = rnd(0.5)+0.5
 	local hole = rnd(0.5)
 	
-	local power = rnd(4)+2
+	local perif = 0.07
+	local sang = rnd(perif*2)-perif
+	-- counterclockwise angles
+	-- 0.00 = right
+	-- 0.25 = up
+	-- 0.50 = left
+	-- 0.75 = down
+	sang += 0.25
+	local power = rnd(3)+2
 	
 	for i=1,200 do
 		local angle = rnd()
@@ -697,7 +705,11 @@ function shootfirework()
 		local vx = cos(angle)*dist
 		local vy = sin(angle)*dist
 		
-		vy = -power - vy
+		local sx = cos(sang)*power
+		local sy = sin(sang)*power
+		
+		vx += sx
+		vy += sy
 		
 		if (rainbow) c=ceil(rnd(15))
 		
@@ -709,7 +721,7 @@ function shootfirework()
 			c=c,
 			t=0,
 			snd=snd,
-			te=rnd(10)+30,
+			te=rnd(30)+30,
 		})
 	end
 end

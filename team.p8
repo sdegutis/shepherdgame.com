@@ -452,6 +452,11 @@ function docollide(p,mx,my)
 					music(-1)
 					sfx(18)
 					party=60
+					
+					for i=1,#players do
+						local p=players[i]
+						p.moving=true
+					end
 				end
 			end
 		end

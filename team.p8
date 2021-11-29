@@ -12,7 +12,7 @@ skiptitle=false
 function _init()
 	level=1
 	starttitle()
- wongame()
+ --wongame()
 end
 
 function starttitle()
@@ -612,11 +612,15 @@ function draw_winner(g)
 	         g.x+12,g.y+8, 5)
 	local s = g.s + 1
 	if (time()%1 < 0.5) s += 1
+	
+	for i=1,15 do pal(i,0) end
+		spr(s, g.x+1, g.y)
+	pal()
 	spr(s, g.x, g.y-1)
 end
 
 function stime()
-	return time()/3
+	return time()/4
 end
 
 function dance_smile(g)

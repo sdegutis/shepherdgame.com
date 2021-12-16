@@ -1,17 +1,26 @@
 pico-8 cartridge // http://www.pico-8.com
 version 33
 __lua__
+x=0
+y=0
+
+function _update()
+	if (btn(➡️)) x+=1
+	if (btn(⬅️)) x-=1
+	if (btn(⬇️)) y+=1
+	if (btn(⬆️)) y-=1
+end
+
 function _draw()
 	cls(12)
-	local y = 3
 	
-	local s = 16
+	local s = 32
 	if time()%0.5 < 0.25 then
 	s+=1
 	end
 	
-	spr(s,10,10)
-	spr(1,10,y)
+	spr(s,x,y)
+	spr(2,x,y-7)
 end
 
 __gfx__

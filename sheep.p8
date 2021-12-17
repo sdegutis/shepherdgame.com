@@ -62,6 +62,29 @@ bag
  bees  > captures
  apple > captures
 
+bees sees
+	player > gets sleepy
+	wolf   > nothing
+	sheep  > runs
+	bees   > nothing
+
+wolf sees
+ player > nothing
+ bees   > nothing
+ sheep  > runs
+ wolf   > nothing
+
+sheep sees
+	player > nothing
+	bees   > runs
+	wolf   > runs
+	sheep  > follows
+
+apple
+	bees   > nothing
+	sheep  > follows player!
+	wolf   > runs away! (secret)
+	player > less sleepy
 
 --]]
 

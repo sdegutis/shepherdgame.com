@@ -13,9 +13,9 @@ top-down zelda-style view.
 toggleable split screen.
 8 pre-made levels.
 
-one girl has cane.
-cane can clear bushes.
-cane can shoo bees.
+one girl has stick.
+stick can clear bushes.
+stick can shoo bees.
 
 one girl has bag.
 bag can carry apples.
@@ -47,8 +47,11 @@ bushes
 trees
 	can contain apples
 	can contain bees
+	release if:
+		hit with stick
+		hit with bag
 
-cane
+stick
 	sheep > runs
 	wolf  > nothing
 	bush  > clear & reveal

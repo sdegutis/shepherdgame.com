@@ -1,21 +1,59 @@
 pico-8 cartridge // http://www.pico-8.com
 version 33
 __lua__
+--[[
+
+team2:
+
+both girls are shepherds.
+the sheep are lost!
+find them, bring them home.
+
+top-down zelda-style view.
+toggleable split screen.
+8 pre-made levels.
+
+one girl has cane.
+cane can clear bushes.
+cane can shoo bees.
+
+one girl has bag.
+bag can carry apples.
+bag can carry bees!
+
+clearing bushes is tiring.
+sleepiness makes you slow.
+apples cure sleepiness!
+
+wolves scare sheep!
+shoo them with bees!
+find bees in bushes.
+
+lead sheep to their fold.
+sheep follow other sheep.
+sheep like being fed apples!
+
+--]]
+
 x=0
 y=0
+m=false
 
 function _update()
 	if (btn(➡️)) x+=1
 	if (btn(⬅️)) x-=1
 	if (btn(⬇️)) y+=1
 	if (btn(⬆️)) y-=1
+	
+	m = btn(⬆️) or btn(⬇️) or
+	    btn(⬅️) or btn(➡️)
 end
 
 function _draw()
 	cls(12)
 	
 	local s = 32
-	if time()%0.5 < 0.25 then
+	if m and time()%0.5 < 0.25 then
 	s+=1
 	end
 	

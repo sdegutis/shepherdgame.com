@@ -115,14 +115,14 @@ function _draw()
 	
 	
 	for i=1,15 do pal(i,0) end
-	--spr(s,x+1,y+1)
+	spr(s,x+1,y+1)
 	pal()
 	spr(s,x,y)
 	
 	for i=1,15 do pal(i,0) end
-	--spr(2,x+1,y-7+1)
+	spr(2,2+1,7+1)
 	pal()
-	spr(2,x,y-7)
+	spr(2,2,7)
 end
 
 __gfx__

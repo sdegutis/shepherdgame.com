@@ -33,6 +33,36 @@ lead sheep to their fold.
 sheep follow other sheep.
 sheep like being fed apples!
 
+
+---
+
+interactions
+
+bushes
+	can contain bees
+	can contain apples
+	can contain sheep?
+	can contain wolves!
+
+trees
+	can contain apples
+	can contain bees
+
+cane
+	sheep > runs
+	wolf  > nothing
+	bush  > clear & reveal
+	bees  > runs (after 3)
+	apple > nothing
+
+bag
+ sheep > nothing
+ wolf  > nothing
+ bush  > nothing
+ bees  > captures
+ apple > captures
+
+
 --]]
 
 x=10
@@ -52,7 +82,7 @@ end
 function _draw()
 	cls(12)
 	
-	local s = 32
+	local s = 16
 	if m and time()%0.5 < 0.25 then
 	s+=1
 	end

@@ -7,7 +7,7 @@ __lua__
 --   to practice teamwork
 --   in a slightly fun way
 
-skiptitle=true
+skiptitle=false
 
 function _init()
 	level=1

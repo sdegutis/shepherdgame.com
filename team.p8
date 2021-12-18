@@ -7,7 +7,7 @@ __lua__
 --   to practice teamwork
 --   in a slightly fun way
 
-skiptitle=false
+skiptitle=true
 
 function _init()
 	level=1
@@ -464,6 +464,11 @@ function docollide(p,mx,my)
 end
 
 function collided(p,e)
+ if abs(p.x-e.x) > 10 or
+    abs(p.y-e.y) > 10 then
+ 	return false
+ end
+
 	local ax=p.x+p.cx
 	local aw=p.cw
 	local ay=p.y+p.cy

@@ -3,9 +3,10 @@ Newer:
 
 | File      | What                             |
 | --------- | -------------------------------- |
+| sheep     | 2-P teamwork game with sheep.    |
+| blocks    | 2-P teamwork game with buttons.  |
 | bomberman | Bomberman clone with waterbombs. |
 | harbinger | Top-down zelda-style RPG thing.  |
-| team      | 2-P teamwork game with buttons.  |
 
 Older:
 
@@ -26,25 +27,3 @@ Older:
 | things3   | Pico-8 version of the game Things.                       |
 | war       | Eventual warcraft1 clone (but without occult).           |
 | windows   | Emulation of Windows 8 loading circles.                  |
-
-License: MIT
-
-Screenshots:
-
-Bomberman:
-
-![bomberman sshot 1](bomberman_6.gif)
-
-![bomberman sshot 2](bomberman_7.gif)
-
-![bomberman sshot 3](bomberman_8.gif)
-
-![bomberman sshot 4](bomberman_9.gif)
-
-
-Teamwork:
-
-![teamwork sshot 1](team_0.gif)
-
-![teamwork sshot 2](team_1.gif)
-

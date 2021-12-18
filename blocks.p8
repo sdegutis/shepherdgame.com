@@ -621,6 +621,8 @@ function wongame()
 		guy1.dance = rnd(dances)
 		guy2.dance = rnd(dances)
 	until guy1.dance != guy2.dance
+	
+	_update()
 end
 
 function draw_winner(g)

@@ -89,6 +89,36 @@ apple
 	wolf   > runs away! (secret)
 	player > less sleepy
 
+
+
+---
+
+update game:
+
+loop through all entities
+
+if e.tick
+ e.tick()
+
+if e.shouldact
+ e.shouldact=false
+ e.act()
+ 	handle act-collision (how?)
+ 	e:collide(???)
+
+if e.movable
+ move(e)
+ foreach entity e2
+ 	handle move-collision
+		e:collide(e2)
+
+def
+	p.collide = player_collides
+	s.collide = sheep_collides
+	w.collide = wolf_collides
+	etc
+
+
 --]]
 
 x=10

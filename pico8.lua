@@ -51,8 +51,11 @@ end
 ---@param x number
 ---@param y number
 ---@param scale number|nil default 1
-function Sprite:draw(x, y, scale)
-  love.graphics.draw(self.image, x, y, 0, scale, scale)
+---@param r number|nil default 0
+---@param offset number|nil default 0
+function Sprite:draw(x, y, scale, r, offset)
+  local o = offset or 0
+  love.graphics.draw(self.image, x, y, r or 0, scale, scale, o, o)
 end
 
 --- @param gfx string[] 0-128 lines of 128 char strings
@@ -264,8 +267,8 @@ return function(filenameOrContents)
 
   ---Returns a new love.Image for this sprite
   ---@param i number (0-indexed like PICO-8)
-  ---@param w number pixels wide (default 8)
-  ---@param h number pixels tall (default 8)
+  ---@param w number|nil pixels wide (default 8)
+  ---@param h number|nil pixels tall (default 8)
   ---@return Sprite
   local function makeSpriteAt(i, w, h)
     local sx = i % 16

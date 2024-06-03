@@ -81,6 +81,8 @@ function love.update(dt)
 
   for i = 1, 3 do
     local x, y = joysticks[i]:getAxes()
+    x = x or 0
+    y = y or 0
     objects.players[i].body:applyForce(x * 300, y * 100)
   end
 end

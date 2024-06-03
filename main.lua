@@ -1,7 +1,10 @@
+love.graphics.setDefaultFilter("nearest", "nearest")
+local loadP8 = require("pico8")
+
 function love.load()
   love.physics.setMeter(64)
-  -- world = love.physics.newWorld(0, 9.81 * 64, true)
-  world = love.physics.newWorld(0, 0, true)
+  world = love.physics.newWorld(0, 9.81 * 64, true)
+  -- world = love.physics.newWorld(0, 0, true)
 
   objects = {}
 
@@ -29,7 +32,6 @@ function love.load()
   objects.players[1] = {}
   objects.players[2] = {}
   objects.players[3] = {}
-  objects.players[4] = {}
 
   for i = 1, 3 do
     objects.players[i] = {}
@@ -38,6 +40,10 @@ function love.load()
     objects.players[i].fixture = love.physics.newFixture(objects.players[i].body, objects.players[i].shape, 1)
     objects.players[i].fixture:setRestitution(0.9)
   end
+
+  objects.players[1].sprite = loadP8("sarah/untitled.p8").getOrMakeSpriteAt(1);
+  objects.players[2].sprite = loadP8("jane/janegame2.p8").getOrMakeSpriteAt(1);
+  objects.players[3].sprite = loadP8("bomberman.p8").getOrMakeSpriteAt(1);
 
   objects.block1 = {}
   objects.block1.body = love.physics.newBody(world, 200, 550, "dynamic")
@@ -61,17 +67,8 @@ function love.update(dt)
 
   for i = 1, 3 do
     local x, y = joysticks[i]:getAxes()
-    objects.players[i].body:applyForce(x * 300, y * 300)
+    objects.players[i].body:applyForce(x * 300, y * 100)
   end
-
-  -- if love.keyboard.isDown("right") then
-  --   objects.ball.body:applyForce(400, 0)
-  -- elseif love.keyboard.isDown("left") then
-  --   objects.ball.body:applyForce(-400, 0)
-  -- elseif love.keyboard.isDown("up") then
-  --   objects.ball.body:setPosition(650 / 2, 650 / 2)
-  --   objects.ball.body:setLinearVelocity(0, 0)
-  -- end
 end
 
 function love.draw()
@@ -82,9 +79,13 @@ function love.draw()
   love.graphics.polygon("fill", objects.ground4.body:getWorldPoints(objects.ground4.shape:getPoints()))
 
   for i = 1, 3 do
-    love.graphics.setColor(0.76, 0.25 * i, 0.05)
-    love.graphics.circle("fill", objects.players[i].body:getX(), objects.players[i].body:getY(),
-      objects.players[i].shape:getRadius())
+    -- love.graphics.setColor(0.76, 0.25 * i, 0.05)
+    -- love.graphics.circle("fill", objects.players[i].body:getX(), objects.players[i].body:getY(),
+    --   objects.players[i].shape:getRadius())
+
+    love.graphics.setColor(1, 1, 1)
+    local body = objects.players[i].body
+    objects.players[i].sprite:draw(body:getX(), body:getY(), 5, body:getAngle(), 3.75)
   end
 
   love.graphics.setColor(0.50, 0.50, 0.50)
@@ -95,14 +96,10 @@ end
 -- if pcall(require, "lldebugger") then require("lldebugger").start() end
 -- if pcall(require, "mobdebug") then require("mobdebug").start() end
 
--- love.graphics.setDefaultFilter("nearest", "nearest")
-
 -- local lib = require('lib')
 
 -- lib.setScreenSize(1000, 1000)
 
--- local loadP8 = require("pico8")
--- local basics = loadP8("test2.p8")
 
 -- local font1 = loadP8("font1.p8").createFont()
 -- love.graphics.setFont(font1)

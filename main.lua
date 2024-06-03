@@ -14,7 +14,7 @@ function love.load()
   objects.ground1.fixture = love.physics.newFixture(objects.ground1.body, objects.ground1.shape)
 
   objects.ground2 = {}
-  objects.ground2.body = love.physics.newBody(world, 650 / 2, 50 / 2)
+  objects.ground2.body = love.physics.newBody(world, 650 / 2, 50 / 2 + 50)
   objects.ground2.shape = love.physics.newRectangleShape(650, 25)
   objects.ground2.fixture = love.physics.newFixture(objects.ground2.body, objects.ground2.shape)
 
@@ -39,6 +39,7 @@ function love.load()
     objects.players[i].shape = love.physics.newCircleShape(20)
     objects.players[i].fixture = love.physics.newFixture(objects.players[i].body, objects.players[i].shape, 1)
     objects.players[i].fixture:setRestitution(0.9)
+    objects.players[i].points = 0
   end
 
   objects.players[1].sprite = loadP8("sarah/untitled.p8").getOrMakeSpriteAt(1);
@@ -57,6 +58,19 @@ function love.load()
 
   love.graphics.setBackgroundColor(0.41, 0.53, 0.97)
   love.window.setMode(650, 650)
+
+  world:setCallbacks(function(fix1, fix2)
+    for i = 1, 3 do
+      if
+          fix2 == objects.players[i].fixture
+          and
+          fix1 == objects.ground2.fixture
+      then
+        local p  = objects.players[i]
+        p.points = p.points + 1
+      end
+    end
+  end, function() end)
 end
 
 function love.update(dt)
@@ -86,6 +100,13 @@ function love.draw()
     love.graphics.setColor(1, 1, 1)
     local body = objects.players[i].body
     objects.players[i].sprite:draw(body:getX(), body:getY(), 5, body:getAngle(), 3.75)
+
+    local x = 100 * i + 30 * i
+    love.graphics.setColor(0.2, 0.2, 0.5)
+    love.graphics.rectangle('fill', x, 20, 100, 20)
+
+    love.graphics.setColor(0.8, 0.8, 1.0)
+    love.graphics.rectangle('fill', x, 20, objects.players[i].points, 20)
   end
 
   love.graphics.setColor(0.50, 0.50, 0.50)

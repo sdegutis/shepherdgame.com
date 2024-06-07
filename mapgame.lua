@@ -62,7 +62,7 @@ end
 
 objects.players[1].sprite = loadP8("sarah/untitled.p8").getOrMakeSpriteAt(1);
 objects.players[2].sprite = loadP8("jane/janegame2.p8").getOrMakeSpriteAt(1);
-objects.players[3].sprite = loadP8("bomberman.p8").getOrMakeSpriteAt(1);
+objects.players[3].sprite = loadP8("test1.p8").getOrMakeSpriteAt(1);
 
 love.graphics.setBackgroundColor(0.1, 0.1, 0.3)
 

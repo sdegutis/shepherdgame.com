@@ -32,6 +32,7 @@ local colorTable = {
 ---@field image love.Image
 ---@field flag number
 ---@field flags boolean[]
+---@field data number[][]
 local Sprite = {}
 
 local function calcFlags(flag)
@@ -42,8 +43,8 @@ local function calcFlags(flag)
   return t
 end
 
-function Sprite.new(image, flag)
-  local spr = { image = image, flag = flag, flags = calcFlags(flag) }
+function Sprite.new(image, data, flag)
+  local spr = { image = image, data = data, flag = flag, flags = calcFlags(flag) }
   setmetatable(spr, { __index = Sprite })
   return spr
 end
@@ -162,6 +163,32 @@ local function newImageFromSpritesheet(spritesheet, sx, sy, w, h)
   return love.graphics.newImage(data)
 end
 
+---@param spritesheet number[][]
+---@param sx number
+---@param sy number
+---@param w number
+---@param h number
+---@return number[][]
+local function dataFromSpritesheet(spritesheet, sx, sy, w, h)
+  local data = {}
+
+  for py = 0, (h - 1) do
+    local rowIndex = sy * 8 + py
+    local row = spritesheet[rowIndex]
+
+    local newrow = {}
+    table.insert(data, newrow)
+
+    for px = 0, (w - 1) do
+      local idx = sx * 8 + px
+      local colorIndex = row[idx]
+      table.insert(newrow, colorIndex)
+    end
+  end
+
+  return data
+end
+
 ---@param lines any
 local function parseGroups(lines)
   local groups = {}
@@ -273,8 +300,9 @@ return function(filenameOrContents)
   local function makeSpriteAt(i, w, h)
     local sx = i % 16
     local sy = math.floor(i / 16)
+    local data = dataFromSpritesheet(spritesheet, sx, sy, w or 8, h or 8)
     local img = newImageFromSpritesheet(spritesheet, sx, sy, w or 8, h or 8)
-    return Sprite.new(img, flags[i])
+    return Sprite.new(img, data, flags[i])
   end
 
   local cachedSprites = {}

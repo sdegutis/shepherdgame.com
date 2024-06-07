@@ -13,8 +13,8 @@ local map = loadP8("sarah/untitled.p8")
 local scaletile = 4
 love.window.setMode(W, H)
 love.physics.setMeter(64)
+love.graphics.setBackgroundColor(0.1, 0.1, 0.3)
 
--- local world = love.physics.newWorld(0, 0, true)
 local world = love.physics.newWorld(0, 9.81 * 64, true)
 
 local objects = {}
@@ -63,8 +63,6 @@ end
 objects.players[1].sprite = loadP8("sarah/untitled.p8").getOrMakeSpriteAt(1);
 objects.players[2].sprite = loadP8("jane/janegame2.p8").getOrMakeSpriteAt(1);
 objects.players[3].sprite = loadP8("test1.p8").getOrMakeSpriteAt(1);
-
-love.graphics.setBackgroundColor(0.1, 0.1, 0.3)
 
 function love.update(dt)
   world:update(dt)

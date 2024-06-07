@@ -140,27 +140,19 @@ local function newFontFromSpritesheet(spritesheet, chars)
   return love.graphics.newImageFont(imgdata, chars)
 end
 
----@param spritesheet number[][]
----@param sx number
----@param sy number
----@param w number
----@param h number
+---@param data number[][]
 ---@return love.Image
-local function newImageFromSpritesheet(spritesheet, sx, sy, w, h)
-  local data = love.image.newImageData(w, h)
-
-  for py = 0, (h - 1) do
-    local rowIndex = sy * 8 + py
-    local row = spritesheet[rowIndex]
-
-    for px = 0, (w - 1) do
-      local idx = sx * 8 + px
-      local colorIndex = row[idx]
-      data:setPixel(px, py, colorTable[colorIndex])
+local function newImageFromSpriteData(data)
+  local w = #data[1]
+  local h = #data
+  local imgdata = love.image.newImageData(w, h)
+  for y = 1, h do
+    for x = 1, w do
+      local val = data[y][x]
+      imgdata:setPixel(x - 1, y - 1, colorTable[val])
     end
   end
-
-  return love.graphics.newImage(data)
+  return love.graphics.newImage(imgdata)
 end
 
 ---@param spritesheet number[][]
@@ -301,7 +293,7 @@ return function(filenameOrContents)
     local sx = i % 16
     local sy = math.floor(i / 16)
     local data = dataFromSpritesheet(spritesheet, sx, sy, w or 8, h or 8)
-    local img = newImageFromSpritesheet(spritesheet, sx, sy, w or 8, h or 8)
+    local img = newImageFromSpriteData(data)
     return Sprite.new(img, data, flags[i])
   end
 

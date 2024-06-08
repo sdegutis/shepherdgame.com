@@ -1,1 +1,1 @@
-require "mapgame"
+require "mapgame2"

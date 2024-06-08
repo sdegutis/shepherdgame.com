@@ -107,7 +107,7 @@ function love.update(dt)
     x = x or 0
     y = y or 0
 
-    local force = 1000
+    local force = 10
     if joysticks[i]:isDown(1) then
       force = force * 10
     end
@@ -117,7 +117,13 @@ function love.update(dt)
       world:setGravity(0, (gravity and 9.81 or 0) * 64)
     end
 
-    objects.players[i].body:applyForce(x * force, y * force)
+    --- @type love.Body
+    local body = objects.players[i].body
+
+    local px, py = body:getPosition()
+    body:applyLinearImpulse(x * force, y * force)
+    -- body:setPosition(px + x, py + y)
+    -- body:applyForce(x * force, y * force)
   end
 end
 

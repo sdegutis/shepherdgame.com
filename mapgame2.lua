@@ -6,6 +6,7 @@ local H = 900
 
 local font1 = loadP8("font1.p8").createFont()
 love.graphics.setFont(font1)
+love.mouse.setVisible(false)
 
 local map = loadP8("test3.p8")
 local scaletile = 4

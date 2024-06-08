@@ -13,12 +13,29 @@ love.window.setMode(W, H)
 love.physics.setMeter(64)
 -- love.graphics.setBackgroundColor(0.1, 0.1, 0.3)
 
-local gravity = false
+local gravity = true
 local world = love.physics.newWorld(0, (gravity and 9.81 or 0) * 64, true)
 
 local objects = {}
 objects.players = {}
 objects.tiles = {}
+objects.lava = {}
+
+world:setCallbacks(function(fix1, fix2)
+  local gone
+  if objects.lava[fix1] and not objects.lava[fix2] then
+    gone = fix2
+  elseif objects.lava[fix2] and not objects.lava[fix1] then
+    gone = fix1
+  end
+  for i, tile in pairs(objects.tiles) do
+    if gone == tile.fixture and not tile.player then
+      tile.fixture:destroy()
+      tile.body:destroy()
+      table.remove(objects.tiles, i)
+    end
+  end
+end, function() end)
 
 RED = 0
 ORANGE = 1
@@ -60,7 +77,12 @@ for y = 0, 63 do
       tile.spr = spr
       table.insert(objects.tiles, tile)
 
+      if spr.flags[BLUE] then
+        objects.lava[tile.fixture] = true
+      end
+
       if spr.flags[GREEN] then
+        tile.player = true
         tile.fixture:setRestitution(0.9)
         table.insert(objects.players, tile)
       end
@@ -85,9 +107,14 @@ function love.update(dt)
     x = x or 0
     y = y or 0
 
-    local force = 100
+    local force = 1000
     if joysticks[i]:isDown(1) then
       force = force * 10
+    end
+
+    if joysticks[i]:isDown(2) then
+      gravity = not gravity
+      world:setGravity(0, (gravity and 9.81 or 0) * 64)
     end
 
     objects.players[i].body:applyForce(x * force, y * force)

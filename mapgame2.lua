@@ -9,12 +9,12 @@ love.graphics.setFont(font1)
 love.mouse.setVisible(false)
 
 local map = loadP8("test3.p8")
-local scaletile = 4
+local scaletile = 1
 love.window.setMode(W, H)
 love.physics.setMeter(64)
 -- love.graphics.setBackgroundColor(0.1, 0.1, 0.3)
 
-local gravity = false
+local gravity = true
 local world = love.physics.newWorld(0, (gravity and 9.81 or 0) * 64, true)
 
 local objects = {}
@@ -22,7 +22,28 @@ objects.players = {}
 objects.tiles = {}
 objects.lava = {}
 
+local playerFixtures = {}
+
+local ground = love.physics.newBody(world, 0, 0)
+local grounds = {}
+grounds[1] = love.physics.newFixture(ground, love.physics.newEdgeShape(0, 0, W, 0))
+grounds[2] = love.physics.newFixture(ground, love.physics.newEdgeShape(0, H, W, H))
+grounds[3] = love.physics.newFixture(ground, love.physics.newEdgeShape(0, 0, 0, H))
+grounds[4] = love.physics.newFixture(ground, love.physics.newEdgeShape(W, 0, W, H))
+
 world:setCallbacks(function(fix1, fix2)
+  if playerFixtures[fix2] then
+    if fix1 == grounds[1] then
+      world:setGravity(0, 9.81 * 64)
+    elseif fix1 == grounds[2] then
+      world:setGravity(0, -9.81 * 64)
+    elseif fix1 == grounds[3] then
+      world:setGravity(9.81 * 64, 0)
+    elseif fix1 == grounds[4] then
+      world:setGravity(-9.81 * 64, 0)
+    end
+  end
+
   local gone
   if objects.lava[fix1] and not objects.lava[fix2] then
     gone = fix2
@@ -57,7 +78,7 @@ for y = 0, 63 do
       local scale = 1
 
       tile.scaletile = scaletile
-      if spr.flags[GREEN] then scale = 2 end
+      if spr.flags[GREEN] then scale = 4 end
       tile.scaletile = tile.scaletile * scale
 
       local w = tile.scaletile * 8
@@ -86,16 +107,11 @@ for y = 0, 63 do
         tile.player = true
         tile.fixture:setRestitution(0.9)
         table.insert(objects.players, tile)
+        playerFixtures[tile.fixture] = true
       end
     end
   end
 end
-
-local ground = love.physics.newBody(world, 0, 0)
-love.physics.newFixture(ground, love.physics.newEdgeShape(0, 0, W, 0))
-love.physics.newFixture(ground, love.physics.newEdgeShape(0, H, W, H))
-love.physics.newFixture(ground, love.physics.newEdgeShape(0, 0, 0, H))
-love.physics.newFixture(ground, love.physics.newEdgeShape(W, 0, W, H))
 
 function love.update(dt)
   world:update(dt)
@@ -108,15 +124,15 @@ function love.update(dt)
     x = x or 0
     y = y or 0
 
-    local force = 10
+    local force = 1
     if joysticks[i]:isDown(1) then
       force = force * 10
     end
 
-    if joysticks[i]:isDown(2) then
-      gravity = not gravity
-      world:setGravity(0, (gravity and 9.81 or 0) * 64)
-    end
+    -- if joysticks[i]:isDown(2) then
+    --   gravity = not gravity
+    --   world:setGravity(0, (gravity and 9.81 or 0) * 64)
+    -- end
 
     --- @type love.Body
     local body = objects.players[i].body

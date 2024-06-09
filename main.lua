@@ -1,1 +1,1 @@
-require "mapgame2"
+require "chains"

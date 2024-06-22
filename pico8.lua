@@ -120,6 +120,7 @@ local function newFontFromSpritesheet(spritesheet, chars)
       local row = spritesheet[cy * 8 + y]
       for x = 0, 7 do
         local colorIndex = row[cx * 8 + x]
+        ---@diagnostic disable-next-line: missing-parameter, param-type-mismatch
         imgdata:setPixel(i * 8 + x, y, colorTable[colorIndex])
       end
     end
@@ -149,6 +150,7 @@ local function newImageFromSpriteData(data)
   for y = 1, h do
     for x = 1, w do
       local val = data[y][x]
+      ---@diagnostic disable-next-line: missing-parameter, param-type-mismatch
       imgdata:setPixel(x - 1, y - 1, colorTable[val])
     end
   end
@@ -221,11 +223,15 @@ local function parseMap(groups)
   local map2 = { unpack(groups.__gfx__ or {}, 65) } or {}
 
   -- make them both 0-8192 chars
+  ---@diagnostic disable-next-line: cast-local-type
   map1 = table.concat(map1)
+  ---@diagnostic disable-next-line: cast-local-type
   map2 = table.concat(map2)
 
   -- pad end of each with 0s
+  ---@diagnostic disable-next-line: cast-local-type
   map1 = map1 .. string.rep('0', 8192 - #map1)
+  ---@diagnostic disable-next-line: cast-local-type
   map2 = map2 .. string.rep('0', 8192 - #map2)
 
   -- now we have a whole map we can loop through
@@ -315,6 +321,7 @@ return function(filenameOrContents)
   ---@param chars string[] | nil omit this to use chars in Lua code
   ---@return love.Font
   local function createFont(chars)
+    ---@diagnostic disable-next-line: param-type-mismatch
     return newFontFromSpritesheet(spritesheet, chars or table.concat(groups.__lua__))
   end
 

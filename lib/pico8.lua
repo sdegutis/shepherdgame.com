@@ -276,7 +276,7 @@ local function parseFlags(gff)
 end
 
 ---@param filenameOrContents string
-return function(filenameOrContents)
+local function load(filenameOrContents)
   local lines = filenameOrContents:match('^pico-8 cartridge')
       and filenameOrContents:gmatch("(.-)\n")
       or love.filesystem.lines(filenameOrContents)
@@ -333,3 +333,17 @@ return function(filenameOrContents)
     createFont = createFont,
   }
 end
+
+return {
+  load = load,
+  colors = {
+    RED = 0,
+    ORANGE = 1,
+    YELLOW = 2,
+    GREEN = 3,
+    BLUE = 4,
+    PURPLE = 5,
+    PINK = 6,
+    PEACH = 7,
+  }
+}

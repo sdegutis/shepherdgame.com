@@ -1,6 +1,7 @@
 love.graphics.setDefaultFilter("nearest", "nearest")
 local loadP8 = require("lib/pico8")
 
+---@diagnostic disable-next-line: duplicate-set-field
 function love.load()
   love.physics.setMeter(64)
   world = love.physics.newWorld(0, 9.81 * 64, true)
@@ -73,6 +74,7 @@ function love.load()
   end, function() end)
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 function love.update(dt)
   world:update(dt)
 
@@ -87,6 +89,7 @@ function love.update(dt)
   end
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 function love.draw()
   love.graphics.setColor(0.2, 0.2, 0.2)
   love.graphics.polygon("fill", objects.ground1.body:getWorldPoints(objects.ground1.shape:getPoints()))

@@ -96,6 +96,7 @@ love.physics.newFixture(ground, love.physics.newEdgeShape(0, H, W, H))
 love.physics.newFixture(ground, love.physics.newEdgeShape(0, 0, 0, H))
 love.physics.newFixture(ground, love.physics.newEdgeShape(W, 0, W, H))
 
+---@diagnostic disable-next-line: duplicate-set-field
 function love.update(dt)
   world:update(dt)
 
@@ -121,6 +122,7 @@ function love.update(dt)
   end
 end
 
+---@diagnostic disable-next-line: duplicate-set-field
 function love.draw()
   love.graphics.setColor(1, 1, 1)
 

@@ -1,5 +1,5 @@
 love.graphics.setDefaultFilter("nearest", "nearest")
-local loadP8 = require("pico8")
+local loadP8 = require("lib/pico8")
 
 function love.load()
   love.physics.setMeter(64)
@@ -44,7 +44,7 @@ function love.load()
 
   objects.players[1].sprite = loadP8("sarah/untitled.p8").getOrMakeSpriteAt(1);
   objects.players[2].sprite = loadP8("jane/janegame2.p8").getOrMakeSpriteAt(1);
-  objects.players[3].sprite = loadP8("bomberman.p8").getOrMakeSpriteAt(1);
+  objects.players[3].sprite = loadP8("old/bomberman.p8").getOrMakeSpriteAt(1);
 
   objects.block1 = {}
   objects.block1.body = love.physics.newBody(world, 200, 550, "dynamic")

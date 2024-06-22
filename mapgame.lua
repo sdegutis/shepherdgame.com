@@ -1,5 +1,5 @@
 love.graphics.setDefaultFilter("nearest", "nearest")
-local loadP8 = require("pico8")
+local loadP8 = require("lib/pico8")
 
 local W = 1700
 local H = 900

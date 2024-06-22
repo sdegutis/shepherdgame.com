@@ -15,5 +15,5 @@ end
 
 ---@diagnostic disable-next-line: duplicate-set-field
 function love.draw()
-  love.graphics.print("function _draw()\n  map()\nend", 25, 205, 0, 3, 3)
+  -- love.graphics.print("function _draw()\n  map()\nend", 25, 205, 0, 3, 3)
 end

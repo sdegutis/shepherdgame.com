@@ -121,10 +121,9 @@ end
 
 -- local lib = require('lib')
 
--- lib.setScreenSize(1000, 1000)
 
 
--- local font1 = loadP8("font1.p8").createFont()
+-- local font1 = loadP8("lib/font1.p8").createFont()
 -- love.graphics.setFont(font1)
 
 -- -- basics.map

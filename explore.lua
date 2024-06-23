@@ -9,8 +9,6 @@ local map1 = p8.load('explore.p8')
 
 local SCALE = 3
 
---- @interface Entity
-
 local entities = {}
 local players = {}
 

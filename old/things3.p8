@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 16
+version 42
 __lua__
 bg=1
 
@@ -34,6 +34,7 @@ function topicmode()
 	end
 	
 	function update()
+		poke(0x5f30,1)
 		cur.update()
 		
 		t += 1
@@ -106,6 +107,7 @@ function entermode(topic)
 	end
 	
 	function update()
+		poke(0x5f30,1)
 		cur.update()
 		if (canfinish) doneb.update()
 		t += 1

@@ -42,9 +42,9 @@ engine.update = () => {
 
   for (let y = 0; y < 64; y++) {
     for (let x = 0; x < 128; x++) {
-      const spr = game1.map[y][x];
-      if (spr.index > 0) {
-        ctx.putImageData(spr.sprite.image, mx + x * 8, my + y * 8);
+      const tile = game1.map[y][x];
+      if (tile.index > 0) {
+        ctx.putImageData(tile.sprite.image, mx + x * 8, my + y * 8);
       }
     }
   }

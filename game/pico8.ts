@@ -1,8 +1,5 @@
-import { getFileText, getPico8Dir } from "./files.js";
-
 export async function loadP8(filename: string) {
-  const dir = await getPico8Dir();
-  const text = await getFileText(dir, filename);
+  const text = await getFileText(filename);
   const groups = parseGroups(text);
   return {
     flags: parseFlags(groups.gff),
@@ -140,4 +137,10 @@ function parseGroups(text: string) {
     gfx: string[],
     map: string[],
   };
+}
+
+async function getFileText(path: string) {
+  const res = await fetch(path);
+  const text = await res.text();
+  return text;
 }

@@ -11,7 +11,7 @@ export const HOME = 16;
 
 export function runGameLoop() {
   const engine = { update: () => { } };
-  const framerate = 1000 / 30;
+  const framerate = 30;
   let from = +document.timeline.currentTime!;
   const step = () => {
     requestAnimationFrame(t => {

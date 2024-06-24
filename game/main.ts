@@ -19,39 +19,27 @@ let my = 0;
 
 draw();
 
-const BUTTONS = [
-  'A', 'B', 'X', 'Y',
-  'L', 'R', 'ZL', 'ZR',
-  '-', '+',
-  'LTRIGGER', 'RTRIGGER',
-  'UP', 'DOWN', 'LEFT', 'RIGHT',
-  'HOME',
-] as const;
-
-type Buttons = { [key in typeof BUTTONS[number]]: GamepadButton };
-
-const ZL = 6;
-const ZR = 7;
-
-// const players = navigator.getGamepads().filter(c => c !== null).map(gamepad => {
-//   const buttons: Buttons = Object.fromEntries(gamepad.buttons.map((b, i) => [BUTTONS[i], b]));
-//   return { gamepad, buttons };
-// });
+enum B {
+  A, B, X, Y,
+  L, R, ZL, ZR,
+  MINUS, PLUS,
+  LTRIGGER, RTRIGGER,
+  UP, DOWN, LEFT, RIGHT,
+  HOME,
+}
 
 engine.update = () => {
   const players = navigator.getGamepads();
   for (const player of players) {
     if (!player) continue;
 
-    console.log(player.axes)
-
     player.vibrationActuator!.reset();
-    if (player.buttons[ZR]!.value || player.buttons[ZL]!.value) {
+    if (player.buttons[B.ZR]!.value || player.buttons[B.ZL]!.value) {
       player.vibrationActuator!.playEffect("dual-rumble", {
         startDelay: 0,
         duration: 500,
-        weakMagnitude: player.buttons[ZL]!.value,
-        strongMagnitude: player.buttons[ZR]!.value,
+        weakMagnitude: player.buttons[B.ZL]!.value,
+        strongMagnitude: player.buttons[B.ZR]!.value,
       });
     }
 

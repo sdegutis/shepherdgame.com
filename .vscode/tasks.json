@@ -11,6 +11,17 @@
 			"runOptions": {
 				"runOn": "folderOpen"
 			}
+		},
+		{
+			"type": "npm",
+			"script": "server",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: server",
+			"detail": "tsc --server",
+			"runOptions": {
+				"runOn": "folderOpen"
+			}
 		}
 	]
 }

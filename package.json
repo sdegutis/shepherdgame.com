@@ -7,7 +7,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "server": "http-server"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +16,7 @@
   "description": "",
   "devDependencies": {
     "@types/wicg-file-system-access": "^2023.10.5",
+    "http-server": "^14.1.1",
     "typescript": "^5.5.2"
   }
 }

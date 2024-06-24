@@ -41,7 +41,7 @@ export function getPlayers(engine: { update: () => void }, ctx: CanvasRenderingC
     engine.update = () => {
       const gamepads = navigator.getGamepads();
 
-      ctx.reset();
+      // ctx.reset();
 
       for (let i = 0; i < 4; i++) {
         const gamepad = gamepads[i];
@@ -57,7 +57,7 @@ export function getPlayers(engine: { update: () => void }, ctx: CanvasRenderingC
         const spr = ui.sprites[1];
         ctx.drawImage(spr, x, 100);
 
-        if (gamepad?.buttons[9]?.pressed) {
+        if (gamepad?.buttons[PLUS].pressed) {
           resolve();
         }
       }

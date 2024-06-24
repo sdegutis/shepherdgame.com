@@ -1,16 +1,18 @@
-export function runGameLoop(update: () => void) {
+export function runGameLoop() {
+  const engine = { update: () => { } };
   const framerate = 1000 / 30;
   let from = +document.timeline.currentTime!;
   const step = () => {
     requestAnimationFrame(t => {
       if (t - from >= framerate) {
-        update();
+        engine.update();
         from = t;
       }
       step();
     });
   };
   step();
+  return engine;
 }
 
 export function createCanvas(width: number, height: number, scale: number) {

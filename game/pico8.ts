@@ -124,7 +124,7 @@ function parseGroups(text: string) {
 
   for (const line of text.trim().split(/\r?\n/)) {
     if (line.startsWith('__')) {
-      group = line.match(/[^_]+/)![0]!;
+      group = line;
       groups[group] = [];
     }
     else {
@@ -132,10 +132,10 @@ function parseGroups(text: string) {
     }
   }
 
-  return groups as {
-    gff: string[],
-    gfx: string[],
-    map: string[],
+  return {
+    gff: groups['__gff__'] ?? [],
+    gfx: groups['__gfx__'] ?? [],
+    map: groups['__map__'] ?? [],
   };
 }
 

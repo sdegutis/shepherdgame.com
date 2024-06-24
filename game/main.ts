@@ -6,9 +6,51 @@ import { loadP8 } from "./pico8.js";
 //   jane can pick up keys that open doors
 //   and sarah can push buttons that open bars
 
-const game1 = await loadP8('game/explore.p8');
 
 const ctx = createCanvas(1400, 900, 4);
+
+const engine = runGameLoop();
+
+await getPlayers();
+
+function getPlayers() {
+  return new Promise<void>(async resolve => {
+    const core = await loadP8('game/core.p8');
+
+    engine.update = () => {
+      const gamepads = navigator.getGamepads();
+
+      ctx.reset();
+
+      for (let i = 0; i < 4; i++) {
+        const gamepad = gamepads[i];
+
+        const x = i * 30 + 120
+        const w = 4;
+
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 3;
+        ctx.fillStyle = gamepad ? '#9f9' : '#f77';
+        ctx.fillRect(x - w, 100 - w, 8 + (w * 2), 8 + (w * 2));
+
+        const spr = core.sprites[1]!;
+        ctx.putImageData(spr, x, 100);
+
+        if (gamepad?.buttons[9]?.pressed) {
+          resolve();
+        }
+      }
+
+    }
+  });
+}
+
+
+
+
+
+
+const game1 = await loadP8('game/explore.p8');
 
 let mx = 0;
 let my = 0;
@@ -21,13 +63,14 @@ const BUTTONS = [
   '-', '+',
   'LTRIGGER', 'RTRIGGER',
   'UP', 'DOWN', 'LEFT', 'RIGHT',
+  'HOME',
 ] as const;
 
 type Buttons = { [key in typeof BUTTONS[number]]: GamepadButton };
 
-runGameLoop(() => {
+engine.update = () => {
 
-  const c = navigator.getGamepads()[0];
+  const c = navigator.getGamepads()[1];
   if (!c) return;
 
   const buttons: Buttons = Object.fromEntries(c.buttons.map((b, i) => [BUTTONS[i], b]));
@@ -53,7 +96,8 @@ runGameLoop(() => {
 
   draw();
 
-});
+};
+
 
 function draw() {
   ctx.reset();
@@ -68,13 +112,3 @@ function draw() {
     }
   }
 }
-
-
-
-// window.addEventListener('gamepadconnected', (e) => {
-//   console.log('conn', e.gamepad.index);
-// });
-
-// window.addEventListener('gamepaddisconnected', (e) => {
-//   console.log('disc', e.gamepad.index);
-// });

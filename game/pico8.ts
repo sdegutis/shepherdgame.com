@@ -87,8 +87,6 @@ function parseFlags(chars: string) {
 }
 
 function parseSprites(data: string) {
-  console.log(data);
-
   const COLORS = [
     [0x00, 0x00, 0x00, 0x00],
     [0x1D, 0x2B, 0x53, 0xff],
@@ -111,7 +109,9 @@ function parseSprites(data: string) {
 
   for (let y = 0; y < 16; y++) {
     for (let x = 0; x < 16; x++) {
-      const img = new ImageData(8, 8);
+      const img = new OffscreenCanvas(8, 8);
+      const ctx = img.getContext('2d')!;
+      const imgdata = ctx.getImageData(0, 0, 8, 8);
 
       for (let yy = 0; yy < 8; yy++) {
         for (let xx = 0; xx < 8; xx++) {
@@ -124,12 +124,14 @@ function parseSprites(data: string) {
 
           const p = (yy * 8 * 4) + (xx * 4);
 
-          img.data[p + 0] = rgba[0];
-          img.data[p + 1] = rgba[1];
-          img.data[p + 2] = rgba[2];
-          img.data[p + 3] = rgba[3];
+          imgdata.data[p + 0] = rgba[0];
+          imgdata.data[p + 1] = rgba[1];
+          imgdata.data[p + 2] = rgba[2];
+          imgdata.data[p + 3] = rgba[3];
         }
       }
+
+      ctx.putImageData(imgdata, 0, 0);
 
       sprites.push(img);
     }

@@ -55,7 +55,7 @@ export function getPlayers(engine: { update: () => void }, ctx: CanvasRenderingC
         ctx.fillRect(x - w, 100 - w, 8 + (w * 2), 8 + (w * 2));
 
         const spr = ui.sprites[1];
-        ctx.putImageData(spr, x, 100);
+        ctx.drawImage(spr, x, 100);
 
         if (gamepad?.buttons[9]?.pressed) {
           resolve();

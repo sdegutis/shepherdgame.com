@@ -39,12 +39,13 @@ engine.update = () => {
   }
 
   ctx.reset();
+  ctx.translate(mx, my);
 
   for (let y = 0; y < 64; y++) {
     for (let x = 0; x < 128; x++) {
       const tile = game1.map[y][x];
       if (tile.index > 0) {
-        ctx.putImageData(tile.sprite.image, mx + x * 8, my + y * 8);
+        ctx.drawImage(tile.sprite.image, x * 8, y * 8);
       }
     }
   }

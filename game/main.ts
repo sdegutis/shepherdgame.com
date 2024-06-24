@@ -1,5 +1,5 @@
 import { createCanvas, getPlayers, runGameLoop, ZL, ZR } from "./core.js";
-import { loadP8 } from "./pico8.js";
+import { loadCleanP8 } from "./pico8.js";
 
 // sarahs idea:
 //   i can place bombs that blow up certain bricks
@@ -12,7 +12,7 @@ const engine = runGameLoop();
 await getPlayers(engine, ctx);
 
 
-const game1 = await loadP8('game/explore.p8');
+const game1 = await loadCleanP8('game/explore.p8');
 
 let mx = 0;
 let my = 0;
@@ -55,9 +55,8 @@ function draw() {
   for (let y = 0; y < 64; y++) {
     for (let x = 0; x < 128; x++) {
       const spr = game1.map[y]![x]!;
-      if (spr > 0) {
-        const img = game1.sprites[spr]!;
-        ctx.putImageData(img, mx + x * 8, my + y * 8);
+      if (spr.index > 0) {
+        ctx.putImageData(spr.sprite.image, mx + x * 8, my + y * 8);
       }
     }
   }

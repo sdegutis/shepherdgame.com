@@ -31,14 +31,11 @@ engine.update = () => {
       });
     }
 
+    mx += gamepad.axes[0]!;
+    my += gamepad.axes[1]!;
 
-    const [x1, y1, x2, y2] = gamepad.axes as [number, number, number, number];
-
-    mx += x1;
-    my += y1;
-
-    mx += x2 * 3;
-    my += y2 * 3;
+    mx += gamepad.axes[2]! * 3;
+    my += gamepad.axes[3]! * 3;
   }
 
   ctx.reset();

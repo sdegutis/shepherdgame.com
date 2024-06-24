@@ -26,7 +26,8 @@ export async function loadCleanP8(filename: string) {
 }
 
 export async function loadP8(filename: string) {
-  const text = await getFileText(filename);
+  const res = await fetch(filename);
+  const text = await res.text();
   const groups = parseGroups(text);
   return {
     flags: parseFlags(groups.gff),
@@ -35,18 +36,15 @@ export async function loadP8(filename: string) {
   };
 }
 
-function parseMap(lines: string[]) {
-  for (let i = lines.length; i < 64; i++) {
-    lines.push(''.padEnd(256, '0'));
-  }
-
+function parseMap(data: string) {
   const map = [];
   for (let y = 0; y < 64; y++) {
     const row = [];
     for (let x = 0; x < 128; x++) {
       const i = x * 2;
-      const c = lines[y].slice(i, i + 2);
-      const n = parseInt(c, 16);
+      const ii = y * 256 + i;
+      const c = data.slice(ii, ii + 2);
+      const n = parseInt(y < 32 ? c : c[1] + c[0], 16);
       row.push(n);
     }
     map.push(row);
@@ -54,9 +52,7 @@ function parseMap(lines: string[]) {
   return map;
 }
 
-function parseFlags(lines: string[]) {
-  const chars = lines.join('').padEnd(512, '0');
-
+function parseFlags(chars: string) {
   const COLORS = [
     'RED',
     'ORANGE',
@@ -90,7 +86,9 @@ function parseFlags(lines: string[]) {
   return flags;
 }
 
-function parseSprites(lines: string[]) {
+function parseSprites(data: string) {
+  console.log(data);
+
   const COLORS = [
     [0x00, 0x00, 0x00, 0x00],
     [0x1D, 0x2B, 0x53, 0xff],
@@ -109,11 +107,6 @@ function parseSprites(lines: string[]) {
     [0xFF, 0x77, 0xA8, 0xff],
     [0xFF, 0xCC, 0xAA, 0xff],
   ];
-
-  for (let i = lines.length; i < 128; i++) {
-    lines.push(''.padEnd(128, '0'));
-  }
-
   const sprites = [];
 
   for (let y = 0; y < 16; y++) {
@@ -125,7 +118,7 @@ function parseSprites(lines: string[]) {
           const ly = y * 8 + yy;
           const lx = x * 8 + xx;
 
-          const c = lines[ly][lx];
+          const c = data[ly * 128 + lx];
           const n = parseInt(c, 16);
           const rgba = COLORS[n];
 
@@ -146,28 +139,9 @@ function parseSprites(lines: string[]) {
 }
 
 function parseGroups(text: string) {
-  const groups: Record<string, string[]> = Object.create(null);
-  let group = '';
-
-  for (const line of text.trim().split(/\r?\n/)) {
-    if (line.startsWith('__')) {
-      group = line;
-      groups[group] = [];
-    }
-    else {
-      groups[group]?.push(line);
-    }
-  }
-
-  return {
-    gff: groups['__gff__'] ?? [],
-    gfx: groups['__gfx__'] ?? [],
-    map: groups['__map__'] ?? [],
-  };
-}
-
-async function getFileText(path: string) {
-  const res = await fetch(path);
-  const text = await res.text();
-  return text;
+  const flat = text.replace(/[\r\n]/g, '');
+  const gfx = (flat.match(/__gfx__([0-9abcdef]+)/)?.[1] ?? '').padEnd(128 * 128, '0');
+  const map = (flat.match(/__map__([0-9abcdef]+)/)?.[1] ?? '').padEnd(128 * 32 * 2, '0') + gfx.slice(128 * 64);
+  const gff = (flat.match(/__gff__([0-9abcdef]+)/)?.[1] ?? '').padEnd(256 * 2, '0');
+  return { gfx, map, gff };
 }

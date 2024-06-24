@@ -39,7 +39,7 @@ engine.update = () => {
   }
 
   ctx.reset();
-  ctx.translate(mx, my);
+  ctx.translate(Math.round(mx), Math.round(my));
 
   for (let y = 0; y < 64; y++) {
     for (let x = 0; x < 128; x++) {

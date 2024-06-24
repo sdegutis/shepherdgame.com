@@ -26,7 +26,7 @@ export async function loadCleanP8(filename: string) {
 }
 
 export async function loadP8(filename: string) {
-  const res = await fetch(filename);
+  const res = await fetch(filename, { cache: 'no-store' });
   const text = await res.text();
   const groups = parseGroups(text);
   return {

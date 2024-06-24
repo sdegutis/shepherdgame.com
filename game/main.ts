@@ -1,3 +1,4 @@
+import { createCanvas, runGameLoop } from "./core.js";
 import { loadP8 } from "./pico8.js";
 
 // sarahs idea:
@@ -9,23 +10,10 @@ const game1 = await loadP8('explore.p8');
 
 const ctx = createCanvas(1400, 900, 4);
 
-function runGameLoop(update: () => void) {
-  const framerate = 1000 / 30;
-  let from = +document.timeline.currentTime!;
-  const step = () => {
-    requestAnimationFrame(t => {
-      if (t - from >= framerate) {
-        update();
-        from = t;
-      }
-      step();
-    });
-  };
-  step();
-}
-
 let mx = 0;
 let my = 0;
+
+draw();
 
 const BUTTONS = [
   'A', 'B', 'X', 'Y',
@@ -90,16 +78,3 @@ function draw() {
 // window.addEventListener('gamepaddisconnected', (e) => {
 //   console.log('disc', e.gamepad.index);
 // });
-
-
-
-
-function createCanvas(width: number, height: number, scale: number) {
-  const canvas = document.createElement('canvas');
-  canvas.style.width = width + 'px';
-  canvas.style.height = height + 'px';
-  canvas.width = width / scale;
-  canvas.height = height / scale;
-  document.body.append(canvas);
-  return canvas.getContext('2d')!;
-}

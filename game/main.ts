@@ -22,27 +22,27 @@ engine.update = () => {
     if (!gamepad) continue;
 
     gamepad.vibrationActuator.reset();
-    if (gamepad.buttons[ZR]!.value || gamepad.buttons[ZL]!.value) {
+    if (gamepad.buttons[ZR].value || gamepad.buttons[ZL].value) {
       gamepad.vibrationActuator.playEffect("dual-rumble", {
         startDelay: 0,
         duration: 500,
-        weakMagnitude: gamepad.buttons[ZL]!.value,
-        strongMagnitude: gamepad.buttons[ZR]!.value,
+        weakMagnitude: gamepad.buttons[ZL].value,
+        strongMagnitude: gamepad.buttons[ZR].value,
       });
     }
 
-    mx += gamepad.axes[0]!;
-    my += gamepad.axes[1]!;
+    mx += gamepad.axes[0];
+    my += gamepad.axes[1];
 
-    mx += gamepad.axes[2]! * 3;
-    my += gamepad.axes[3]! * 3;
+    mx += gamepad.axes[2] * 3;
+    my += gamepad.axes[3] * 3;
   }
 
   ctx.reset();
 
   for (let y = 0; y < 64; y++) {
     for (let x = 0; x < 128; x++) {
-      const spr = game1.map[y]![x]!;
+      const spr = game1.map[y][x];
       if (spr.index > 0) {
         ctx.putImageData(spr.sprite.image, mx + x * 8, my + y * 8);
       }

@@ -4,8 +4,8 @@ export async function loadCleanP8(filename: string) {
   const sprites = [];
   for (let i = 0; i < 256; i++) {
     sprites.push({
-      image: data.sprites[i]!,
-      flags: data.flags[i]!,
+      image: data.sprites[i],
+      flags: data.flags[i],
     });
   }
 
@@ -13,10 +13,10 @@ export async function loadCleanP8(filename: string) {
   for (let y = 0; y < 64; y++) {
     const row = [];
     for (let x = 0; x < 128; x++) {
-      const spr = data.map[y]![x]!;
+      const spr = data.map[y][x];
       row.push({
         index: spr,
-        sprite: sprites[spr]!,
+        sprite: sprites[spr],
       });
     }
     map.push(row);
@@ -45,7 +45,7 @@ function parseMap(lines: string[]) {
     const row = [];
     for (let x = 0; x < 128; x++) {
       const i = x * 2;
-      const c = lines[y]!.slice(i, i + 2);
+      const c = lines[y].slice(i, i + 2);
       const n = parseInt(c, 16);
       row.push(n);
     }
@@ -81,7 +81,7 @@ function parseFlags(lines: string[]) {
 
     for (let b = 0; b < 8; b++) {
       const bb = 1 << b;
-      if (n & bb) flag[COLORS[b]!] = true;
+      if (n & bb) flag[COLORS[b]] = true;
     }
 
     flags.push(flag);
@@ -125,16 +125,16 @@ function parseSprites(lines: string[]) {
           const ly = y * 8 + yy;
           const lx = x * 8 + xx;
 
-          const c = lines[ly]![lx]!;
+          const c = lines[ly][lx];
           const n = parseInt(c, 16);
-          const rgba = COLORS[n]!;
+          const rgba = COLORS[n];
 
           const p = (yy * 8 * 4) + (xx * 4);
 
-          img.data[p + 0] = rgba[0]!;
-          img.data[p + 1] = rgba[1]!;
-          img.data[p + 2] = rgba[2]!;
-          img.data[p + 3] = rgba[3]!;
+          img.data[p + 0] = rgba[0];
+          img.data[p + 1] = rgba[1];
+          img.data[p + 2] = rgba[2];
+          img.data[p + 3] = rgba[3];
         }
       }
 

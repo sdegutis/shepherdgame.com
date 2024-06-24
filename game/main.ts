@@ -1,4 +1,4 @@
-import { createCanvas, getPlayers, runGameLoop } from "./core.js";
+import { createCanvas, getPlayers, runGameLoop, ZL, ZR } from "./core.js";
 import { loadP8 } from "./pico8.js";
 
 // sarahs idea:
@@ -19,26 +19,17 @@ let my = 0;
 
 draw();
 
-enum B {
-  A, B, X, Y,
-  L, R, ZL, ZR,
-  MINUS, PLUS,
-  LTRIGGER, RTRIGGER,
-  UP, DOWN, LEFT, RIGHT,
-  HOME,
-}
-
 engine.update = () => {
   for (const gamepad of navigator.getGamepads()) {
     if (!gamepad) continue;
 
     gamepad.vibrationActuator.reset();
-    if (gamepad.buttons[B.ZR]!.value || gamepad.buttons[B.ZL]!.value) {
+    if (gamepad.buttons[ZR]!.value || gamepad.buttons[ZL]!.value) {
       gamepad.vibrationActuator.playEffect("dual-rumble", {
         startDelay: 0,
         duration: 500,
-        weakMagnitude: gamepad.buttons[B.ZL]!.value,
-        strongMagnitude: gamepad.buttons[B.ZR]!.value,
+        weakMagnitude: gamepad.buttons[ZL]!.value,
+        strongMagnitude: gamepad.buttons[ZR]!.value,
       });
     }
 

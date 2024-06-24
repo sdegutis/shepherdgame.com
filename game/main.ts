@@ -6,7 +6,7 @@ import { loadP8 } from "./pico8.js";
 //   jane can pick up keys that open doors
 //   and sarah can push buttons that open bars
 
-const game1 = await loadP8('explore.p8');
+const game1 = await loadP8('game/explore.p8');
 
 const ctx = createCanvas(1400, 900, 4);
 

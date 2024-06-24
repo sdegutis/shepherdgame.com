@@ -17,8 +17,6 @@ const game1 = await loadCleanP8('game/explore.p8');
 let mx = 0;
 let my = 0;
 
-draw();
-
 engine.update = () => {
   for (const gamepad of navigator.getGamepads()) {
     if (!gamepad) continue;
@@ -41,15 +39,8 @@ engine.update = () => {
 
     mx += x2 * 3;
     my += y2 * 3;
-
-    draw();
   }
 
-
-};
-
-
-function draw() {
   ctx.reset();
 
   for (let y = 0; y < 64; y++) {
@@ -60,4 +51,5 @@ function draw() {
       }
     }
   }
-}
+
+};

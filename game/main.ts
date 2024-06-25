@@ -15,6 +15,22 @@ const ctx = createCanvas(WIDTH, HEIGHT, SCALE);
 const engine = runGameLoop();
 const gamepadIndexes = await getPlayers(engine, ctx);
 
+
+
+const context = new AudioContext();
+const o = context.createOscillator();
+o.type = "square";
+o.frequency.value = 174.6;
+
+const g = context.createGain();
+o.connect(g);
+g.connect(context.destination);
+
+o.start();
+g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 1)
+
+
+
 const game1 = await loadCleanP8('game/explore.p8');
 
 const entities: Entity[] = [];
@@ -58,11 +74,11 @@ class Entity {
     const y = Math.round(this.box.y);
     ctx.drawImage(this.image, x - this.ox, y - this.oy);
 
-    ctx.strokeStyle = '#f00a';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.rect(x + 0.5, y + 0.5, this.box.w - 1, this.box.h - 1);
-    ctx.stroke();
+    // ctx.strokeStyle = '#f00a';
+    // ctx.lineWidth = 1;
+    // ctx.beginPath();
+    // ctx.rect(x + 0.5, y + 0.5, this.box.w - 1, this.box.h - 1);
+    // ctx.stroke();
   }
 
 }

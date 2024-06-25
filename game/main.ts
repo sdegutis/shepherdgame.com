@@ -1,3 +1,4 @@
+import { Camera } from "./camera.js";
 import { createCanvas, getPlayers, runGameLoop } from "./core.js";
 import { loadCleanP8, MapTile } from "./pico8.js";
 
@@ -16,32 +17,14 @@ const gamepadIndexes = await getPlayers(engine, ctx);
 
 const game1 = await loadCleanP8('game/explore.p8');
 
-const MW = game1.map[0].length * 8;
-const MH = game1.map.length * 8;
-
 const entities: Entity[] = [];
 const players: Player[] = [];
 const walls: Entity[] = [];
 
-let mx = 0;
-let my = 0;
+const MW = game1.map[0].length * 8;
+const MH = game1.map.length * 8;
 
-function updateCamera() {
-  const avgX = ((players[0].entity.x + players[1].entity.x + players[2].entity.x) / 3);
-  const avgY = ((players[0].entity.y + players[1].entity.y + players[2].entity.y) / 3);
-
-  mx = -(avgX - (WIDTH / 2));
-  my = -(avgY - (HEIGHT / 2));
-
-  if (mx > 0) mx = 0;
-  if (my > 0) my = 0;
-
-  if (mx < WIDTH - MW) mx = WIDTH - MW;
-  if (my < HEIGHT - MH) my = HEIGHT - MH;
-
-  mx = Math.round(mx);
-  my = Math.round(my);
-}
+const camera = new Camera(MW, MH, WIDTH, HEIGHT, players);
 
 class Entity {
 
@@ -70,7 +53,7 @@ class Player {
     const [x1, y1] = this.gamepad.axes;
     this.entity.x += x1 * 10;
     this.entity.y += y1 * 10;
-    updateCamera();
+    camera.update();
   }
 
   // gamepad.vibrationActuator.reset();
@@ -114,7 +97,7 @@ entities.sort((a, b) => {
   return 0;
 });
 
-updateCamera();
+camera.update();
 
 engine.update = () => {
   for (const player of players) {
@@ -122,7 +105,7 @@ engine.update = () => {
   }
 
   ctx.reset();
-  ctx.translate(mx, my);
+  ctx.translate(camera.mx, camera.my);
 
   for (const e of entities) {
     e.draw(ctx);

@@ -14,19 +14,38 @@ await getPlayers(engine, ctx);
 
 const game1 = await loadCleanP8('game/explore.p8');
 
+function getPlayerCoords(sprNum: number) {
+  for (let y = 0; y < 128; y++) {
+    for (let x = 0; x < 64; x++) {
+      const tile = game1.map[y][x];
+      if (tile.index === sprNum) {
+        game1.map[y][x] = game1.map[y][x - 1];
+        return [x, y];
+      }
+    }
+  }
+  return [0, 0];
+}
+
 // let mx = 0;
 // let my = 0;
 
 class Player {
 
   image;
+  x;
+  y;
 
   constructor(
     private gamepadIndex: number,
-    public x: number,
-    public y: number,
     playerNum: number,
   ) {
+    const sprNum = playerNum + 1;
+    const [x, y] = getPlayerCoords(sprNum);
+
+    this.x = x * 8;
+    this.y = y * 8;
+
     this.image = game1.sprites[playerNum + 1].image;
   }
 
@@ -50,7 +69,7 @@ const entities: Entity[] = [];
 
 const players = (navigator.getGamepads()
   .filter(gp => gp !== null)
-  .map((gp, i) => new Player(gp.index, 0, 0, i))
+  .map((gp, i) => new Player(gp.index, i))
 );
 
 for (let y = 0; y < 64; y++) {
@@ -80,7 +99,7 @@ engine.update = () => {
     // }
   }
 
-  ctx.reset();
+  // ctx.reset();
   // ctx.translate(Math.round(mx), Math.round(my));
 
   for (const e of entities) {

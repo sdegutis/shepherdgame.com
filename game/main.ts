@@ -19,8 +19,14 @@ const game1 = await loadCleanP8('game/explore.p8');
 
 const EMPTY = 17;
 
+// interface Actable {
+//   actOn(player: Player): boolean;
+// }
+
 const entities: Entity[] = [];
 const players: Player[] = [];
+// const actables: Actable[] = [];
+
 const walls: Entity[] = [];
 const keys: Key[] = [];
 const doors: Entity[] = [];
@@ -30,35 +36,21 @@ const MH = game1.map.length * 8;
 
 const camera = new Camera(MW, MH, WIDTH, HEIGHT, players);
 
-class Box {
-
-  w = 8; h = 8;
-  constructor(public x: number, public y: number) { }
-
-  intersects(other: Box, x: number, y: number) {
-    return (
-      x + this.w >= other.x &&
-      y + this.h >= other.y &&
-      x < other.x + other.w &&
-      y < other.y + other.h
-    );
-  }
-
-}
-
 class Entity {
 
   layer = 0;
   ox = 0; oy = 0;
+  w = 8; h = 8;
 
   constructor(
-    public box: Box,
+    public x: number,
+    public y: number,
     public image: OffscreenCanvas,
   ) { }
 
   draw(ctx: CanvasRenderingContext2D) {
-    const x = Math.round(this.box.x);
-    const y = Math.round(this.box.y);
+    const x = Math.round(this.x);
+    const y = Math.round(this.y);
     ctx.drawImage(this.image, x - this.ox, y - this.oy);
 
     // ctx.strokeStyle = '#f00a';
@@ -66,6 +58,15 @@ class Entity {
     // ctx.beginPath();
     // ctx.rect(x + 0.5, y + 0.5, this.box.w - 1, this.box.h - 1);
     // ctx.stroke();
+  }
+
+  intersects(other: Entity, x: number, y: number) {
+    return (
+      x + this.w >= other.x &&
+      y + this.h >= other.y &&
+      x < other.x + other.w &&
+      y < other.y + other.h
+    );
   }
 
 }
@@ -80,8 +81,8 @@ class Player {
   constructor(public entity: Entity) {
     entity.ox = 2;
     entity.oy = 1;
-    entity.box.w = 4;
-    entity.box.h = 7;
+    entity.w = 4;
+    entity.h = 7;
   }
 
   update() {
@@ -90,28 +91,31 @@ class Player {
 
     const speed = 1;
 
-    const x = this.entity.box.x + x1 * speed;
-    if (walls.some(wall => this.entity.box.intersects(wall.box, x, this.entity.box.y))) {
+    const x = this.entity.x + x1 * speed;
+
+
+
+    if (walls.some(wall => this.entity.intersects(wall, x, this.entity.y))) {
       this.rumble(.01, .3, 0);
     }
     else {
-      this.entity.box.x = x;
+      this.entity.x = x;
       camera.update();
     }
 
-    const y = this.entity.box.y + y1 * speed;
-    if (walls.some(wall => this.entity.box.intersects(wall.box, this.entity.box.x, y))) {
+    const y = this.entity.y + y1 * speed;
+    if (walls.some(wall => this.entity.intersects(wall, this.entity.x, y))) {
       this.rumble(.01, .3, 0);
     }
     else {
-      this.entity.box.y = y;
+      this.entity.y = y;
       camera.update();
     }
 
-    const key = keys.find(key => this.entity.box.intersects(
-      key.entity.box,
-      this.entity.box.x,
-      this.entity.box.y
+    const key = keys.find(key => this.entity.intersects(
+      key.entity,
+      this.entity.x,
+      this.entity.y
     ));
 
     if (key) {
@@ -126,10 +130,10 @@ class Player {
       this.rumble(.3, 1, 1);
     }
 
-    const door = doors.find(door => this.entity.box.intersects(
-      door.box,
-      this.entity.box.x,
-      this.entity.box.y
+    const door = doors.find(door => this.entity.intersects(
+      door,
+      this.entity.x,
+      this.entity.y
     ));
 
     if (door && this.keys > 0) {
@@ -161,8 +165,8 @@ class Key {
   x; y;
 
   constructor(public entity: Entity) {
-    this.x = entity.box.x;
-    this.y = entity.box.y;
+    this.x = entity.x;
+    this.y = entity.y;
   }
 
   update(t: number) {
@@ -170,16 +174,14 @@ class Key {
     const percent = (t % durationMs) / durationMs;
     const percentOfCircle = percent * Math.PI * 2;
     const distance = 1.5;
-    this.entity.box.y = this.y + +Math.cos(percentOfCircle) * distance;
-    this.entity.box.x = this.x + -Math.sin(percentOfCircle) * distance;
+    this.entity.y = this.y + +Math.cos(percentOfCircle) * distance;
+    this.entity.x = this.x + -Math.sin(percentOfCircle) * distance;
   }
 
 }
 
 function createEntity(spr: Sprite, x: number, y: number) {
-  const box = new Box(x * 8, y * 8);
-
-  const entity = new Entity(box, spr.image);
+  const entity = new Entity(x * 8, y * 8, spr.image);
   entities.push(entity);
 
   if (spr.flags.GREEN) {

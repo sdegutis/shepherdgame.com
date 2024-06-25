@@ -13,18 +13,28 @@ function freqForNote(note: typeof notes[number], oct: number) {
 
 export function playNote(note: typeof notes[number], octave: number, duration: number, options?: {
   type?: OscillatorType,
-  vol?: number,
+  volume?: number,
+  delay?: number,
 }) {
   const g = audio.createGain();
-  if (options?.vol !== undefined) g.gain.value = options.vol;
+  if (options?.volume !== undefined) g.gain.value = options.volume;
   g.connect(audio.destination);
 
   g.gain.exponentialRampToValueAtTime(0.00001, audio.currentTime + duration)
 
+  let node: GainNode | DelayNode = g;
+
+  if (options?.delay) {
+    node = new DelayNode(audio, {
+      delayTime: options.delay,
+      maxDelayTime: options.delay,
+    });
+  }
+
   const o = audio.createOscillator();
-  o.connect(g);
+  o.connect(node);
 
   if (options?.type !== undefined) o.type = options?.type;
   o.frequency.value = freqForNote(note, octave);
-  o.start();
+  o.start(0);
 }

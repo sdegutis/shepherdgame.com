@@ -1,7 +1,6 @@
 import { Camera } from "./camera.js";
 import { createCanvas, getPlayers, runGameLoop } from "./core.js";
 import { loadCleanP8, MapTile } from "./pico8.js";
-import { playNote } from "./sfx.js";
 
 // sarahs idea:
 //   i can place bombs that blow up certain bricks
@@ -16,7 +15,7 @@ const ctx = createCanvas(WIDTH, HEIGHT, SCALE);
 const engine = runGameLoop();
 const gamepadIndexes = await getPlayers(engine, ctx);
 
-playNote('C', 5, 2, { type: 'triangle' });
+// playNote('C', 5, 2, { type: 'triangle' });
 
 const game1 = await loadCleanP8('game/explore.p8');
 
@@ -102,7 +101,8 @@ class Player {
 
     const key = this.hitKey(this.entity.box.x, this.entity.box.y);
     if (key) {
-      playNote('F', 3, 1, { type: 'square' });
+      // playNote('C', 3, .5, { type: 'square' });
+      // playNote('F', 3, 1, { type: 'square', delay: 1 });
 
       const keyIndex = keys.indexOf(key);
       keys.splice(keyIndex, 1);

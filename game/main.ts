@@ -1,6 +1,6 @@
 import { Camera } from "./camera.js";
 import { createCanvas, getPlayers, runGameLoop } from "./core.js";
-import { loadCleanP8, MapTile } from "./pico8.js";
+import { loadCleanP8, MapTile, Sprite } from "./pico8.js";
 
 // sarahs idea:
 //   i can place bombs that blow up certain bricks
@@ -17,10 +17,13 @@ const gamepadIndexes = await getPlayers(engine, ctx);
 
 const game1 = await loadCleanP8('game/explore.p8');
 
+const EMPTY = 17;
+
 const entities: Entity[] = [];
 const players: Player[] = [];
 const walls: Entity[] = [];
 const keys: Key[] = [];
+const doors: Entity[] = [];
 
 const MW = game1.map[0].length * 8;
 const MH = game1.map.length * 8;
@@ -72,6 +75,8 @@ class Player {
   gamepadIndex = gamepadIndexes.shift()!;
   get gamepad() { return navigator.getGamepads()[this.gamepadIndex]; }
 
+  keys = 0;
+
   constructor(public entity: Entity) {
     entity.ox = 2;
     entity.oy = 1;
@@ -110,10 +115,30 @@ class Player {
     ));
 
     if (key) {
+      this.keys++;
+
       const keyIndex = keys.indexOf(key);
       keys.splice(keyIndex, 1);
 
       const eIndex = entities.indexOf(key.entity);
+      entities.splice(eIndex, 1);
+
+      this.rumble(.3, 1, 1);
+    }
+
+    const door = doors.find(door => this.entity.box.intersects(
+      door.box,
+      this.entity.box.x,
+      this.entity.box.y
+    ));
+
+    if (door && this.keys > 0) {
+      this.keys--;
+
+      const doorIndex = doors.indexOf(door);
+      doors.splice(doorIndex, 1);
+
+      const eIndex = entities.indexOf(door);
       entities.splice(eIndex, 1);
 
       this.rumble(.3, 1, 1);
@@ -151,32 +176,37 @@ class Key {
 
 }
 
-function createEntity(tile: MapTile, x: number, y: number) {
+function createEntity(spr: Sprite, x: number, y: number) {
   const box = new Box(x * 8, y * 8);
 
-  const entity = new Entity(box, tile.sprite.image);
+  const entity = new Entity(box, spr.image);
   entities.push(entity);
 
-  if (tile.sprite.flags.GREEN) {
+  if (spr.flags.GREEN) {
     const player = new Player(entity);
     entity.layer = 2;
     players.push(player);
-    createEntity(game1.map[y][x - 1], x, y);
+    createEntity(game1.sprites[EMPTY], x, y);
   }
-  else if (tile.sprite.flags.RED) {
+  else if (spr.flags.RED) {
     walls.push(entity);
   }
-  else if (tile.sprite.flags.YELLOW) {
+  else if (spr.flags.YELLOW) {
     const key = new Key(entity);
     entity.layer = 1;
     keys.push(key);
-    createEntity(game1.map[y][x - 1], x, y);
+    createEntity(game1.sprites[EMPTY], x, y);
+  }
+  else if (spr.flags.ORANGE) {
+    entity.layer = 1;
+    doors.push(entity);
+    createEntity(game1.sprites[EMPTY], x, y);
   }
 }
 
 for (let y = 0; y < 64; y++) {
   for (let x = 0; x < 128; x++) {
-    createEntity(game1.map[y][x], x, y);
+    createEntity(game1.map[y][x].sprite, x, y);
   }
 }
 

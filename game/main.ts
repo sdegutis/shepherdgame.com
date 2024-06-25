@@ -7,9 +7,9 @@ import { loadCleanP8, MapTile } from "./pico8.js";
 //   jane can pick up keys that open doors
 //   and sarah can push buttons that open bars
 
-const WIDTH = 750;
-const HEIGHT = 450;
-const SCALE = 2;
+const WIDTH = 320;
+const HEIGHT = 180;
+const SCALE = 5;
 
 const ctx = createCanvas(WIDTH, HEIGHT, SCALE);
 const engine = runGameLoop();
@@ -27,18 +27,25 @@ const MH = game1.map.length * 8;
 
 const camera = new Camera(MW, MH, WIDTH, HEIGHT, players);
 
+class Box {
+
+  w = 8; h = 8;
+  constructor(public x: number, public y: number) { }
+
+}
+
 class Entity {
 
   layer = 0;
+  ox = 0; oy = 0;
 
   constructor(
-    public x: number,
-    public y: number,
+    public box: Box,
     public image: OffscreenCanvas,
   ) { }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.drawImage(this.image, Math.round(this.x), Math.round(this.y));
+    ctx.drawImage(this.image, Math.round(this.box.x - this.ox), Math.round(this.box.y - this.oy));
   }
 
 }
@@ -48,25 +55,28 @@ class Player {
   gamepadIndex = gamepadIndexes.shift()!;
   get gamepad() { return navigator.getGamepads()[this.gamepadIndex]; }
 
-  constructor(public entity: Entity) { }
+  constructor(public entity: Entity) {
+    entity.ox = 2;
+    entity.box.w = 4;
+  }
 
   update() {
     if (!this.gamepad) return;
     const [x1, y1] = this.gamepad.axes;
 
-    const x = this.entity.x + x1;
-    if (!this.hitWall(x, this.entity.y)) {
-      this.entity.x = x;
+    const x = this.entity.box.x + x1;
+    if (!this.hitWall(x, this.entity.box.y)) {
+      this.entity.box.x = x;
       camera.update();
     }
 
-    const y = this.entity.y + y1;
-    if (!this.hitWall(this.entity.x, y)) {
-      this.entity.y = y;
+    const y = this.entity.box.y + y1;
+    if (!this.hitWall(this.entity.box.x, y)) {
+      this.entity.box.y = y;
       camera.update();
     }
 
-    const key = this.hitKey(this.entity.x, this.entity.y);
+    const key = this.hitKey(this.entity.box.x, this.entity.box.y);
     if (key) {
       const keyIndex = keys.indexOf(key);
       keys.splice(keyIndex, 1);
@@ -86,10 +96,10 @@ class Player {
   hitWall(x: number, y: number) {
     for (const wall of walls) {
       if (
-        x + 8 >= wall.x &&
-        y + 8 >= wall.y &&
-        x < wall.x + 8 &&
-        y < wall.y + 8
+        x + this.entity.box.w >= wall.box.x &&
+        y + this.entity.box.h >= wall.box.y &&
+        x < wall.box.x + wall.box.w &&
+        y < wall.box.y + wall.box.h
       ) return true;
     }
     return false;
@@ -98,10 +108,10 @@ class Player {
   hitKey(x: number, y: number) {
     for (const key of keys) {
       if (
-        x + 8 >= key.x &&
-        y + 8 >= key.y &&
-        x < key.x + 8 &&
-        y < key.y + 8
+        x + this.entity.box.w >= key.x &&
+        y + this.entity.box.h >= key.y &&
+        x < key.x + key.entity.box.w &&
+        y < key.y + key.entity.box.h
       ) return key;
     }
     return null;
@@ -119,20 +129,25 @@ class Key {
   x; y;
 
   constructor(public entity: Entity) {
-    this.x = entity.x;
-    this.y = entity.y;
+    this.x = entity.box.x;
+    this.y = entity.box.y;
   }
 
   update(t: number) {
-    const ms = 1000;
-    this.entity.y = this.y + +Math.cos(((t % ms) / ms) * (Math.PI * 2)) * 2;
-    this.entity.x = this.x + -Math.sin(((t % ms) / ms) * (Math.PI * 2)) * 2;
+    const durationMs = 1000;
+    const percent = (t % durationMs) / durationMs;
+    const percentOfCircle = percent * Math.PI * 2;
+    const distance = 1.5;
+    this.entity.box.y = this.y + +Math.cos(percentOfCircle) * distance;
+    this.entity.box.x = this.x + -Math.sin(percentOfCircle) * distance;
   }
 
 }
 
 function createEntity(tile: MapTile, x: number, y: number) {
-  const entity = new Entity(x * 8, y * 8, tile.sprite.image);
+  const box = new Box(x * 8, y * 8);
+
+  const entity = new Entity(box, tile.sprite.image);
   entities.push(entity);
 
   if (tile.sprite.flags.GREEN) {

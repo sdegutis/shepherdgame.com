@@ -9,12 +9,12 @@ export class Camera {
     private mh: number,
     private sw: number,
     private sh: number,
-    private players: { entity: { x: number, y: number } }[],
+    private players: { entity: { box: { x: number, y: number } } }[],
   ) { }
 
   update() {
-    const avgX = ((this.players[0].entity.x + this.players[1].entity.x + this.players[2].entity.x) / 3);
-    const avgY = ((this.players[0].entity.y + this.players[1].entity.y + this.players[2].entity.y) / 3);
+    const avgX = ((this.players[0].entity.box.x + this.players[1].entity.box.x + this.players[2].entity.box.x) / 3);
+    const avgY = ((this.players[0].entity.box.y + this.players[1].entity.box.y + this.players[2].entity.box.y) / 3);
 
     this.mx = -(avgX - (this.sw / 2));
     this.my = -(avgY - (this.sh / 2));

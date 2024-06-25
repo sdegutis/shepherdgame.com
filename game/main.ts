@@ -1,4 +1,4 @@
-import { createCanvas, getPlayers, runGameLoop, ZL, ZR } from "./core.js";
+import { createCanvas, getPlayers, runGameLoop } from "./core.js";
 import { loadCleanP8 } from "./pico8.js";
 
 // sarahs idea:
@@ -7,7 +7,7 @@ import { loadCleanP8 } from "./pico8.js";
 //   and sarah can push buttons that open bars
 
 
-const ctx = createCanvas(1400, 900, 4);
+const ctx = createCanvas(1880, 900, 4);
 const engine = runGameLoop();
 await getPlayers(engine, ctx);
 
@@ -17,8 +17,41 @@ const game1 = await loadCleanP8('game/explore.p8');
 // let mx = 0;
 // let my = 0;
 
-const entities: { image: OffscreenCanvas, x: number, y: number }[] = [];
-const players = [];
+class Player {
+
+  image;
+
+  constructor(
+    private gamepadIndex: number,
+    public x: number,
+    public y: number,
+    playerNum: number,
+  ) {
+    this.image = game1.sprites[playerNum + 1].image;
+  }
+
+  get gamepad() { return navigator.getGamepads()[this.gamepadIndex]! }
+
+  update() {
+    const [x1, y1] = this.gamepad.axes;
+    this.x += x1;
+    this.y += y1;
+  }
+
+}
+
+interface Entity {
+  image: OffscreenCanvas;
+  x: number;
+  y: number;
+}
+
+const entities: Entity[] = [];
+
+const players = (navigator.getGamepads()
+  .filter(gp => gp !== null)
+  .map((gp, i) => new Player(gp.index, 0, 0, i))
+);
 
 for (let y = 0; y < 64; y++) {
   for (let x = 0; x < 128; x++) {
@@ -33,8 +66,8 @@ for (let y = 0; y < 64; y++) {
 
 
 engine.update = () => {
-  for (const gamepad of navigator.getGamepads()) {
-    if (!gamepad) continue;
+  for (const player of players) {
+    player.update();
 
     // gamepad.vibrationActuator.reset();
     // if (gamepad.buttons[ZR].value || gamepad.buttons[ZL].value) {
@@ -45,12 +78,6 @@ engine.update = () => {
     //     strongMagnitude: gamepad.buttons[ZR].value,
     //   });
     // }
-
-    // mx += gamepad.axes[0];
-    // my += gamepad.axes[1];
-
-    // mx += gamepad.axes[2] * 3;
-    // my += gamepad.axes[3] * 3;
   }
 
   ctx.reset();
@@ -58,6 +85,10 @@ engine.update = () => {
 
   for (const e of entities) {
     ctx.drawImage(e.image, e.x, e.y);
+  }
+
+  for (const p of players) {
+    ctx.drawImage(p.image, Math.round(p.x), Math.round(p.y));
   }
 
 };

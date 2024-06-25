@@ -1,6 +1,6 @@
 import { Camera } from "./camera.js";
 import { createCanvas, getPlayers, runGameLoop } from "./core.js";
-import { loadCleanP8, MapTile, Sprite } from "./pico8.js";
+import { loadCleanP8, Sprite } from "./pico8.js";
 
 // sarahs idea:
 //   i can place bombs that blow up certain bricks
@@ -19,17 +19,19 @@ const game1 = await loadCleanP8('game/explore.p8');
 
 const EMPTY = 17;
 
-// interface Actable {
-//   actOn(player: Player): boolean;
-// }
+interface Actable {
+  actOn(player: Player): boolean;
+  entity: Entity;
+}
 
-const entities: Entity[] = [];
+interface Updatable {
+  update(t: number): void;
+}
+
+const drawables: Entity[] = [];
 const players: Player[] = [];
-// const actables: Actable[] = [];
-
-const walls: Entity[] = [];
-const keys: Key[] = [];
-const doors: Entity[] = [];
+const actables: Actable[] = [];
+const updatables: Updatable[] = [];
 
 const MW = game1.map[0].length * 8;
 const MH = game1.map.length * 8;
@@ -60,18 +62,23 @@ class Entity {
     // ctx.stroke();
   }
 
-  intersects(other: Entity, x: number, y: number) {
-    return (
-      x + this.w >= other.x &&
-      y + this.h >= other.y &&
-      x < other.x + other.w &&
-      y < other.y + other.h
-    );
-  }
-
 }
 
-class Player {
+function removeFrom<T>(array: T[], item: T) {
+  const index = array.indexOf(item);
+  array.splice(index, 1);
+}
+
+function intersects(a: Entity, b: Entity) {
+  return (
+    a.x + a.w >= b.x &&
+    a.y + a.h >= b.y &&
+    a.x < b.x + b.w &&
+    a.y < b.y + b.h
+  );
+}
+
+class Player implements Updatable {
 
   gamepadIndex = gamepadIndexes.shift()!;
   get gamepad() { return navigator.getGamepads()[this.gamepadIndex]; }
@@ -91,62 +98,20 @@ class Player {
 
     const speed = 1;
 
-    const x = this.entity.x + x1 * speed;
+    const xAdd = x1 * speed;
+    const yAdd = y1 * speed;
 
+    let found;
 
+    this.entity.x += xAdd;
+    found = actables.find(a => intersects(a.entity, this.entity));
+    if (found && !found.actOn(this)) this.entity.x -= xAdd;
 
-    if (walls.some(wall => this.entity.intersects(wall, x, this.entity.y))) {
-      this.rumble(.01, .3, 0);
-    }
-    else {
-      this.entity.x = x;
-      camera.update();
-    }
+    this.entity.y += yAdd;
+    found = actables.find(a => intersects(a.entity, this.entity));
+    if (found && !found.actOn(this)) this.entity.y -= yAdd;
 
-    const y = this.entity.y + y1 * speed;
-    if (walls.some(wall => this.entity.intersects(wall, this.entity.x, y))) {
-      this.rumble(.01, .3, 0);
-    }
-    else {
-      this.entity.y = y;
-      camera.update();
-    }
-
-    const key = keys.find(key => this.entity.intersects(
-      key.entity,
-      this.entity.x,
-      this.entity.y
-    ));
-
-    if (key) {
-      this.keys++;
-
-      const keyIndex = keys.indexOf(key);
-      keys.splice(keyIndex, 1);
-
-      const eIndex = entities.indexOf(key.entity);
-      entities.splice(eIndex, 1);
-
-      this.rumble(.3, 1, 1);
-    }
-
-    const door = doors.find(door => this.entity.intersects(
-      door,
-      this.entity.x,
-      this.entity.y
-    ));
-
-    if (door && this.keys > 0) {
-      this.keys--;
-
-      const doorIndex = doors.indexOf(door);
-      doors.splice(doorIndex, 1);
-
-      const eIndex = entities.indexOf(door);
-      entities.splice(eIndex, 1);
-
-      this.rumble(.3, 1, 1);
-    }
+    camera.update();
   }
 
   rumble(sec: number, weak: number, strong: number) {
@@ -160,13 +125,21 @@ class Player {
 
 }
 
-class Key {
+class Key implements Updatable, Actable {
 
   x; y;
 
   constructor(public entity: Entity) {
     this.x = entity.x;
     this.y = entity.y;
+  }
+
+  actOn(player: Player) {
+    player.keys++;
+    removeFrom(actables, this);
+    removeFrom(drawables, this.entity);
+    player.rumble(.3, 1, 1);
+    return true;
   }
 
   update(t: number) {
@@ -180,28 +153,62 @@ class Key {
 
 }
 
+class Wall implements Actable {
+
+  constructor(public entity: Entity) { }
+
+  actOn(player: Player): boolean {
+    player.rumble(.01, .3, 0);
+    return false;
+  }
+
+}
+
+class Door implements Actable {
+
+  constructor(public entity: Entity) { }
+
+  actOn(player: Player): boolean {
+    if (player.keys === 0) {
+      player.rumble(.01, .3, 0);
+      return false;
+    }
+
+    player.keys--;
+    removeFrom(actables, this);
+    removeFrom(drawables, this.entity);
+    player.rumble(.3, 1, 1);
+    return true;
+  }
+
+}
+
 function createEntity(spr: Sprite, x: number, y: number) {
   const entity = new Entity(x * 8, y * 8, spr.image);
-  entities.push(entity);
+  drawables.push(entity);
 
   if (spr.flags.GREEN) {
     const player = new Player(entity);
     entity.layer = 2;
     players.push(player);
+    updatables.push(player);
     createEntity(game1.sprites[EMPTY], x, y);
   }
   else if (spr.flags.RED) {
-    walls.push(entity);
+    const wall = new Wall(entity);
+    actables.push(wall);
   }
   else if (spr.flags.YELLOW) {
     const key = new Key(entity);
     entity.layer = 1;
-    keys.push(key);
+    actables.push(key);
+    updatables.push(key);
     createEntity(game1.sprites[EMPTY], x, y);
   }
   else if (spr.flags.ORANGE) {
+    const door = new Door(entity);
     entity.layer = 1;
-    doors.push(entity);
+    actables.push(door);
     createEntity(game1.sprites[EMPTY], x, y);
   }
 }
@@ -212,7 +219,7 @@ for (let y = 0; y < 64; y++) {
   }
 }
 
-entities.sort((a, b) => {
+drawables.sort((a, b) => {
   if (a.layer > b.layer) return 1;
   if (a.layer < b.layer) return -1;
   return 0;
@@ -221,18 +228,14 @@ entities.sort((a, b) => {
 camera.update();
 
 engine.update = (t) => {
-  for (const player of players) {
-    player.update();
-  }
-
-  for (const key of keys) {
-    key.update(t);
+  for (const e of updatables) {
+    e.update(t);
   }
 
   ctx.reset();
   ctx.translate(camera.mx, camera.my);
 
-  for (const e of entities) {
+  for (const e of drawables) {
     e.draw(ctx);
   }
 };

@@ -53,10 +53,13 @@ class Player {
     const [x1, y1] = this.gamepad.axes;
 
     const x = this.entity.x + x1;
-    const y = this.entity.y + y1;
-
-    if (!this.hitWall(x, y)) {
+    if (!this.hitWall(x, this.entity.y)) {
       this.entity.x = x;
+      camera.update();
+    }
+
+    const y = this.entity.y + y1;
+    if (!this.hitWall(this.entity.x, y)) {
       this.entity.y = y;
       camera.update();
     }

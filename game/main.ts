@@ -32,6 +32,15 @@ class Box {
   w = 8; h = 8;
   constructor(public x: number, public y: number) { }
 
+  intersects(other: Box, x: number, y: number) {
+    return (
+      x + this.w >= other.x &&
+      y + this.h >= other.y &&
+      x < other.x + other.w &&
+      y < other.y + other.h
+    );
+  }
+
 }
 
 class Entity {
@@ -45,7 +54,15 @@ class Entity {
   ) { }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.drawImage(this.image, Math.round(this.box.x - this.ox), Math.round(this.box.y - this.oy));
+    const x = Math.round(this.box.x);
+    const y = Math.round(this.box.y);
+    ctx.drawImage(this.image, x - this.ox, y - this.oy);
+
+    ctx.strokeStyle = '#f00a';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.rect(x + 0.5, y + 0.5, this.box.w - 1, this.box.h - 1);
+    ctx.stroke();
   }
 
 }
@@ -57,20 +74,24 @@ class Player {
 
   constructor(public entity: Entity) {
     entity.ox = 2;
+    entity.oy = 1;
     entity.box.w = 4;
+    entity.box.h = 7;
   }
 
   update() {
     if (!this.gamepad) return;
     const [x1, y1] = this.gamepad.axes;
 
-    const x = this.entity.box.x + x1;
+    const speed = 1;
+
+    const x = this.entity.box.x + x1 * speed;
     if (!this.hitWall(x, this.entity.box.y)) {
       this.entity.box.x = x;
       camera.update();
     }
 
-    const y = this.entity.box.y + y1;
+    const y = this.entity.box.y + y1 * speed;
     if (!this.hitWall(this.entity.box.x, y)) {
       this.entity.box.y = y;
       camera.update();
@@ -95,32 +116,21 @@ class Player {
 
   hitWall(x: number, y: number) {
     for (const wall of walls) {
-      if (
-        x + this.entity.box.w >= wall.box.x &&
-        y + this.entity.box.h >= wall.box.y &&
-        x < wall.box.x + wall.box.w &&
-        y < wall.box.y + wall.box.h
-      ) return true;
+      if (this.entity.box.intersects(wall.box, x, y)) {
+        return true;
+      }
     }
     return false;
   }
 
   hitKey(x: number, y: number) {
     for (const key of keys) {
-      if (
-        x + this.entity.box.w >= key.x &&
-        y + this.entity.box.h >= key.y &&
-        x < key.x + key.entity.box.w &&
-        y < key.y + key.entity.box.h
-      ) return key;
+      if (this.entity.box.intersects(key.entity.box, x, y)) {
+        return key;
+      }
     }
     return null;
   }
-
-  // gamepad.vibrationActuator.reset();
-  // if (gamepad.buttons[ZR].value || gamepad.buttons[ZL].value) {
-
-  // }
 
 }
 

@@ -15,8 +15,6 @@ const ctx = createCanvas(WIDTH, HEIGHT, SCALE);
 const engine = runGameLoop();
 const gamepadIndexes = await getPlayers(engine, ctx);
 
-// playNote('C', 5, 2, { type: 'triangle' });
-
 const game1 = await loadCleanP8('game/explore.p8');
 
 const entities: Entity[] = [];
@@ -88,53 +86,47 @@ class Player {
     const speed = 1;
 
     const x = this.entity.box.x + x1 * speed;
-    if (!this.hitWall(x, this.entity.box.y)) {
+    if (walls.some(wall => this.entity.box.intersects(wall.box, x, this.entity.box.y))) {
+      this.rumble(.01, .3, 0);
+    }
+    else {
       this.entity.box.x = x;
       camera.update();
     }
 
     const y = this.entity.box.y + y1 * speed;
-    if (!this.hitWall(this.entity.box.x, y)) {
+    if (walls.some(wall => this.entity.box.intersects(wall.box, this.entity.box.x, y))) {
+      this.rumble(.01, .3, 0);
+    }
+    else {
       this.entity.box.y = y;
       camera.update();
     }
 
-    const key = this.hitKey(this.entity.box.x, this.entity.box.y);
-    if (key) {
-      // playNote('C', 3, .5, { type: 'square' });
-      // playNote('F', 3, 1, { type: 'square', delay: 1 });
+    const key = keys.find(key => this.entity.box.intersects(
+      key.entity.box,
+      this.entity.box.x,
+      this.entity.box.y
+    ));
 
+    if (key) {
       const keyIndex = keys.indexOf(key);
       keys.splice(keyIndex, 1);
 
       const eIndex = entities.indexOf(key.entity);
       entities.splice(eIndex, 1);
 
-      this.gamepad.vibrationActuator.playEffect("dual-rumble", {
-        startDelay: 300,
-        duration: 100,
-        weakMagnitude: 1,
-        strongMagnitude: 1,
-      });
+      this.rumble(.3, 1, 1);
     }
   }
 
-  hitWall(x: number, y: number) {
-    for (const wall of walls) {
-      if (this.entity.box.intersects(wall.box, x, y)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  hitKey(x: number, y: number) {
-    for (const key of keys) {
-      if (this.entity.box.intersects(key.entity.box, x, y)) {
-        return key;
-      }
-    }
-    return null;
+  rumble(sec: number, weak: number, strong: number) {
+    this.gamepad!.vibrationActuator.playEffect("dual-rumble", {
+      startDelay: 0,
+      duration: sec * 1000,
+      weakMagnitude: weak,
+      strongMagnitude: strong,
+    });
   }
 
 }

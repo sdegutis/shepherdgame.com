@@ -44,16 +44,34 @@ class Entity {
 
 class Player {
 
-  gamepadIndex = gamepadIndexes.shift()!;;
-  get gamepad() { return navigator.getGamepads()[this.gamepadIndex]! }
+  gamepadIndex = gamepadIndexes.shift()!;
+  get gamepad() { return navigator.getGamepads()[this.gamepadIndex]!; }
 
   constructor(public entity: Entity) { }
 
   update() {
     const [x1, y1] = this.gamepad.axes;
-    this.entity.x += x1 * 10;
-    this.entity.y += y1 * 10;
-    camera.update();
+
+    const x = this.entity.x + x1;
+    const y = this.entity.y + y1;
+
+    if (!this.hitWall(x, y)) {
+      this.entity.x = x;
+      this.entity.y = y;
+      camera.update();
+    }
+  }
+
+  hitWall(x: number, y: number) {
+    for (const wall of walls) {
+      if (
+        x + 8 >= wall.x &&
+        y + 8 >= wall.y &&
+        x < wall.x + 8 &&
+        y < wall.y + 8
+      ) return true;
+    }
+    return false;
   }
 
   // gamepad.vibrationActuator.reset();
@@ -69,25 +87,24 @@ class Player {
 }
 
 function createEntity(tile: MapTile, x: number, y: number) {
-  const drawable = new Entity(x * 8, y * 8, tile.sprite.image);
-  entities.push(drawable);
+  const entity = new Entity(x * 8, y * 8, tile.sprite.image);
+  entities.push(entity);
 
   if (tile.sprite.flags.GREEN) {
     createEntity(game1.map[y][x - 1], x, y);
 
-    const player = new Player(drawable);
-    drawable.layer = 1;
+    const player = new Player(entity);
+    entity.layer = 1;
     players.push(player);
   }
   else if (tile.sprite.flags.RED) {
-    walls.push(drawable);
+    walls.push(entity);
   }
 }
 
 for (let y = 0; y < 64; y++) {
   for (let x = 0; x < 128; x++) {
-    const tile = game1.map[y][x];
-    createEntity(tile, x, y);
+    createEntity(game1.map[y][x], x, y);
   }
 }
 

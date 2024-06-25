@@ -1,3 +1,20 @@
+export interface MapTile {
+  index: number,
+  sprite: Sprite,
+}
+
+export interface Sprite {
+  image: OffscreenCanvas,
+  flags: Flag[],
+}
+
+const FLAGS = [
+  'RED', 'ORANGE', 'YELLOW', 'GREEN',
+  'BLUE', 'PURPLE', 'PINK', 'PEACH',
+] as const;
+
+export type Flag = { [key in typeof FLAGS[number]]?: true };
+
 export async function loadCleanP8(filename: string) {
   const data = await loadP8(filename);
 
@@ -6,7 +23,7 @@ export async function loadCleanP8(filename: string) {
     sprites.push({
       image: data.sprites[i],
       flags: data.flags[i],
-    });
+    } as Sprite);
   }
 
   const map = [];
@@ -17,7 +34,7 @@ export async function loadCleanP8(filename: string) {
       row.push({
         index: spr,
         sprite: sprites[spr],
-      });
+      } as MapTile);
     }
     map.push(row);
   }
@@ -53,19 +70,6 @@ function parseMap(data: string) {
 }
 
 function parseFlags(chars: string) {
-  const COLORS = [
-    'RED',
-    'ORANGE',
-    'YELLOW',
-    'GREEN',
-    'BLUE',
-    'PURPLE',
-    'PINK',
-    'PEACH',
-  ] as const;
-
-  type Flag = { [key in typeof COLORS[number]]?: true };
-
   const flags: Flag[] = [];
 
   for (let i = 0; i < 256; i++) {
@@ -77,7 +81,7 @@ function parseFlags(chars: string) {
 
     for (let b = 0; b < 8; b++) {
       const bb = 1 << b;
-      if (n & bb) flag[COLORS[b]] = true;
+      if (n & bb) flag[FLAGS[b]] = true;
     }
 
     flags.push(flag);

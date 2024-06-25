@@ -1,5 +1,5 @@
 import { createCanvas, getPlayers, runGameLoop } from "./core.js";
-import { loadCleanP8 } from "./pico8.js";
+import { loadCleanP8, MapTile } from "./pico8.js";
 
 // sarahs idea:
 //   i can place bombs that blow up certain bricks
@@ -61,18 +61,23 @@ class Player {
 const entities: Entity[] = [];
 const players: Player[] = [];
 
+function createEntity(tile: MapTile, x: number, y: number) {
+  const drawable = new Entity(x * 8, y * 8, tile.sprite.image);
+  entities.push(drawable);
+
+  if (tile.index >= 1 && tile.index <= 3) {
+    createEntity(game1.map[y][x - 1], x, y);
+
+    const player = new Player(drawable);
+    drawable.layer = 1;
+    players.push(player);
+  }
+}
+
 for (let y = 0; y < 64; y++) {
   for (let x = 0; x < 128; x++) {
     const tile = game1.map[y][x];
-
-    const drawable = new Entity(x * 8, y * 8, tile.sprite.image);
-    entities.push(drawable);
-
-    if (tile.index >= 1 && tile.index <= 3) {
-      const player = new Player(drawable);
-      drawable.layer = 1;
-      players.push(player);
-    }
+    createEntity(tile, x, y);
   }
 }
 

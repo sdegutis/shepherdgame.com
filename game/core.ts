@@ -10,13 +10,13 @@ export const UP = 12, DOWN = 13, LEFT = 14, RIGHT = 15;
 export const HOME = 16;
 
 export function runGameLoop() {
-  const engine = { update: () => { } };
+  const engine = { update: (s: number) => { } };
   const framerate = 30;
   let from = +document.timeline.currentTime!;
   const step = () => {
     requestAnimationFrame(t => {
       if (t - from >= framerate) {
-        engine.update();
+        engine.update(t);
         from = t;
       }
       step();

@@ -20,6 +20,7 @@ const game1 = await loadCleanP8('game/explore.p8');
 const entities: Entity[] = [];
 const players: Player[] = [];
 const walls: Entity[] = [];
+const keys: Key[] = [];
 
 const MW = game1.map[0].length * 8;
 const MH = game1.map.length * 8;
@@ -45,11 +46,12 @@ class Entity {
 class Player {
 
   gamepadIndex = gamepadIndexes.shift()!;
-  get gamepad() { return navigator.getGamepads()[this.gamepadIndex]!; }
+  get gamepad() { return navigator.getGamepads()[this.gamepadIndex]; }
 
   constructor(public entity: Entity) { }
 
   update() {
+    if (!this.gamepad) return;
     const [x1, y1] = this.gamepad.axes;
 
     const x = this.entity.x + x1;
@@ -89,19 +91,41 @@ class Player {
 
 }
 
+class Key {
+
+  x; y;
+
+  constructor(public entity: Entity) {
+    this.x = entity.x;
+    this.y = entity.y;
+  }
+
+  update(t: number) {
+    const ms = 1000;
+    this.entity.y = this.y + +Math.cos(((t % ms) / ms) * (Math.PI * 2)) * 2;
+    this.entity.x = this.x + -Math.sin(((t % ms) / ms) * (Math.PI * 2)) * 2;
+  }
+
+}
+
 function createEntity(tile: MapTile, x: number, y: number) {
   const entity = new Entity(x * 8, y * 8, tile.sprite.image);
   entities.push(entity);
 
   if (tile.sprite.flags.GREEN) {
-    createEntity(game1.map[y][x - 1], x, y);
-
     const player = new Player(entity);
-    entity.layer = 1;
+    entity.layer = 2;
     players.push(player);
+    createEntity(game1.map[y][x - 1], x, y);
   }
   else if (tile.sprite.flags.RED) {
     walls.push(entity);
+  }
+  else if (tile.sprite.flags.YELLOW) {
+    const key = new Key(entity);
+    entity.layer = 1;
+    keys.push(key);
+    createEntity(game1.map[y][x - 1], x, y);
   }
 }
 
@@ -119,9 +143,13 @@ entities.sort((a, b) => {
 
 camera.update();
 
-engine.update = () => {
+engine.update = (t) => {
   for (const player of players) {
     player.update();
+  }
+
+  for (const key of keys) {
+    key.update(t);
   }
 
   ctx.reset();

@@ -9,8 +9,10 @@ export const LTRIGGER = 10, RTRIGGER = 11;
 export const UP = 12, DOWN = 13, LEFT = 14, RIGHT = 15;
 export const HOME = 16;
 
+type Engine = { update: (t: number) => void };
+
 export function runGameLoop() {
-  const engine = { update: (s: number) => { } };
+  const engine: Engine = { update: () => { } };
   const framerate = 30;
   let from = +document.timeline.currentTime!;
   const step = () => {
@@ -36,7 +38,7 @@ export function createCanvas(width: number, height: number, scale: number) {
   return canvas.getContext('2d')!;
 }
 
-export function getPlayers(engine: { update: () => void }, ctx: CanvasRenderingContext2D) {
+export function getPlayers(engine: Engine, ctx: CanvasRenderingContext2D) {
   return new Promise<number[]>(async resolve => {
     engine.update = () => {
       const gamepads = navigator.getGamepads();

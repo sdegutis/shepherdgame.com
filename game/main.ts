@@ -11,6 +11,22 @@ const WIDTH = 320;
 const HEIGHT = 180;
 const SCALE = 5;
 
+
+
+
+function freqFromA4(n: number) {
+  return 2 ** (n / 12) * 440;
+}
+
+const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'] as const;
+
+function freqForNote(note: typeof notes[number], oct: number) {
+  const index = notes.indexOf(note) + (12 * oct);
+  return freqFromA4(-57 + index);
+}
+
+
+
 const ctx = createCanvas(WIDTH, HEIGHT, SCALE);
 const engine = runGameLoop();
 const gamepadIndexes = await getPlayers(engine, ctx);
@@ -20,7 +36,7 @@ const gamepadIndexes = await getPlayers(engine, ctx);
 const context = new AudioContext();
 const o = context.createOscillator();
 o.type = "square";
-o.frequency.value = 174.6;
+o.frequency.value = 87.31;
 
 const g = context.createGain();
 o.connect(g);

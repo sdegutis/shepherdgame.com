@@ -28,10 +28,10 @@ export function runGameLoop() {
 
 export function createCanvas(width: number, height: number, scale: number) {
   const canvas = document.createElement('canvas');
-  canvas.style.width = width + 'px';
-  canvas.style.height = height + 'px';
-  canvas.width = width / scale;
-  canvas.height = height / scale;
+  canvas.style.width = (width * scale) + 'px';
+  canvas.style.height = (height * scale) + 'px';
+  canvas.width = width;
+  canvas.height = height;
   document.body.append(canvas);
   return canvas.getContext('2d')!;
 }

@@ -5,7 +5,7 @@ export interface MapTile {
 
 export interface Sprite {
   image: OffscreenCanvas,
-  flags: Flag[],
+  flags: Flag,
 }
 
 const FLAGS = [
@@ -18,23 +18,23 @@ export type Flag = { [key in typeof FLAGS[number]]?: true };
 export async function loadCleanP8(filename: string) {
   const data = await loadP8(filename);
 
-  const sprites = [];
+  const sprites: Sprite[] = [];
   for (let i = 0; i < 256; i++) {
     sprites.push({
       image: data.sprites[i],
       flags: data.flags[i],
-    } as Sprite);
+    });
   }
 
   const map = [];
   for (let y = 0; y < 64; y++) {
-    const row = [];
+    const row: MapTile[] = [];
     for (let x = 0; x < 128; x++) {
       const spr = data.map[y][x];
       row.push({
         index: spr,
         sprite: sprites[spr],
-      } as MapTile);
+      });
     }
     map.push(row);
   }

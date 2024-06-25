@@ -65,6 +65,22 @@ class Player {
       this.entity.y = y;
       camera.update();
     }
+
+    const key = this.hitKey(this.entity.x, this.entity.y);
+    if (key) {
+      const keyIndex = keys.indexOf(key);
+      keys.splice(keyIndex, 1);
+
+      const eIndex = entities.indexOf(key.entity);
+      entities.splice(eIndex, 1);
+
+      this.gamepad.vibrationActuator.playEffect("dual-rumble", {
+        startDelay: 0,
+        duration: 100,
+        weakMagnitude: 1,
+        strongMagnitude: 1,
+      });
+    }
   }
 
   hitWall(x: number, y: number) {
@@ -79,14 +95,21 @@ class Player {
     return false;
   }
 
+  hitKey(x: number, y: number) {
+    for (const key of keys) {
+      if (
+        x + 8 >= key.x &&
+        y + 8 >= key.y &&
+        x < key.x + 8 &&
+        y < key.y + 8
+      ) return key;
+    }
+    return null;
+  }
+
   // gamepad.vibrationActuator.reset();
   // if (gamepad.buttons[ZR].value || gamepad.buttons[ZL].value) {
-  //   gamepad.vibrationActuator.playEffect("dual-rumble", {
-  //     startDelay: 0,
-  //     duration: 500,
-  //     weakMagnitude: gamepad.buttons[ZL].value,
-  //     strongMagnitude: gamepad.buttons[ZR].value,
-  //   });
+
   // }
 
 }

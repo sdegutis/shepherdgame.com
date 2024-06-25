@@ -37,11 +37,9 @@ export function createCanvas(width: number, height: number, scale: number) {
 }
 
 export function getPlayers(engine: { update: () => void }, ctx: CanvasRenderingContext2D) {
-  return new Promise<void>(async resolve => {
+  return new Promise<number[]>(async resolve => {
     engine.update = () => {
       const gamepads = navigator.getGamepads();
-
-      // ctx.reset();
 
       for (let i = 0; i < 4; i++) {
         const gamepad = gamepads[i];
@@ -58,7 +56,7 @@ export function getPlayers(engine: { update: () => void }, ctx: CanvasRenderingC
         ctx.drawImage(spr, x, 100);
 
         if (gamepad?.buttons[PLUS].pressed) {
-          resolve();
+          resolve(gamepads.filter(c => c !== null).map(c => c.index));
         }
       }
     }

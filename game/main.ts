@@ -6,47 +6,38 @@ import { loadCleanP8 } from "./pico8.js";
 //   jane can pick up keys that open doors
 //   and sarah can push buttons that open bars
 
+const WIDTH = 1500;
+const HEIGHT = 900;
 
-const ctx = createCanvas(1880, 900, 4);
+const ctx = createCanvas(WIDTH, HEIGHT, 4);
 const engine = runGameLoop();
-await getPlayers(engine, ctx);
+const playerIndexes = await getPlayers(engine, ctx);
 
 
 const game1 = await loadCleanP8('game/explore.p8');
 
-function getPlayerCoords(sprNum: number) {
-  for (let y = 0; y < 128; y++) {
-    for (let x = 0; x < 64; x++) {
-      const tile = game1.map[y][x];
-      if (tile.index === sprNum) {
-        game1.map[y][x] = game1.map[y][x - 1];
-        return [x, y];
-      }
-    }
-  }
-  return [0, 0];
-}
-
-// let mx = 0;
-// let my = 0;
-
-class Player {
-
-  image;
-  x;
-  y;
+class Drawable {
 
   constructor(
-    private gamepadIndex: number,
-    playerNum: number,
+    public x: number,
+    public y: number,
+    public image: OffscreenCanvas,
+  ) { }
+
+}
+
+class Player extends Drawable {
+
+  gamepadIndex;
+
+  constructor(
+    x: number,
+    y: number,
+    image: OffscreenCanvas,
   ) {
-    const sprNum = playerNum + 1;
-    const [x, y] = getPlayerCoords(sprNum);
-
-    this.x = x * 8;
-    this.y = y * 8;
-
-    this.image = game1.sprites[playerNum + 1].image;
+    super(x, y, image);
+    this.gamepadIndex = playerIndexes.shift()!;
+    console.log(this.gamepadIndex)
   }
 
   get gamepad() { return navigator.getGamepads()[this.gamepadIndex]! }
@@ -59,27 +50,31 @@ class Player {
 
 }
 
-interface Entity {
+interface Drawable {
   image: OffscreenCanvas;
   x: number;
   y: number;
 }
 
-const entities: Entity[] = [];
-
-const players = (navigator.getGamepads()
-  .filter(gp => gp !== null)
-  .map((gp, i) => new Player(gp.index, i))
-);
+const drawables: Drawable[] = [];
+const players: Player[] = [];
 
 for (let y = 0; y < 64; y++) {
   for (let x = 0; x < 128; x++) {
     const tile = game1.map[y][x];
-    entities.push({
-      image: tile.sprite.image,
-      x: x * 8,
-      y: y * 8,
-    });
+
+    const image = tile.sprite.image;
+    const px = x * 8;
+    const py = y * 8;
+
+    if (tile.index >= 1 && tile.index <= 3) {
+      const entity = new Player(px, py, image);
+      players.push(entity);
+    }
+    else {
+      const entity = new Drawable(px, py, image);
+      drawables.push(entity);
+    }
   }
 }
 
@@ -99,11 +94,11 @@ engine.update = () => {
     // }
   }
 
-  // ctx.reset();
+  ctx.reset();
   // ctx.translate(Math.round(mx), Math.round(my));
 
-  for (const e of entities) {
-    ctx.drawImage(e.image, e.x, e.y);
+  for (const d of drawables) {
+    ctx.drawImage(d.image, d.x, d.y);
   }
 
   for (const p of players) {

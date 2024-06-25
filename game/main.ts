@@ -102,7 +102,7 @@ class Player {
 
     const key = this.hitKey(this.entity.box.x, this.entity.box.y);
     if (key) {
-      playNote('C', 3, 2, { type: 'square' });
+      playNote('F', 3, 1, { type: 'square' });
 
       const keyIndex = keys.indexOf(key);
       keys.splice(keyIndex, 1);

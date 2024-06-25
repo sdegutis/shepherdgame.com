@@ -1,6 +1,7 @@
 import { Camera } from "./camera.js";
 import { createCanvas, getPlayers, runGameLoop } from "./core.js";
 import { loadCleanP8, MapTile } from "./pico8.js";
+import { playNote } from "./sfx.js";
 
 // sarahs idea:
 //   i can place bombs that blow up certain bricks
@@ -11,41 +12,11 @@ const WIDTH = 320;
 const HEIGHT = 180;
 const SCALE = 5;
 
-
-
-
-function freqFromA4(n: number) {
-  return 2 ** (n / 12) * 440;
-}
-
-const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'] as const;
-
-function freqForNote(note: typeof notes[number], oct: number) {
-  const index = notes.indexOf(note) + (12 * oct);
-  return freqFromA4(-57 + index);
-}
-
-
-
 const ctx = createCanvas(WIDTH, HEIGHT, SCALE);
 const engine = runGameLoop();
 const gamepadIndexes = await getPlayers(engine, ctx);
 
-
-
-const context = new AudioContext();
-const o = context.createOscillator();
-o.type = "square";
-o.frequency.value = 87.31;
-
-const g = context.createGain();
-o.connect(g);
-g.connect(context.destination);
-
-o.start();
-g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 1)
-
-
+playNote('C', 5, 2, { type: 'triangle' });
 
 const game1 = await loadCleanP8('game/explore.p8');
 
@@ -131,6 +102,8 @@ class Player {
 
     const key = this.hitKey(this.entity.box.x, this.entity.box.y);
     if (key) {
+      playNote('C', 3, 2, { type: 'square' });
+
       const keyIndex = keys.indexOf(key);
       keys.splice(keyIndex, 1);
 
@@ -138,7 +111,7 @@ class Player {
       entities.splice(eIndex, 1);
 
       this.gamepad.vibrationActuator.playEffect("dual-rumble", {
-        startDelay: 0,
+        startDelay: 300,
         duration: 100,
         weakMagnitude: 1,
         strongMagnitude: 1,

@@ -16,6 +16,7 @@ export class Player implements Updatable {
   get gamepad() { return navigator.getGamepads()[this.gamepadIndex]; }
 
   keys = 0;
+  bombs = 0;
 
   constructor(public entity: Entity, private camera: Camera) {
     entity.ox = 2;

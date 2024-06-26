@@ -9,7 +9,6 @@ export class Door implements Actable {
 
   actOn(player: Player): boolean {
     if (player.keys === 0) {
-      player.rumble(.01, .3, 0);
       return false;
     }
 

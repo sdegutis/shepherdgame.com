@@ -22,6 +22,8 @@ export class Player implements Updatable {
     entity.oy = 1;
     entity.w = 4;
     entity.h = 7;
+    entity.x += entity.ox;
+    entity.y += entity.oy;
   }
 
   update() {

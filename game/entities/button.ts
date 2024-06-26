@@ -35,7 +35,10 @@ export class Button implements Actable {
     removeFrom(drawables, this.entity);
     // player.rumble(.3, 1, 1);
 
-    const key = `${this.entity.x / 8},${this.entity.y / 8}`;
+    const x1 = this.entity.x - this.entity.ox;
+    const y1 = this.entity.y - this.entity.oy;
+
+    const key = `${x1 / 8},${y1 / 8}`;
     for (const [x, y] of mapping[key]) {
       const bar = actables.find(a =>
         a.entity.x === x * 8 + a.entity.ox &&

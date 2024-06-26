@@ -1,5 +1,5 @@
 import { Camera } from "./camera.js";
-import { A, createCanvas, getPlayers, runGameLoop } from "./core.js";
+import { A, createCanvas, runGameLoop } from "./core.js";
 import { loadCleanP8, Sprite } from "./pico8.js";
 
 // sarahs idea:
@@ -13,7 +13,6 @@ const SCALE = 5;
 
 const ctx = createCanvas(WIDTH, HEIGHT, SCALE);
 const engine = runGameLoop();
-const gamepadIndexes = await getPlayers(engine, ctx);
 
 const game1 = await loadCleanP8('sarah/untitled_2.p8');
 
@@ -83,7 +82,7 @@ function intersects(a: Entity, b: Entity) {
 
 class Player implements Updatable {
 
-  gamepadIndex = gamepadIndexes.shift()!;
+  gamepadIndex = players.length;
   get gamepad() { return navigator.getGamepads()[this.gamepadIndex]; }
 
   keys = 0;

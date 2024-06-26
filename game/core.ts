@@ -1,7 +1,3 @@
-import { loadP8 } from "./pico8.js";
-
-const ui = await loadP8('game/ui.p8');
-
 export const A = 0, B = 1, X = 2, Y = 3;
 export const L = 4, R = 5, ZL = 6, ZR = 7;
 export const MINUS = 8, PLUS = 9;
@@ -36,31 +32,4 @@ export function createCanvas(width: number, height: number, scale: number) {
   canvas.height = height;
   document.body.append(canvas);
   return canvas.getContext('2d')!;
-}
-
-export function getPlayers(engine: Engine, ctx: CanvasRenderingContext2D) {
-  return new Promise<number[]>(async resolve => {
-    engine.update = () => {
-      const gamepads = navigator.getGamepads();
-
-      for (let i = 0; i < 4; i++) {
-        const gamepad = gamepads[i];
-
-        const x = i * 30 + 120
-        const w = 4;
-
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 3;
-        ctx.fillStyle = gamepad ? '#9f9' : '#f77';
-        ctx.fillRect(x - w, 100 - w, 8 + (w * 2), 8 + (w * 2));
-
-        const spr = ui.sprites[1];
-        ctx.drawImage(spr, x, 100);
-
-        if (gamepad?.buttons[PLUS].pressed) {
-          resolve(gamepads.filter(c => c !== null).map(c => c.index));
-        }
-      }
-    }
-  });
 }

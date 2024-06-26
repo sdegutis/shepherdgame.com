@@ -13,6 +13,8 @@ export class Key implements Updatable, Actable {
   }
 
   actOn(player: Player) {
+    if (!player.isPink) return true;
+
     player.keys++;
     removeFrom(actables, this);
     removeFrom(drawables, this.entity);

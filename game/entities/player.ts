@@ -63,12 +63,12 @@ export class Player implements Updatable {
   }
 
   rumble(sec: number, weak: number, strong: number) {
-    this.gamepad!.vibrationActuator.playEffect("dual-rumble", {
-      startDelay: 0,
-      duration: sec * 1000,
-      weakMagnitude: weak,
-      strongMagnitude: strong,
-    });
+    // this.gamepad!.vibrationActuator.playEffect("dual-rumble", {
+    //   startDelay: 0,
+    //   duration: sec * 1000,
+    //   weakMagnitude: weak,
+    //   strongMagnitude: strong,
+    // });
   }
 
 }

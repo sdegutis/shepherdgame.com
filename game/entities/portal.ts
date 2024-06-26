@@ -3,19 +3,36 @@ import { removeFrom } from "../lib/helpers.js";
 import { Entity } from "./entity.js";
 import { Player } from "./player.js";
 
+const mapping: Record<string, [number, number]> = {
+  '8,7': [10, 7],
+  '12,13': [2, 21],
+};
+
 export class Portal implements Actable {
 
   constructor(public entity: Entity) { }
 
   actOn(player: Player): boolean {
     if (player.keys === 0) {
-      return false;
+      return true;
     }
 
     player.keys--;
-    removeFrom(actables, this);
-    removeFrom(drawables, this.entity);
-    player.rumble(.3, 1, 1);
+
+    const key = `${this.entity.x / 8},${this.entity.y / 8}`;
+    console.log(key);
+    const [x, y] = mapping[key];
+
+    const entity = actables.find(a =>
+      a.entity.x === x * 8 &&
+      a.entity.y === y * 8
+    )!;
+
+    removeFrom(actables, entity);
+
+    player.entity.x = x * 8 + player.entity.ox;
+    player.entity.y = y * 8 + player.entity.oy;
+
     return true;
   }
 

@@ -1,5 +1,5 @@
 import { Camera } from "../lib/camera.js";
-import { A, B, Y } from "../lib/core.js";
+import { A, B, X } from "../lib/core.js";
 import { actables, drawables, players, Updatable, updatables } from "../lib/data.js";
 import { intersects } from "../lib/helpers.js";
 import { Sprite } from "../lib/pico8.js";
@@ -27,7 +27,7 @@ export class Player implements Updatable {
   update(t: number) {
     this.move();
 
-    if (this.gamepad?.buttons[B].pressed) {
+    if (this.gamepad?.buttons[X].pressed) {
       this.placeBomb(t);
     }
   }
@@ -36,7 +36,7 @@ export class Player implements Updatable {
     if (!this.gamepad) return;
     const [x1] = this.gamepad.axes;
 
-    const speed = this.gamepad.buttons[Y].pressed ? 2 : 1;
+    const speed = this.gamepad.buttons[B].pressed ? 2 : 1;
 
     const xAdd = x1 * speed;
 

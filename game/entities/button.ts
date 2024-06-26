@@ -35,7 +35,6 @@ export class Button implements Actable {
       );
       removeFrom(actables, bar);
       removeFrom(drawables, bar?.entity);
-      console.log(bar);
     }
 
     return true;

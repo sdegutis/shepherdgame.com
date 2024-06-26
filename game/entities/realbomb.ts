@@ -1,5 +1,6 @@
-import { drawables, Updatable, updatables } from "../lib/data.js";
+import { actables, drawables, Updatable, updatables } from "../lib/data.js";
 import { removeFrom } from "../lib/helpers.js";
+import { Crack } from "./crack.js";
 import { Entity } from "./entity.js";
 
 export class RealBomb implements Updatable {
@@ -28,6 +29,24 @@ export class RealBomb implements Updatable {
   explode() {
     removeFrom(drawables, this.entity);
     removeFrom(updatables, this);
+
+    const x1 = this.entity.x;
+    const y1 = this.entity.y;
+
+    const cracks = actables.filter(a => {
+      if (!(a instanceof Crack)) return false;
+
+      const x2 = a.entity.x;
+      const y2 = a.entity.y;
+
+      const distance = Math.sqrt(((x1 - x2) ** 2) + ((y1 - y2) ** 2));
+      return distance < 8;
+    });
+
+    for (const crack of cracks) {
+      removeFrom(drawables, crack.entity);
+      removeFrom(actables, crack);
+    }
   }
 
 }

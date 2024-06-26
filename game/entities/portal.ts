@@ -1,4 +1,4 @@
-import { Actable, actables, drawables } from "../lib/data.js";
+import { Actable, actables } from "../lib/data.js";
 import { removeFrom } from "../lib/helpers.js";
 import { Entity } from "./entity.js";
 import { Player } from "./player.js";
@@ -20,7 +20,6 @@ export class Portal implements Actable {
     player.keys--;
 
     const key = `${this.entity.x / 8},${this.entity.y / 8}`;
-    console.log(key);
     const [x, y] = mapping[key];
 
     const entity = actables.find(a =>

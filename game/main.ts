@@ -5,7 +5,7 @@ import { Crack } from "./entities/crack.js";
 import { Entity } from "./entities/entity.js";
 import { Key } from "./entities/key.js";
 import { Player } from "./entities/player.js";
-import { Portal } from "./entities/portal.js";
+import { connectPortals, Portal } from "./entities/portal.js";
 import { Wall } from "./entities/wall.js";
 import { Camera } from "./lib/camera.js";
 import { createCanvas, runGameLoop } from "./lib/core.js";
@@ -83,6 +83,8 @@ for (let y = 0; y < 64; y++) {
     }
   }
 }
+
+connectPortals();
 
 drawables.sort((a, b) => {
   if (a.layer > b.layer) return 1;

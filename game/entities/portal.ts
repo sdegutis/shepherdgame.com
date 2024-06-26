@@ -10,29 +10,42 @@ const mapping: Record<string, [number, number]> = {
 
 export class Portal implements Actable {
 
+  opened = false;
+  to?: [number, number];
+
   constructor(public entity: Entity) { }
 
   actOn(player: Player): boolean {
-    if (player.keys === 0) {
-      return true;
+    if (!this.opened) {
+      if (player.keys === 0) {
+        return true;
+      }
+
+      player.keys--;
+      this.opened = true;
     }
-
-    player.keys--;
-
-    const key = `${this.entity.x / 8},${this.entity.y / 8}`;
-    const [x, y] = mapping[key];
-
-    const entity = actables.find(a =>
-      a.entity.x === x * 8 &&
-      a.entity.y === y * 8
-    )!;
-
-    removeFrom(actables, entity);
-
-    player.entity.x = x * 8 + player.entity.ox;
-    player.entity.y = y * 8 + player.entity.oy;
+    else {
+      if (this.to) {
+        const [x, y] = this.to;
+        player.entity.x = x * 8 + player.entity.ox;
+        player.entity.y = y * 8 + player.entity.oy;
+      }
+    }
 
     return true;
   }
 
+}
+
+export function connectPortals() {
+  const portals = actables.filter(a => a instanceof Portal);
+
+  for (const portal of portals) {
+    const key = `${portal.entity.x / 8},${portal.entity.y / 8}`;
+    if (!mapping[key]) {
+      removeFrom(actables, portal);
+      continue;
+    }
+    portal.to = mapping[key];
+  }
 }

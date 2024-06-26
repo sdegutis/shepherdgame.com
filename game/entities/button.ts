@@ -18,10 +18,18 @@ const mapping: Record<string, [number, number][]> = {
 
 export class Button implements Actable {
 
-  constructor(public entity: Entity) { }
+  constructor(public entity: Entity) {
+    entity.ox = 3;
+    entity.oy = 4;
+    entity.w = 3;
+    entity.h = 4;
+    entity.x += entity.ox;
+    entity.y += entity.oy;
+  }
 
   actOn(player: Player, x: number, y: number) {
     if (y <= 0) return false;
+    if (!player.isGreen) return false;
 
     removeFrom(actables, this);
     removeFrom(drawables, this.entity);

@@ -6,6 +6,7 @@ export interface MapTile {
 export interface Sprite {
   image: OffscreenCanvas,
   flags: Flag,
+  index: number,
 }
 
 const FLAGS = [
@@ -23,6 +24,7 @@ export async function loadCleanP8(filename: string) {
     sprites.push({
       image: data.sprites[i],
       flags: data.flags[i],
+      index: i,
     });
   }
 

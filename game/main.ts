@@ -1,5 +1,5 @@
 import { Camera } from "./camera.js";
-import { createCanvas, getPlayers, runGameLoop } from "./core.js";
+import { A, createCanvas, getPlayers, runGameLoop } from "./core.js";
 import { loadCleanP8, Sprite } from "./pico8.js";
 
 // sarahs idea:
@@ -15,9 +15,9 @@ const ctx = createCanvas(WIDTH, HEIGHT, SCALE);
 const engine = runGameLoop();
 const gamepadIndexes = await getPlayers(engine, ctx);
 
-const game1 = await loadCleanP8('game/explore.p8');
+const game1 = await loadCleanP8('sarah/untitled_2.p8');
 
-const EMPTY = 17;
+const EMPTY = 0;
 
 interface Actable {
   actOn(player: Player): boolean;
@@ -45,12 +45,15 @@ class Entity {
   w = 8; h = 8;
 
   constructor(
+    private index: number,
     public x: number,
     public y: number,
     public image: OffscreenCanvas,
   ) { }
 
   draw(ctx: CanvasRenderingContext2D) {
+    if (this.index === 0) return;
+
     const x = Math.round(this.x);
     const y = Math.round(this.y);
     ctx.drawImage(this.image, x - this.ox, y - this.oy);
@@ -96,7 +99,7 @@ class Player implements Updatable {
     if (!this.gamepad) return;
     const [x1, y1] = this.gamepad.axes;
 
-    const speed = 1;
+    const speed = this.gamepad.buttons[A].pressed ? 3 : 1;
 
     const xAdd = x1 * speed;
     const yAdd = y1 * speed;
@@ -105,13 +108,11 @@ class Player implements Updatable {
 
     this.entity.x += xAdd;
     found = actables.find(a => intersects(a.entity, this.entity));
-    if (found && !found.actOn(this)) this.entity.x -= xAdd;
+    if (found && !found.actOn(this)) this.entity.x -= xAdd; else camera.update();
 
     this.entity.y += yAdd;
     found = actables.find(a => intersects(a.entity, this.entity));
-    if (found && !found.actOn(this)) this.entity.y -= yAdd;
-
-    camera.update();
+    if (found && !found.actOn(this)) this.entity.y -= yAdd; else camera.update();
   }
 
   rumble(sec: number, weak: number, strong: number) {
@@ -184,10 +185,10 @@ class Door implements Actable {
 }
 
 function createEntity(spr: Sprite, x: number, y: number) {
-  const entity = new Entity(x * 8, y * 8, spr.image);
+  const entity = new Entity(spr.index, x * 8, y * 8, spr.image);
   drawables.push(entity);
 
-  if (spr.flags.GREEN) {
+  if (spr.index >= 1 && spr.index <= 3) {
     const player = new Player(entity);
     entity.layer = 2;
     players.push(player);

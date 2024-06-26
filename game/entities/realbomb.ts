@@ -40,7 +40,7 @@ export class RealBomb implements Updatable {
       const y2 = a.entity.y;
 
       const distance = Math.sqrt(((x1 - x2) ** 2) + ((y1 - y2) ** 2));
-      return distance < 8;
+      return distance < 12;
     });
 
     for (const crack of cracks) {

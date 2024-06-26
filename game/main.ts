@@ -91,12 +91,12 @@ class Player implements Updatable {
 
   update() {
     if (!this.gamepad) return;
-    const [x1, y1] = this.gamepad.axes;
+    const [x1] = this.gamepad.axes;
 
     const speed = this.gamepad.buttons[A].pressed ? 3 : 1;
 
     const xAdd = x1 * speed;
-    const yAdd = y1 * speed;
+    const yAdd = (this.gamepad.buttons[A].pressed ? -1 : 1) * speed;
 
     let found;
 
@@ -153,7 +153,6 @@ class Wall implements Actable {
   constructor(public entity: Entity) { }
 
   actOn(player: Player): boolean {
-    player.rumble(.01, .3, 0);
     return false;
   }
 

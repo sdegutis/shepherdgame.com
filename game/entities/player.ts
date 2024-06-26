@@ -42,7 +42,7 @@ export class Player implements Updatable {
 
     this.entity.x += xAdd;
     found = actables.find(a => intersects(a.entity, this.entity));
-    if (found && !found.actOn(this)) {
+    if (found && !found.actOn(this, xAdd, 0)) {
       this.entity.x -= xAdd;
     } else {
       this.camera.update();
@@ -50,7 +50,7 @@ export class Player implements Updatable {
 
     this.entity.y += yAdd;
     found = actables.find(a => intersects(a.entity, this.entity));
-    if (found && !found.actOn(this)) {
+    if (found && !found.actOn(this, 0, yAdd)) {
       this.entity.y -= yAdd;
 
       const standing = (yAdd > 0);

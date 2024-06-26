@@ -20,7 +20,9 @@ export class Button implements Actable {
 
   constructor(public entity: Entity) { }
 
-  actOn(player: Player) {
+  actOn(player: Player, x: number, y: number) {
+    if (y <= 0) return false;
+
     removeFrom(actables, this);
     removeFrom(drawables, this.entity);
     // player.rumble(.3, 1, 1);

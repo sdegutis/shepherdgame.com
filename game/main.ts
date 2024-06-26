@@ -188,17 +188,17 @@ function createEntity(tile: MapTile, x: number, y: number) {
     players.push(player);
     updatables.push(player);
   }
-  else if (tile.sprite.flags.RED) {
+  else if ([8].includes(tile.index)) {
     const wall = new Wall(entity);
     actables.push(wall);
   }
-  else if (tile.sprite.flags.YELLOW) {
+  else if (tile.index === 4) {
     const key = new Key(entity);
     entity.layer = 1;
     actables.push(key);
     updatables.push(key);
   }
-  else if (tile.sprite.flags.ORANGE) {
+  else if (tile.index === 11) {
     const door = new Door(entity);
     entity.layer = 1;
     actables.push(door);

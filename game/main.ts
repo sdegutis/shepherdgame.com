@@ -1,3 +1,4 @@
+import { Bar } from "./entities/bars.js";
 import { Button } from "./entities/button.js";
 import { Door } from "./entities/door.js";
 import { Entity } from "./entities/entity.js";
@@ -8,11 +9,6 @@ import { Camera } from "./lib/camera.js";
 import { createCanvas, runGameLoop } from "./lib/core.js";
 import { actables, drawables, players, updatables } from "./lib/data.js";
 import { loadCleanP8, MapTile } from "./lib/pico8.js";
-
-// sarahs idea:
-//   i can place bombs that blow up certain bricks
-//   jane can pick up keys that open doors
-//   and sarah can push buttons that open bars
 
 const WIDTH = 320;
 const HEIGHT = 180;
@@ -29,7 +25,7 @@ const MH = game1.map.length * 8;
 const camera = new Camera(MW, MH, WIDTH, HEIGHT, players);
 
 function createEntity(tile: MapTile, x: number, y: number) {
-  const entity = new Entity(x * 8, y * 8, tile.sprite.image);
+  const entity = new Entity(tile.index, x * 8, y * 8, tile.sprite.image);
   drawables.push(entity);
 
   if (tile.index >= 1 && tile.index <= 3) {
@@ -48,8 +44,12 @@ function createEntity(tile: MapTile, x: number, y: number) {
     actables.push(key);
     updatables.push(key);
   }
+  else if (tile.index === 10) {
+    const bar = new Bar(entity);
+    actables.push(bar);
+  }
   else if (tile.index === 5) {
-    const button = new Button(entity, x, y, game1.map);
+    const button = new Button(entity);
     entity.layer = 1;
     actables.push(button);
   }

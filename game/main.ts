@@ -2,10 +2,10 @@ import { Bar } from "./entities/bars.js";
 import { Bomb } from "./entities/bomb.js";
 import { Button } from "./entities/button.js";
 import { Crack } from "./entities/crack.js";
-import { Door } from "./entities/door.js";
 import { Entity } from "./entities/entity.js";
 import { Key } from "./entities/key.js";
 import { Player } from "./entities/player.js";
+import { Portal } from "./entities/portal.js";
 import { Wall } from "./entities/wall.js";
 import { Camera } from "./lib/camera.js";
 import { createCanvas, runGameLoop } from "./lib/core.js";
@@ -62,9 +62,9 @@ function createEntity(tile: MapTile, x: number, y: number) {
     actables.push(button);
   }
   else if (tile.index === 11) {
-    const door = new Door(entity);
+    const portal = new Portal(entity);
     entity.layer = 1;
-    actables.push(door);
+    actables.push(portal);
   }
   else if (tile.index === 9) {
     const crack = new Crack(entity);

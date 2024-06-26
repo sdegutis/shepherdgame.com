@@ -24,11 +24,11 @@ export class Player implements Updatable {
     entity.y += entity.oy;
   }
 
-  update() {
+  update(t: number) {
     this.move();
 
     if (this.gamepad?.buttons[B].pressed) {
-      this.placeBomb();
+      this.placeBomb(t);
     }
   }
 
@@ -72,12 +72,12 @@ export class Player implements Updatable {
     }
   }
 
-  placeBomb() {
+  placeBomb(t: number) {
     if (this.bombs === 0) return;
     this.bombs--;
 
     const entity = new Entity(6, this.entity.x, this.entity.y, this.bomb.image);
-    const bomb = new RealBomb(entity);
+    const bomb = new RealBomb(entity, t);
     updatables.push(bomb);
     drawables.push(bomb.entity);
   }

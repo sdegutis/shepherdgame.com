@@ -1,6 +1,7 @@
 import { Bar } from "./entities/bars.js";
 import { Bomb } from "./entities/bomb.js";
 import { Button } from "./entities/button.js";
+import { Crack } from "./entities/crack.js";
 import { Door } from "./entities/door.js";
 import { Entity } from "./entities/entity.js";
 import { Key } from "./entities/key.js";
@@ -64,6 +65,11 @@ function createEntity(tile: MapTile, x: number, y: number) {
     const door = new Door(entity);
     entity.layer = 1;
     actables.push(door);
+  }
+  else if (tile.index === 9) {
+    const crack = new Crack(entity);
+    entity.layer = 1;
+    actables.push(crack);
   }
 }
 

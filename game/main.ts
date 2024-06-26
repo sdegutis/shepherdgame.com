@@ -24,6 +24,8 @@ const game1 = await loadCleanP8('sarah/untitled_2.p8');
 const MW = game1.map[0].length * 8;
 const MH = game1.map.length * 8;
 
+const BOMB = game1.sprites[6];
+
 const camera = new Camera(MW, MH, WIDTH, HEIGHT, players);
 
 function createEntity(tile: MapTile, x: number, y: number) {
@@ -31,7 +33,7 @@ function createEntity(tile: MapTile, x: number, y: number) {
   drawables.push(entity);
 
   if (tile.index >= 1 && tile.index <= 3) {
-    const player = new Player(entity, camera);
+    const player = new Player(entity, camera, BOMB);
     entity.layer = 2;
     players.push(player);
     updatables.push(player);

@@ -1,8 +1,10 @@
 import { Camera } from "../lib/camera.js";
-import { A } from "../lib/core.js";
-import { actables, players, Updatable } from "../lib/data.js";
+import { A, B, Y } from "../lib/core.js";
+import { actables, drawables, players, Updatable, updatables } from "../lib/data.js";
 import { intersects } from "../lib/helpers.js";
+import { Sprite } from "../lib/pico8.js";
 import { Entity } from "./entity.js";
+import { RealBomb } from "./realbomb.js";
 
 export class Player implements Updatable {
 
@@ -13,7 +15,7 @@ export class Player implements Updatable {
   bombs = 0;
   yvel = 0;
 
-  constructor(public entity: Entity, private camera: Camera) {
+  constructor(public entity: Entity, private camera: Camera, private bomb: Sprite) {
     entity.ox = 2;
     entity.oy = 1;
     entity.w = 4;
@@ -23,10 +25,18 @@ export class Player implements Updatable {
   }
 
   update() {
+    this.move();
+
+    if (this.gamepad?.buttons[B].pressed) {
+      this.placeBomb();
+    }
+  }
+
+  move() {
     if (!this.gamepad) return;
     const [x1] = this.gamepad.axes;
 
-    const speed = 1;
+    const speed = this.gamepad.buttons[Y].pressed ? 2 : 1;
 
     const xAdd = x1 * speed;
 
@@ -60,6 +70,16 @@ export class Player implements Updatable {
     } else {
       this.camera.update();
     }
+  }
+
+  placeBomb() {
+    if (this.bombs === 0) return;
+    this.bombs--;
+
+    const entity = new Entity(6, this.entity.x, this.entity.y, this.bomb.image);
+    const bomb = new RealBomb(entity);
+    updatables.push(bomb);
+    drawables.push(bomb.entity);
   }
 
   rumble(sec: number, weak: number, strong: number) {

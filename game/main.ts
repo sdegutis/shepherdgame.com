@@ -1,3 +1,4 @@
+import { Button } from "./entities/button.js";
 import { Door } from "./entities/door.js";
 import { Entity } from "./entities/entity.js";
 import { Key } from "./entities/key.js";
@@ -37,7 +38,7 @@ function createEntity(tile: MapTile, x: number, y: number) {
     players.push(player);
     updatables.push(player);
   }
-  else if ([8].includes(tile.index)) {
+  else if ([8, 18].includes(tile.index)) {
     const wall = new Wall(entity);
     actables.push(wall);
   }
@@ -46,6 +47,11 @@ function createEntity(tile: MapTile, x: number, y: number) {
     entity.layer = 1;
     actables.push(key);
     updatables.push(key);
+  }
+  else if (tile.index === 5) {
+    const button = new Button(entity, x, y, game1.map);
+    entity.layer = 1;
+    actables.push(button);
   }
   else if (tile.index === 11) {
     const door = new Door(entity);

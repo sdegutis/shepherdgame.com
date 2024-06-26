@@ -1,3 +1,4 @@
+import { Player } from "../entities/player.js";
 
 export class Camera {
 
@@ -9,7 +10,7 @@ export class Camera {
     private mh: number,
     private sw: number,
     private sh: number,
-    private players: { entity: { x: number, y: number } }[],
+    private players: Player[],
   ) { }
 
   update() {

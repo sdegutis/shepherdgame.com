@@ -1,6 +1,6 @@
 import { Camera } from "./camera.js";
 import { A, createCanvas, runGameLoop } from "./core.js";
-import { loadCleanP8, Sprite } from "./pico8.js";
+import { loadCleanP8, MapTile, Sprite } from "./pico8.js";
 
 // sarahs idea:
 //   i can place bombs that blow up certain bricks
@@ -15,8 +15,6 @@ const ctx = createCanvas(WIDTH, HEIGHT, SCALE);
 const engine = runGameLoop();
 
 const game1 = await loadCleanP8('sarah/untitled_2.p8');
-
-const EMPTY = 0;
 
 interface Actable {
   actOn(player: Player): boolean;
@@ -44,15 +42,12 @@ class Entity {
   w = 8; h = 8;
 
   constructor(
-    private index: number,
     public x: number,
     public y: number,
     public image: OffscreenCanvas,
   ) { }
 
   draw(ctx: CanvasRenderingContext2D) {
-    if (this.index === 0) return;
-
     const x = Math.round(this.x);
     const y = Math.round(this.y);
     ctx.drawImage(this.image, x - this.ox, y - this.oy);
@@ -60,7 +55,7 @@ class Entity {
     // ctx.strokeStyle = '#f00a';
     // ctx.lineWidth = 1;
     // ctx.beginPath();
-    // ctx.rect(x + 0.5, y + 0.5, this.box.w - 1, this.box.h - 1);
+    // ctx.rect(x + 0.5, y + 0.5, this.w - 1, this.h - 1);
     // ctx.stroke();
   }
 
@@ -183,39 +178,39 @@ class Door implements Actable {
 
 }
 
-function createEntity(spr: Sprite, x: number, y: number) {
-  const entity = new Entity(spr.index, x * 8, y * 8, spr.image);
+function createEntity(tile: MapTile, x: number, y: number) {
+  const entity = new Entity(x * 8, y * 8, tile.sprite.image);
   drawables.push(entity);
 
-  if (spr.index >= 1 && spr.index <= 3) {
+  if (tile.index >= 1 && tile.index <= 3) {
     const player = new Player(entity);
     entity.layer = 2;
     players.push(player);
     updatables.push(player);
-    createEntity(game1.sprites[EMPTY], x, y);
   }
-  else if (spr.flags.RED) {
+  else if (tile.sprite.flags.RED) {
     const wall = new Wall(entity);
     actables.push(wall);
   }
-  else if (spr.flags.YELLOW) {
+  else if (tile.sprite.flags.YELLOW) {
     const key = new Key(entity);
     entity.layer = 1;
     actables.push(key);
     updatables.push(key);
-    createEntity(game1.sprites[EMPTY], x, y);
   }
-  else if (spr.flags.ORANGE) {
+  else if (tile.sprite.flags.ORANGE) {
     const door = new Door(entity);
     entity.layer = 1;
     actables.push(door);
-    createEntity(game1.sprites[EMPTY], x, y);
   }
 }
 
 for (let y = 0; y < 64; y++) {
   for (let x = 0; x < 128; x++) {
-    createEntity(game1.map[y][x].sprite, x, y);
+    const tile = game1.map[y][x];
+    if (tile.index > 0) {
+      createEntity(tile, x, y);
+    }
   }
 }
 

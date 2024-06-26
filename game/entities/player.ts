@@ -28,7 +28,7 @@ export class Player implements Updatable {
     if (!this.gamepad) return;
     const [x1] = this.gamepad.axes;
 
-    const speed = this.gamepad.buttons[A].pressed ? 3 : 1;
+    const speed = 1;
 
     const xAdd = x1 * speed;
     const yAdd = (this.gamepad.buttons[A].pressed ? -1 : 1) * speed;

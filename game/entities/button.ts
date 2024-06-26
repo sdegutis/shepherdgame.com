@@ -10,7 +10,7 @@ export class Button implements Actable {
   actOn(player: Player) {
     removeFrom(actables, this);
     removeFrom(drawables, this.entity);
-    // player.rumble(.3, 1, 1);
+    player.rumble(.3, 1, 1);
 
     const firstBar = this.findFirstBar();
     if (!firstBar) return true;

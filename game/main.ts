@@ -98,6 +98,9 @@ engine.update = (t) => {
   ctx.reset();
   ctx.translate(camera.mx, camera.my);
 
+  // ctx.fillStyle = '#003';
+  // ctx.fillRect(0, 0, WIDTH, HEIGHT);
+
   for (const e of drawables) {
     e.draw(ctx);
   }

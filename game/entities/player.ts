@@ -6,17 +6,12 @@ import { Entity } from "./entity.js";
 
 export class Player implements Updatable {
 
-  private _gamepadIndex = players.length;
-  public get gamepadIndex() {
-    return this._gamepadIndex;
-  }
-  public set gamepadIndex(value) {
-    this._gamepadIndex = value;
-  }
+  gamepadIndex = players.length;
   get gamepad() { return navigator.getGamepads()[this.gamepadIndex]; }
 
   keys = 0;
   bombs = 0;
+  yvel = 0;
 
   constructor(public entity: Entity, private camera: Camera) {
     entity.ox = 2;
@@ -34,17 +29,37 @@ export class Player implements Updatable {
     const speed = 1;
 
     const xAdd = x1 * speed;
-    const yAdd = (this.gamepad.buttons[A].pressed ? -1 : 1) * speed;
+
+    const MAX = 2;
+    const GRAV = 0.2;
+
+    this.yvel += GRAV;
+    if (this.yvel > MAX) this.yvel = MAX;
+
+    const yAdd = this.yvel;
 
     let found;
 
     this.entity.x += xAdd;
     found = actables.find(a => intersects(a.entity, this.entity));
-    if (found && !found.actOn(this)) this.entity.x -= xAdd; else this.camera.update();
+    if (found && !found.actOn(this)) {
+      this.entity.x -= xAdd;
+    } else {
+      this.camera.update();
+    }
 
     this.entity.y += yAdd;
     found = actables.find(a => intersects(a.entity, this.entity));
-    if (found && !found.actOn(this)) this.entity.y -= yAdd; else this.camera.update();
+    if (found && !found.actOn(this)) {
+      this.entity.y -= yAdd;
+
+      const standing = (yAdd > 0);
+      if (standing && this.gamepad.buttons[A].pressed) {
+        this.yvel = -MAX;
+      }
+    } else {
+      this.camera.update();
+    }
   }
 
   rumble(sec: number, weak: number, strong: number) {

@@ -94,6 +94,14 @@ drawables.sort((a, b) => {
 
 camera.update();
 
+let mx = 0;
+let my = 0;
+
+ctx.canvas.onmousemove = (e) => {
+  mx = Math.round(e.offsetX / SCALE);
+  my = Math.round(e.offsetY / SCALE);
+};
+
 engine.update = (t) => {
   for (const e of updatables) {
     e.update(t);
@@ -107,4 +115,14 @@ engine.update = (t) => {
   for (const e of drawables) {
     e.draw(ctx);
   }
+
+  const dx = Math.floor(mx / 8) * 8;
+  const dy = Math.floor(my / 8) * 8;
+
+  ctx.fillStyle = '#f007';
+  ctx.fillRect(dx, dy, 8, 8);
+  // ctx.fillRect(dx + .5, dy + .5, 7, 7);
+  // ctx.beginPath();
+  // ctx.rect(dx + .5, dy + .5, 7, 7);
+  // ctx.stroke();
 };

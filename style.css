@@ -16,5 +16,5 @@ body {
 canvas {
   background-color: #000;
   image-rendering: pixelated;
-  /* cursor: none; */
+  cursor: none;
 }

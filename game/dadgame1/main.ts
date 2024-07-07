@@ -129,7 +129,7 @@ engine.update = (t) => {
 
     ctx.translate(player.camera.mx, player.camera.my);
     for (const e of drawables) {
-      if (player.camera.near(e)) {
+      if (player.entity.near(e)) {
         e.draw(ctx);
       }
       else {

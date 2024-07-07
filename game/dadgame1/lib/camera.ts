@@ -1,4 +1,3 @@
-import { Entity } from "../entities/entity.js";
 import { Player } from "../entities/player.js";
 
 export class Camera {
@@ -26,14 +25,6 @@ export class Camera {
 
     this.mx = Math.round(this.mx);
     this.my = Math.round(this.my);
-  }
-
-  near(entity: Entity) {
-    const dx = this.player.entity.x + this.player.entity.ox - entity.x + entity.ox;
-    const dy = this.player.entity.y + this.player.entity.oy - entity.y + entity.oy;
-
-    const d = Math.sqrt(dx ** 2 + dy ** 2);
-    return (d < 20);
   }
 
 }

@@ -1,5 +1,5 @@
 import { Camera } from "../lib/camera.js";
-import { A, B, X } from "../lib/core.js";
+import { B, X } from "../lib/core.js";
 import { actables, drawables, players, Updatable, updatables } from "../lib/data.js";
 import { intersects } from "../lib/helpers.js";
 import { Sprite } from "../lib/pico8.js";

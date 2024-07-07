@@ -22,4 +22,12 @@ export class Entity {
     // ctx.stroke();
   }
 
+  near(entity: Entity) {
+    const dx = this.x + this.ox - entity.x + entity.ox;
+    const dy = this.y + this.oy - entity.y + entity.oy;
+
+    const d = Math.sqrt(dx ** 2 + dy ** 2);
+    return (d < 20);
+  }
+
 }

@@ -80,9 +80,9 @@ function createEntity(tile: MapTile, x: number, y: number) {
 for (let y = 0; y < 64; y++) {
   for (let x = 0; x < 128; x++) {
     const tile = game1.map[y][x];
-    // if (tile.index > 0) {
-    createEntity(tile, x, y);
-    // }
+    if (tile.index > 0) {
+      createEntity(tile, x, y);
+    }
   }
 }
 
@@ -130,14 +130,10 @@ engine.update = (t) => {
     ctx.translate(player.camera.mx, player.camera.my);
     for (const e of drawables) {
       if (player.camera.near(e)) {
-        if (e.image === game1.sprites[0].image) {
-          ctx.fillRect(e.x + e.ox, e.y + e.oy, e.w, e.h);
-        }
-        else {
-          e.draw(ctx);
-        }
+        e.draw(ctx);
       }
       else {
+        ctx.fillRect(e.x + e.ox, e.y + e.oy, e.w, e.h);
       }
     }
 

@@ -127,7 +127,7 @@ engine.update = (t) => {
 
     ctx.translate(x, 0);
 
-    ctx.fillStyle = '#003';
+    ctx.fillStyle = '#000024';
     ctx.fillRect(0, 0, PANELW, HEIGHT);
 
     ctx.translate(player.camera.mx, player.camera.my);

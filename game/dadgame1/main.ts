@@ -125,11 +125,16 @@ engine.update = (t) => {
     ctx.translate(x, 0);
 
     ctx.fillStyle = '#000024';
-    ctx.fillRect(0, 0, PANELW, HEIGHT);
+    // ctx.fillRect(0, 0, PANELW, HEIGHT);
 
     ctx.translate(player.camera.mx, player.camera.my);
     for (const e of drawables) {
-      e.draw(ctx);
+      if (player.camera.near(e)) {
+        e.draw(ctx);
+      }
+      else {
+        ctx.fillRect(e.x + e.ox, e.y + e.oy, e.w, e.h);
+      }
     }
 
     ctx.restore();

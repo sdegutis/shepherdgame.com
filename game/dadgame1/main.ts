@@ -1,3 +1,5 @@
+import { Bomb } from "./entities/bomb.js";
+import { Crack } from "./entities/crack.js";
 import { Door } from "./entities/door.js";
 import { Entity } from "./entities/entity.js";
 import { Key } from "./entities/key.js";
@@ -21,7 +23,7 @@ const game1 = await loadCleanP8('game/dadgame1/explore.p8');
 const MW = game1.map[0].length * 8;
 const MH = game1.map.length * 8;
 
-const BOMB = game1.sprites[6];
+const BOMB = game1.sprites[5];
 const OPENDOOR = game1.sprites[4];
 
 function createEntity(tile: MapTile, x: number, y: number) {
@@ -48,12 +50,12 @@ function createEntity(tile: MapTile, x: number, y: number) {
     actables.push(key);
     updatables.push(key);
   }
-  // else if (tile.index === 6) {
-  //   const bomb = new Bomb(entity);
-  //   entity.layer = 1;
-  //   actables.push(bomb);
-  //   updatables.push(bomb);
-  // }
+  else if (tile.index === 5) {
+    const bomb = new Bomb(entity);
+    entity.layer = 1;
+    actables.push(bomb);
+    updatables.push(bomb);
+  }
   // else if (tile.index === 10) {
   //   const bar = new Bar(entity);
   //   actables.push(bar);
@@ -68,11 +70,11 @@ function createEntity(tile: MapTile, x: number, y: number) {
     entity.layer = 1;
     actables.push(door);
   }
-  // else if (tile.index === 9) {
-  //   const crack = new Crack(entity);
-  //   entity.layer = 1;
-  //   actables.push(crack);
-  // }
+  else if (tile.index === 17) {
+    const crack = new Crack(entity);
+    entity.layer = 1;
+    actables.push(crack);
+  }
 }
 
 for (let y = 0; y < 64; y++) {

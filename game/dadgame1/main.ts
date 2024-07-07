@@ -1,11 +1,7 @@
-import { Bar } from "./entities/bars.js";
-import { Bomb } from "./entities/bomb.js";
-import { Button } from "./entities/button.js";
-import { Crack } from "./entities/crack.js";
+import { Door } from "./entities/door.js";
 import { Entity } from "./entities/entity.js";
 import { Key } from "./entities/key.js";
 import { Player } from "./entities/player.js";
-import { connectPortals, Portal } from "./entities/portal.js";
 import { Wall } from "./entities/wall.js";
 import { Camera } from "./lib/camera.js";
 import { createCanvas, runGameLoop } from "./lib/core.js";
@@ -41,41 +37,41 @@ function createEntity(tile: MapTile, x: number, y: number) {
     players.push(player);
     updatables.push(player);
   }
-  else if ([8, 18].includes(tile.index)) {
+  else if ([18].includes(tile.index)) {
     const wall = new Wall(entity);
     actables.push(wall);
   }
-  else if (tile.index === 4) {
+  else if (tile.index === 21) {
     const key = new Key(entity);
     entity.layer = 1;
     actables.push(key);
     updatables.push(key);
   }
-  else if (tile.index === 6) {
-    const bomb = new Bomb(entity);
-    entity.layer = 1;
-    actables.push(bomb);
-    updatables.push(bomb);
-  }
-  else if (tile.index === 10) {
-    const bar = new Bar(entity);
-    actables.push(bar);
-  }
-  else if (tile.index === 5) {
-    const button = new Button(entity);
-    entity.layer = 1;
-    actables.push(button);
-  }
-  else if (tile.index === 11) {
-    const portal = new Portal(entity);
+  // else if (tile.index === 6) {
+  //   const bomb = new Bomb(entity);
+  //   entity.layer = 1;
+  //   actables.push(bomb);
+  //   updatables.push(bomb);
+  // }
+  // else if (tile.index === 10) {
+  //   const bar = new Bar(entity);
+  //   actables.push(bar);
+  // }
+  // else if (tile.index === 5) {
+  //   const button = new Button(entity);
+  //   entity.layer = 1;
+  //   actables.push(button);
+  // }
+  else if (tile.index === 20) {
+    const portal = new Door(entity);
     entity.layer = 1;
     actables.push(portal);
   }
-  else if (tile.index === 9) {
-    const crack = new Crack(entity);
-    entity.layer = 1;
-    actables.push(crack);
-  }
+  // else if (tile.index === 9) {
+  //   const crack = new Crack(entity);
+  //   entity.layer = 1;
+  //   actables.push(crack);
+  // }
 }
 
 for (let y = 0; y < 64; y++) {
@@ -86,8 +82,6 @@ for (let y = 0; y < 64; y++) {
     }
   }
 }
-
-connectPortals();
 
 drawables.sort((a, b) => {
   if (a.layer > b.layer) return 1;

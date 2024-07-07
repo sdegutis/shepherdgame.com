@@ -69,7 +69,7 @@ export class Player implements Updatable {
     if (this.bombs === 0) return;
     this.bombs--;
 
-    const entity = new Entity(6, this.entity.x, this.entity.y, this.bomb.image);
+    const entity = new Entity(this.entity.x, this.entity.y, this.bomb.image);
     const bomb = new RealBomb(entity, t);
     updatables.push(bomb);
     drawables.push(bomb.entity);

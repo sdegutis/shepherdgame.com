@@ -14,9 +14,8 @@ import { loadCleanP8, MapTile } from "./lib/pico8.js";
 
 const WIDTH = 320;
 const HEIGHT = 180;
-const SCALE = 5;
 
-const ctx = createCanvas(WIDTH, HEIGHT, SCALE);
+const ctx = createCanvas(WIDTH, HEIGHT, 5);
 const engine = runGameLoop();
 
 const game1 = await loadCleanP8('sarah/untitled_2.p8');
@@ -108,9 +107,9 @@ engine.update = (t) => {
   }
 
   ctx.reset();
-  ctx.fillStyle = '#003';
-  ctx.fillRect(0, 0, WIDTH, HEIGHT);
-  ctx.translate(camera.mx, camera.my);
+  // ctx.fillStyle = '#003';
+  // ctx.fillRect(0, 0, WIDTH, HEIGHT);
+  // ctx.translate(camera.mx, camera.my);
 
   for (const e of drawables) {
     e.draw(ctx);

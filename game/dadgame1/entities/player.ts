@@ -13,7 +13,6 @@ export class Player implements Updatable {
 
   keys = 0;
   bombs = 0;
-  yvel = 0;
 
   get isGreen() { return this.gamepadIndex === 0 }
   get isPink() { return this.gamepadIndex === 2 }
@@ -38,19 +37,12 @@ export class Player implements Updatable {
 
   move() {
     if (!this.gamepad) return;
-    const [x1] = this.gamepad.axes;
+    const [x1, y1] = this.gamepad.axes;
 
     const speed = this.gamepad.buttons[B].pressed ? 2 : 1;
 
     const xAdd = x1 * speed;
-
-    const MAX = 2;
-    const GRAV = 0.2;
-
-    this.yvel += GRAV;
-    if (this.yvel > MAX) this.yvel = MAX;
-
-    const yAdd = this.yvel;
+    const yAdd = y1 * speed;
 
     let found;
 
@@ -66,11 +58,6 @@ export class Player implements Updatable {
     found = actables.find(a => intersects(a.entity, this.entity));
     if (found && !found.actOn(this, 0, yAdd)) {
       this.entity.y -= yAdd;
-
-      const standing = (yAdd > 0);
-      if (standing && this.gamepad.buttons[A].pressed) {
-        this.yvel = -MAX;
-      }
     } else {
       this.camera.update();
     }

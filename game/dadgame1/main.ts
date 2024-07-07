@@ -18,7 +18,7 @@ const HEIGHT = 180;
 const ctx = createCanvas(WIDTH, HEIGHT, 5);
 const engine = runGameLoop();
 
-const game1 = await loadCleanP8('sarah/untitled_2.p8');
+const game1 = await loadCleanP8('game/dadgame1/explore.p8');
 
 const MW = game1.map[0].length * 8;
 const MH = game1.map.length * 8;

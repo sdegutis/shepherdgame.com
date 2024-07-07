@@ -22,9 +22,10 @@ const MW = game1.map[0].length * 8;
 const MH = game1.map.length * 8;
 
 const BOMB = game1.sprites[6];
+const OPENDOOR = game1.sprites[4];
 
 function createEntity(tile: MapTile, x: number, y: number) {
-  const entity = new Entity(tile.index, x * 8, y * 8, tile.sprite.image);
+  const entity = new Entity(x * 8, y * 8, tile.sprite.image);
   drawables.push(entity);
 
   if (tile.index >= 1 && tile.index <= 3) {
@@ -63,9 +64,9 @@ function createEntity(tile: MapTile, x: number, y: number) {
   //   actables.push(button);
   // }
   else if (tile.index === 20) {
-    const portal = new Door(entity);
+    const door = new Door(entity, OPENDOOR);
     entity.layer = 1;
-    actables.push(portal);
+    actables.push(door);
   }
   // else if (tile.index === 9) {
   //   const crack = new Crack(entity);

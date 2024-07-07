@@ -5,7 +5,6 @@ export class Entity {
   w = 8; h = 8;
 
   constructor(
-    public sprite: number,
     public x: number,
     public y: number,
     public image: OffscreenCanvas,

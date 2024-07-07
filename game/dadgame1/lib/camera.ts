@@ -10,15 +10,12 @@ export class Camera {
     private mh: number,
     private sw: number,
     private sh: number,
-    private players: Player[],
+    private player: Player,
   ) { }
 
   update() {
-    const avgX = ((this.players[0].entity.x + this.players[1].entity.x + this.players[2].entity.x) / 3);
-    const avgY = ((this.players[0].entity.y + this.players[1].entity.y + this.players[2].entity.y) / 3);
-
-    this.mx = -(avgX - (this.sw / 2));
-    this.my = -(avgY - (this.sh / 2));
+    this.mx = -(this.player.entity.x - (this.sw / 2));
+    this.my = -(this.player.entity.y - (this.sh / 2));
 
     if (this.mx > 0) this.mx = 0;
     if (this.my > 0) this.my = 0;

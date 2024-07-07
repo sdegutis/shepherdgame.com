@@ -15,6 +15,8 @@ import { loadCleanP8, MapTile } from "./lib/pico8.js";
 const WIDTH = 320;
 const HEIGHT = 180;
 
+const PANELW = (WIDTH - 2) / 3;
+
 const ctx = createCanvas(WIDTH, HEIGHT, 5);
 const engine = runGameLoop();
 
@@ -25,14 +27,16 @@ const MH = game1.map.length * 8;
 
 const BOMB = game1.sprites[6];
 
-const camera = new Camera(MW, MH, WIDTH, HEIGHT, players);
-
 function createEntity(tile: MapTile, x: number, y: number) {
   const entity = new Entity(tile.index, x * 8, y * 8, tile.sprite.image);
   drawables.push(entity);
 
   if (tile.index >= 1 && tile.index <= 3) {
-    const player = new Player(entity, camera, BOMB);
+    const player = new Player(entity, BOMB);
+
+    player.camera = new Camera(MW, MH, PANELW, HEIGHT, player);
+    player.camera.update();
+
     entity.layer = 2;
     players.push(player);
     updatables.push(player);
@@ -91,8 +95,6 @@ drawables.sort((a, b) => {
   return 0;
 });
 
-camera.update();
-
 // let mx = 0;
 // let my = 0;
 
@@ -107,12 +109,33 @@ engine.update = (t) => {
   }
 
   ctx.reset();
-  // ctx.fillStyle = '#003';
-  // ctx.fillRect(0, 0, WIDTH, HEIGHT);
-  // ctx.translate(camera.mx, camera.my);
 
-  for (const e of drawables) {
-    e.draw(ctx);
+  // ctx.strokeStyle = '#fff';
+
+  for (let i = 0; i < players.length; i++) {
+    const player = players[i];
+    const x = (PANELW + 1) * i;
+
+    ctx.save();
+
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x + PANELW, 0);
+    ctx.lineTo(x + PANELW, HEIGHT);
+    ctx.lineTo(x, HEIGHT);
+    ctx.clip();
+
+    ctx.translate(x, 0);
+
+    ctx.fillStyle = '#003';
+    ctx.fillRect(0, 0, PANELW, HEIGHT);
+
+    ctx.translate(player.camera.mx, player.camera.my);
+    for (const e of drawables) {
+      e.draw(ctx);
+    }
+
+    ctx.restore();
   }
 
   // const dx = Math.floor(mx / 8) * 8;

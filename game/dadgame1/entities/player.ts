@@ -18,7 +18,9 @@ export class Player implements Updatable {
   get isPink() { return this.gamepadIndex === 2 }
   get isPurple() { return this.gamepadIndex === 1 }
 
-  constructor(public entity: Entity, private camera: Camera, private bomb: Sprite) {
+  public camera!: Camera;
+
+  constructor(public entity: Entity, private bomb: Sprite) {
     entity.ox = 2;
     entity.oy = 1;
     entity.w = 4;

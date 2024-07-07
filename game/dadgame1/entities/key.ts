@@ -13,7 +13,7 @@ export class Key implements Updatable, Actable {
   }
 
   actOn(player: Player) {
-    if (!player.isPurple) return true;
+    if (!player.isOrange) return true;
 
     player.keys++;
     removeFrom(actables, this);

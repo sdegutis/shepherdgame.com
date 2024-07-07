@@ -14,9 +14,9 @@ export class Player implements Updatable {
   keys = 0;
   bombs = 0;
 
-  get isGreen() { return this.gamepadIndex === 0 }
-  get isPink() { return this.gamepadIndex === 2 }
-  get isPurple() { return this.gamepadIndex === 1 }
+  get isOrange() { return this.gamepadIndex === 0 }
+  get isGreen() { return this.gamepadIndex === 2 }
+  get isYellow() { return this.gamepadIndex === 1 }
 
   public camera!: Camera;
 

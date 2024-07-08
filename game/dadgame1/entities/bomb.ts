@@ -13,7 +13,7 @@ export class Bomb implements Updatable, Actable {
   }
 
   actOn(player: Player) {
-    if (!player.isYellow) return true;
+    if (!player.isPink) return true;
 
     player.bombs++;
     removeFrom(actables, this);

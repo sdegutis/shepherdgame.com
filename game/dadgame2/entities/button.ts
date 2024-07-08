@@ -29,7 +29,7 @@ export class Button implements Actable {
 
   actOn(player: Player, x: number, y: number) {
     if (y <= 0) return false;
-    if (!player.isGreen) return false;
+    if (!player.isOrange) return false;
 
     removeFrom(actables, this);
     removeFrom(drawables, this.entity);

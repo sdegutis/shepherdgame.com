@@ -1,1 +1,1 @@
-import './dadgame1/main.js';
+import './dadgame2/main.js';

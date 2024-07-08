@@ -23,11 +23,11 @@ export class Entity {
   }
 
   near(entity: Entity) {
-    const dx = this.x + this.ox - entity.x + entity.ox;
-    const dy = this.y + this.oy - entity.y + entity.oy;
+    const dx = (this.x + this.w / 2) - (entity.x + entity.w / 2);
+    const dy = (this.y + this.h / 2) - (entity.y + entity.h / 2);
 
     const d = Math.sqrt(dx ** 2 + dy ** 2);
-    return (d < 20);
+    return (d < 12);
   }
 
 }

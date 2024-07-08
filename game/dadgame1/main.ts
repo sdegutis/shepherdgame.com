@@ -133,7 +133,7 @@ engine.update = (t) => {
         e.draw(ctx);
       }
       else {
-        ctx.fillRect(e.x + e.ox, e.y + e.oy, e.w, e.h);
+        ctx.fillRect(Math.round(e.x), Math.round(e.y), e.w, e.h);
       }
     }
 

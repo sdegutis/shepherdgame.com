@@ -18,7 +18,7 @@ const PANELW = (WIDTH - 2) / 3;
 const ctx = createCanvas(WIDTH, HEIGHT, 5);
 const engine = runGameLoop();
 
-const game1 = await loadCleanP8('game/dadgame1/explore.p8');
+const game1 = await loadCleanP8('game/dadgame2/explore.p8');
 
 const MW = game1.map[0].length * 8;
 const MH = game1.map.length * 8;
@@ -109,36 +109,36 @@ engine.update = (t) => {
 
   // ctx.strokeStyle = '#fff';
 
-  for (let i = 0; i < players.length; i++) {
-    const player = players[i];
-    const x = (PANELW + 1) * i;
+  // for (let i = 0; i < players.length; i++) {
+  //   const player = players[i];
+  //   const x = (PANELW + 1) * i;
 
-    ctx.save();
+  // ctx.save();
 
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x + PANELW, 0);
-    ctx.lineTo(x + PANELW, HEIGHT);
-    ctx.lineTo(x, HEIGHT);
-    ctx.clip();
+  // ctx.beginPath();
+  // ctx.moveTo(x, 0);
+  // ctx.lineTo(x + PANELW, 0);
+  // ctx.lineTo(x + PANELW, HEIGHT);
+  // ctx.lineTo(x, HEIGHT);
+  // ctx.clip();
 
-    ctx.translate(x, 0);
+  // ctx.translate(x, 0);
 
-    ctx.fillStyle = '#000024';
-    // ctx.fillRect(0, 0, PANELW, HEIGHT);
+  // ctx.fillStyle = '#000024';
+  // ctx.fillRect(0, 0, PANELW, HEIGHT);
 
-    ctx.translate(player.camera.mx, player.camera.my);
-    for (const e of drawables) {
-      if (player.entity.near(e)) {
-        e.draw(ctx);
-      }
-      else {
-        ctx.fillRect(Math.round(e.x), Math.round(e.y), e.w, e.h);
-      }
-    }
-
-    ctx.restore();
+  // ctx.translate(player.camera.mx, player.camera.my);
+  for (const e of drawables) {
+    // if (player.entity.near(e)) {
+    e.draw(ctx);
+    // }
+    // else {
+    //   ctx.fillRect(Math.round(e.x), Math.round(e.y), e.w, e.h);
+    // }
   }
+
+  // ctx.restore();
+  // }
 
   // const dx = Math.floor(mx / 8) * 8;
   // const dy = Math.floor(my / 8) * 8;

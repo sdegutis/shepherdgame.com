@@ -73,13 +73,7 @@ engine.update = (t) => {
       }
     }
 
-    if (!near) {
-      ctx.save();
-      ctx.globalAlpha = 0.25;
-    }
+    ctx.globalAlpha = near ? 1 : 0.25;
     e.draw(ctx);
-    if (!near) {
-      ctx.restore();
-    }
   }
 };

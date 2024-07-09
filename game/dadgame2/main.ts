@@ -32,7 +32,7 @@ function createEntity(tile: MapTile, x: number, y: number) {
   return entity;
 }
 
-for (let y = 0; y < 22; y++) {
+for (let y = 0; y < 21; y++) {
   for (let x = 0; x < 40; x++) {
     const tile = game1.map[y][x];
     if (tile.index > 0) {
@@ -41,9 +41,9 @@ for (let y = 0; y < 22; y++) {
   }
 }
 
-for (let y = 0; y < 22; y++) {
+for (let y = 0; y < 21; y++) {
   for (let x = 0; x < 40; x++) {
-    const tile = game1.map[y + 22][x];
+    const tile = game1.map[y + 21][x];
     if (tile.index > 0) {
       createEntity(tile, x, y).layer = 3;
     }

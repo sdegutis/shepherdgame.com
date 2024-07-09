@@ -1,10 +1,7 @@
-import { Camera } from "../lib/camera.js";
 import { B, X } from "../lib/core.js";
-import { actables, drawables, players, Updatable, updatables } from "../lib/data.js";
+import { actables, players, Updatable } from "../lib/data.js";
 import { intersects } from "../lib/helpers.js";
-import { Sprite } from "../lib/pico8.js";
 import { Entity } from "./entity.js";
-import { RealBomb } from "./realbomb.js";
 
 export class Player implements Updatable {
 
@@ -18,9 +15,7 @@ export class Player implements Updatable {
   get isPink() { return this.gamepadIndex === 2 }
   get isPurple() { return this.gamepadIndex === 1 }
 
-  public camera!: Camera;
-
-  constructor(public entity: Entity, private bomb: Sprite) {
+  constructor(public entity: Entity) {
     entity.ox = 2;
     entity.oy = 1;
     entity.w = 4;
@@ -33,7 +28,6 @@ export class Player implements Updatable {
     this.move();
 
     if (this.gamepad?.buttons[X].pressed) {
-      this.placeBomb(t);
     }
   }
 
@@ -52,27 +46,13 @@ export class Player implements Updatable {
     found = actables.find(a => intersects(a.entity, this.entity));
     if (found && !found.actOn(this, xAdd, 0)) {
       this.entity.x -= xAdd;
-    } else {
-      this.camera.update();
     }
 
     this.entity.y += yAdd;
     found = actables.find(a => intersects(a.entity, this.entity));
     if (found && !found.actOn(this, 0, yAdd)) {
       this.entity.y -= yAdd;
-    } else {
-      this.camera.update();
     }
-  }
-
-  placeBomb(t: number) {
-    if (this.bombs === 0) return;
-    this.bombs--;
-
-    const entity = new Entity(this.entity.x, this.entity.y, this.bomb.image);
-    const bomb = new RealBomb(entity, t);
-    updatables.push(bomb);
-    drawables.push(bomb.entity);
   }
 
   rumble(sec: number, weak: number, strong: number) {

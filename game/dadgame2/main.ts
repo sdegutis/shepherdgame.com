@@ -1,11 +1,6 @@
-import { Bomb } from "./entities/bomb.js";
-import { Crack } from "./entities/crack.js";
-import { Door } from "./entities/door.js";
 import { Entity } from "./entities/entity.js";
-import { Key } from "./entities/key.js";
 import { Player } from "./entities/player.js";
 import { Wall } from "./entities/wall.js";
-import { Camera } from "./lib/camera.js";
 import { createCanvas, runGameLoop } from "./lib/core.js";
 import { actables, drawables, players, updatables } from "./lib/data.js";
 import { loadCleanP8, MapTile } from "./lib/pico8.js";
@@ -13,28 +8,17 @@ import { loadCleanP8, MapTile } from "./lib/pico8.js";
 const WIDTH = 320;
 const HEIGHT = 180;
 
-const PANELW = (WIDTH - 2) / 3;
-
 const ctx = createCanvas(WIDTH, HEIGHT, 5);
 const engine = runGameLoop();
 
 const game1 = await loadCleanP8('game/dadgame2/explore.p8');
-
-const MW = game1.map[0].length * 8;
-const MH = game1.map.length * 8;
-
-const BOMB = game1.sprites[5];
-const OPENDOOR = game1.sprites[4];
 
 function createEntity(tile: MapTile, x: number, y: number) {
   const entity = new Entity(x * 8, y * 8, tile.sprite.image);
   drawables.push(entity);
 
   if (tile.index >= 1 && tile.index <= 3) {
-    const player = new Player(entity, BOMB);
-
-    player.camera = new Camera(MW, MH, PANELW, HEIGHT, player);
-    player.camera.update();
+    const player = new Player(entity);
 
     entity.layer = 2;
     players.push(player);
@@ -43,37 +27,6 @@ function createEntity(tile: MapTile, x: number, y: number) {
   else if ([18].includes(tile.index)) {
     const wall = new Wall(entity);
     actables.push(wall);
-  }
-  else if (tile.index === 21) {
-    const key = new Key(entity);
-    entity.layer = 1;
-    actables.push(key);
-    updatables.push(key);
-  }
-  else if (tile.index === 5) {
-    const bomb = new Bomb(entity);
-    entity.layer = 1;
-    actables.push(bomb);
-    updatables.push(bomb);
-  }
-  // else if (tile.index === 10) {
-  //   const bar = new Bar(entity);
-  //   actables.push(bar);
-  // }
-  // else if (tile.index === 5) {
-  //   const button = new Button(entity);
-  //   entity.layer = 1;
-  //   actables.push(button);
-  // }
-  else if (tile.index === 20) {
-    const door = new Door(entity, OPENDOOR);
-    entity.layer = 1;
-    actables.push(door);
-  }
-  else if (tile.index === 17) {
-    const crack = new Crack(entity);
-    entity.layer = 1;
-    actables.push(crack);
   }
 }
 

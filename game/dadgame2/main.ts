@@ -39,19 +39,22 @@ for (let y = 0; y < 22; y++) {
   }
 }
 
+const bg = new OffscreenCanvas(8 * 40, 8 * 22);
+const bgCtx = bg.getContext('2d')!;
+for (let y = 0; y < 22; y++) {
+  for (let x = 0; x < 40; x++) {
+    const tile = game1.map[y + 22][x];
+    if (tile.index > 0) {
+      bgCtx.drawImage(tile.sprite.image, 8 * x, 8 * y);
+    }
+  }
+}
+
 drawables.sort((a, b) => {
   if (a.layer > b.layer) return 1;
   if (a.layer < b.layer) return -1;
   return 0;
 });
-
-// let mx = 0;
-// let my = 0;
-
-// ctx.canvas.onmousemove = (e) => {
-//   mx = Math.round(e.offsetX / SCALE);
-//   my = Math.round(e.offsetY / SCALE);
-// };
 
 engine.update = (t) => {
   for (const e of updatables) {
@@ -60,27 +63,6 @@ engine.update = (t) => {
 
   ctx.reset();
 
-  // ctx.strokeStyle = '#fff';
-
-  // for (let i = 0; i < players.length; i++) {
-  //   const player = players[i];
-  //   const x = (PANELW + 1) * i;
-
-  // ctx.save();
-
-  // ctx.beginPath();
-  // ctx.moveTo(x, 0);
-  // ctx.lineTo(x + PANELW, 0);
-  // ctx.lineTo(x + PANELW, HEIGHT);
-  // ctx.lineTo(x, HEIGHT);
-  // ctx.clip();
-
-  // ctx.translate(x, 0);
-
-  // ctx.fillStyle = '#000024';
-  // ctx.fillRect(0, 0, PANELW, HEIGHT);
-
-  // ctx.translate(player.camera.mx, player.camera.my);
   for (const e of drawables) {
     let near = false;
     for (let i = 0; i < players.length; i++) {
@@ -101,16 +83,5 @@ engine.update = (t) => {
     }
   }
 
-  // ctx.restore();
-  // }
-
-  // const dx = Math.floor(mx / 8) * 8;
-  // const dy = Math.floor(my / 8) * 8;
-
-  // ctx.fillStyle = '#f007';
-  // ctx.fillRect(dx, dy, 8, 8);
-  // ctx.fillRect(dx + .5, dy + .5, 7, 7);
-  // ctx.beginPath();
-  // ctx.rect(dx + .5, dy + .5, 7, 7);
-  // ctx.stroke();
+  ctx.drawImage(bg, 0, 0);
 };

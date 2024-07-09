@@ -25,7 +25,7 @@ export class Entity {
     const dy = (this.y + 4) - (entity.y + 4);
 
     const d = Math.sqrt(dx ** 2 + dy ** 2);
-    return (d < 12);
+    return (d < 20);
   }
 
 }

@@ -32,6 +32,10 @@ function createEntity(tile: MapTile, x: number, y: number) {
     actables.push(wall);
   }
   else if (tile.sprite.flags.ORANGE) {
+    const wall = new Wall(entity, true);
+    actables.push(wall);
+  }
+  else if (tile.index === 4) {
     const wand = new BubbleWand(entity);
     entity.layer = 2;
     actables.push(wand);

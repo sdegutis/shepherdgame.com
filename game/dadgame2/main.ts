@@ -24,6 +24,7 @@ function createEntity(tile: MapTile, x: number, y: number) {
     entity.layer = 2;
     players.push(player);
     updatables.push(player);
+    actables.push(player);
   }
   else if (tile.sprite.flags.RED) {
     const wall = new Wall(entity);

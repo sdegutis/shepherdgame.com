@@ -1,12 +1,12 @@
 import { A, X } from "../lib/core.js";
-import { actables, drawables, players, Updatable, updatables } from "../lib/data.js";
+import { Actable, actables, drawables, players, Updatable, updatables } from "../lib/data.js";
 import { intersects } from "../lib/helpers.js";
 import { game1 } from "../main.js";
 import { Bubble } from "./bubble.js";
 import { Entity } from "./entity.js";
 
 
-export class Player implements Updatable {
+export class Player implements Updatable, Actable {
 
   gamepadIndex = players.length;
   get gamepad() { return navigator.getGamepads()[this.gamepadIndex]; }
@@ -21,6 +21,14 @@ export class Player implements Updatable {
   bubble: Bubble | undefined;
 
   constructor(public entity: Entity) { }
+
+  actOn(player: Player, x: number, y: number): boolean {
+    if (this === player) return true;
+
+    if (y < 0) return true;
+
+    return false;
+  }
 
   update(t: number) {
     this.move();

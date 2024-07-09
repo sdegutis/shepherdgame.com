@@ -5,26 +5,39 @@ import { Player } from "./player.js";
 
 export class Bubble implements Updatable, Actable {
 
-  constructor(public entity: Entity) {
-  }
+  sitting = false;
 
-  actOn(player: Player) {
-    // if (player.hasWand) return true;
-    // this.destroy();
-    // player.hasWand = true;
-    // // player.rumble(.3, 1, 1);
+  constructor(public entity: Entity) { }
+
+  actOn(player: Player, x: number, y: number) {
+    // console.log(x, y)
+
+    if (x) {
+      this.entity.x += x;
+      return true;
+    }
+
+    if (y < 0) {
+      this.entity.y -= 1;
+      return true;
+    }
+    else if (y > 0) {
+      // player.entity.y -= 1;
+      this.sitting = true;
+      return false;
+    }
+
     return true;
   }
 
   update(t: number) {
-    this.entity.y -= 1;
+    this.entity.y -= this.sitting ? -0.25 : 0.25;
 
-    // const durationMs = 1000;
-    // const percent = ((t % durationMs) / durationMs);
-    // const percentOfCircle = percent * Math.PI * 2;
-    // const distance = 1.5;
-    // this.entity.y = this.y + +Math.cos(percentOfCircle) * distance;
-    // this.entity.x = this.x + -Math.sin(percentOfCircle) * distance;
+    if (this.entity.y < 8) {
+      this.destroy();
+    }
+
+    this.sitting = false;
   }
 
   destroy() {

@@ -1,6 +1,6 @@
-import { B, X } from "../lib/core.js";
+import { A, X } from "../lib/core.js";
 import { actables, drawables, players, Updatable, updatables } from "../lib/data.js";
-import { intersects, removeFrom } from "../lib/helpers.js";
+import { intersects } from "../lib/helpers.js";
 import { Bubble } from "./bubble.js";
 import { Entity } from "./entity.js";
 
@@ -25,7 +25,7 @@ export class Player implements Updatable {
   update(t: number) {
     this.move();
 
-    if (this.gamepad?.buttons[B].pressed && this.stoodFor >= 1) {
+    if (this.gamepad?.buttons[A].pressed && this.stoodFor >= 1) {
       this.stoodFor = 0;
       this.yvel = -5.15;
     }
@@ -40,7 +40,7 @@ export class Player implements Updatable {
       this.bubble.destroy();
     }
 
-    const entity = new Entity(this.entity.x, this.entity.y, this.bubbleImage);
+    const entity = new Entity(this.entity.x + 8, this.entity.y, this.bubbleImage);
     const bubble = new Bubble(entity);
     drawables.push(entity);
     updatables.push(bubble);

@@ -9,7 +9,11 @@ export class Bubble implements Updatable, Actable {
   sitting = false;
   unsat = 0;
 
-  constructor(public entity: Entity) { }
+  x;
+
+  constructor(public entity: Entity) {
+    this.x = entity.x;
+  }
 
   actOn(player: Player, x: number, y: number) {
     if (x) {
@@ -33,6 +37,12 @@ export class Bubble implements Updatable, Actable {
   }
 
   update(t: number) {
+    const durationMs = 1000;
+    const percent = ((t % durationMs) / durationMs);
+    const percentOfCircle = percent * Math.PI * 2;
+    const distance = 2;
+    this.entity.x = this.x + -Math.sin(percentOfCircle) * distance;
+
     if (!this.sitting) {
       if (this.unsat) {
         this.unsat++;

@@ -9,8 +9,12 @@ export class Entity {
   ) { }
 
   draw(ctx: CanvasRenderingContext2D) {
-    const x = this.x;
-    const y = this.y;
+    const x =
+      // Math.round
+      (this.x);
+    const y =
+      // Math.round
+      (this.y);
     ctx.drawImage(this.image, x, y);
 
     // ctx.strokeStyle = '#f00a';

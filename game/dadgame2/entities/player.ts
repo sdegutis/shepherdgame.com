@@ -19,7 +19,7 @@ export class Player implements Updatable {
   update(t: number) {
     this.move();
 
-    if (this.gamepad?.buttons[B].pressed && this.stoodFor >= 5) {
+    if (this.gamepad?.buttons[B].pressed && this.stoodFor >= 1) {
       this.stoodFor = 0;
       this.yvel = -5.15;
     }

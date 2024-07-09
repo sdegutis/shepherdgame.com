@@ -28,6 +28,8 @@ function createEntity(tile: MapTile, x: number, y: number) {
     const wall = new Wall(entity);
     actables.push(wall);
   }
+
+  return entity;
 }
 
 for (let y = 0; y < 22; y++) {
@@ -39,13 +41,11 @@ for (let y = 0; y < 22; y++) {
   }
 }
 
-const bg = new OffscreenCanvas(8 * 40, 8 * 22);
-const bgCtx = bg.getContext('2d')!;
 for (let y = 0; y < 22; y++) {
   for (let x = 0; x < 40; x++) {
     const tile = game1.map[y + 22][x];
     if (tile.index > 0) {
-      bgCtx.drawImage(tile.sprite.image, 8 * x, 8 * y);
+      createEntity(tile, x, y).layer = 3;
     }
   }
 }
@@ -82,6 +82,4 @@ engine.update = (t) => {
       ctx.restore();
     }
   }
-
-  ctx.drawImage(bg, 0, 0);
 };

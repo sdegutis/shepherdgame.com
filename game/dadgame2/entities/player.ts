@@ -11,6 +11,7 @@ export class Player implements Updatable {
 
   xvel = 0;
   yvel = 0;
+  dir = 1;
 
   stoodFor = 0;
 
@@ -40,7 +41,9 @@ export class Player implements Updatable {
       this.bubble.destroy();
     }
 
-    const entity = new Entity(this.entity.x + 8, this.entity.y, this.bubbleImage);
+    const x = this.entity.x + (8 * this.dir);
+
+    const entity = new Entity(x, this.entity.y, this.bubbleImage);
     const bubble = new Bubble(entity);
     drawables.push(entity);
     updatables.push(bubble);
@@ -61,6 +64,7 @@ export class Player implements Updatable {
 
     if (movingx) {
       // accel
+      this.dir = Math.sign(movingx);
       this.xvel += x1 * xspeed;
       if (this.xvel > xmaxspeed) this.xvel = xmaxspeed;
       if (this.xvel < -xmaxspeed) this.xvel = -xmaxspeed;

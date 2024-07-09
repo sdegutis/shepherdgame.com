@@ -1,4 +1,4 @@
-import { A, X } from "../lib/core.js";
+import { A, LEFT, RIGHT, X } from "../lib/core.js";
 import { Actable, actables, drawables, players, Updatable, updatables } from "../lib/data.js";
 import { intersects } from "../lib/helpers.js";
 import { game1 } from "../main.js";
@@ -17,7 +17,7 @@ export class Player implements Updatable, Actable {
 
   stoodFor = 0;
 
-  hasWand = false;
+  hasWand = true;
   bubble: Bubble | undefined;
 
   constructor(public entity: Entity) { }
@@ -61,7 +61,9 @@ export class Player implements Updatable, Actable {
   move() {
     let x1 = 0;
     if (this.gamepad) {
-      [x1] = this.gamepad.axes;
+      if (this.gamepad.buttons[LEFT].pressed) { x1 = -1; }
+      else if (this.gamepad.buttons[RIGHT].pressed) { x1 = 1; }
+      else { [x1] = this.gamepad.axes; }
     }
 
     const movingx = ~~(x1 * 100) / 100;

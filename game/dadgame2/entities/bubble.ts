@@ -23,7 +23,7 @@ export class Bubble implements Updatable, Actable {
     else if (y > 0) {
       // player.entity.y -= 1;
       this.sitting = true;
-      this.entity.image = game1.sprites[21].image;
+      // this.entity.image = game1.sprites[21].image;
       return false;
     }
 
@@ -31,13 +31,13 @@ export class Bubble implements Updatable, Actable {
   }
 
   update(t: number) {
-    if (!this.sitting) {
-      this.entity.image = game1.sprites[5].image;
-    }
+    // if (!this.sitting) {
+    //   this.entity.image = game1.sprites[5].image;
+    // }
 
     this.entity.y -= this.sitting ? -0.25 : 0.25;
 
-    if (this.entity.y < 0) {
+    if (this.entity.y < -8) {
       this.destroy();
     }
 

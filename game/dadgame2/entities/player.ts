@@ -15,7 +15,7 @@ export class Player implements Updatable {
 
   stoodFor = 0;
 
-  hasWand = true;
+  hasWand = false;
   bubble: Bubble | undefined;
 
   constructor(

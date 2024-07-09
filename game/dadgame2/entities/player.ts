@@ -13,13 +13,16 @@ export class Player implements Updatable {
   xvel = 0;
   yvel = 0;
 
+  standing = false;
+
   constructor(public entity: Entity) {
   }
 
   update(t: number) {
     this.move();
 
-    if (this.gamepad?.buttons[X].pressed) {
+    if (this.gamepad?.buttons[B].pressed && this.standing) {
+      this.yvel = -7;
     }
   }
 
@@ -66,6 +69,7 @@ export class Player implements Updatable {
 
     const yspeed = 0.5;
     const ymaxspeed = 7;
+    this.standing = false;
 
     this.yvel += yspeed;
     if (this.yvel > ymaxspeed) this.yvel = ymaxspeed;
@@ -78,17 +82,16 @@ export class Player implements Updatable {
         const touching = actables.filter(a => intersects(a.entity, this.entity));
         if (!touching.every(a => a.actOn(this, 0, dir))) {
           this.entity.y -= dir;
+
+          if (this.yvel > 0) {
+            this.standing = true;
+          }
+
           this.yvel = 0;
           break;
         }
       }
     }
-
-
-    // this.entity.y += this.yvel;
-    // if (!actables.filter(a => intersects(a.entity, this.entity)).every(a => a.actOn(this, 0, this.yvel))) {
-    //   this.entity.y -= this.yvel;
-    // }
   }
 
   rumble(sec: number, weak: number, strong: number) {

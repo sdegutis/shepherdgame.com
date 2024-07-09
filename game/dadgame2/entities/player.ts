@@ -17,7 +17,7 @@ export class Player implements Updatable, Actable {
 
   stoodFor = 0;
 
-  hasWand = true;
+  hasWand = false;
   bubble: Bubble | undefined;
 
   constructor(public entity: Entity) { }

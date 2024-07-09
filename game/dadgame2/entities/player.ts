@@ -1,8 +1,10 @@
 import { A, X } from "../lib/core.js";
 import { actables, drawables, players, Updatable, updatables } from "../lib/data.js";
 import { intersects } from "../lib/helpers.js";
+import { game1 } from "../main.js";
 import { Bubble } from "./bubble.js";
 import { Entity } from "./entity.js";
+
 
 export class Player implements Updatable {
 
@@ -15,13 +17,10 @@ export class Player implements Updatable {
 
   stoodFor = 0;
 
-  hasWand = false;
+  hasWand = true;
   bubble: Bubble | undefined;
 
-  constructor(
-    public entity: Entity,
-    private bubbleImage: OffscreenCanvas,
-  ) { }
+  constructor(public entity: Entity) { }
 
   update(t: number) {
     this.move();
@@ -43,7 +42,7 @@ export class Player implements Updatable {
 
     const x = this.entity.x + (8 * this.dir);
 
-    const entity = new Entity(x, this.entity.y, this.bubbleImage);
+    const entity = new Entity(x, this.entity.y, game1.sprites[5].image);
     const bubble = new Bubble(entity);
     drawables.push(entity);
     updatables.push(bubble);

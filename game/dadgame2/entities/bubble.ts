@@ -1,5 +1,6 @@
 import { Actable, actables, drawables, Updatable, updatables } from "../lib/data.js";
 import { removeFrom } from "../lib/helpers.js";
+import { game1 } from "../main.js";
 import { Entity } from "./entity.js";
 import { Player } from "./player.js";
 
@@ -10,8 +11,6 @@ export class Bubble implements Updatable, Actable {
   constructor(public entity: Entity) { }
 
   actOn(player: Player, x: number, y: number) {
-    // console.log(x, y)
-
     if (x) {
       this.entity.x += x;
       return true;
@@ -24,6 +23,7 @@ export class Bubble implements Updatable, Actable {
     else if (y > 0) {
       // player.entity.y -= 1;
       this.sitting = true;
+      this.entity.image = game1.sprites[21].image;
       return false;
     }
 
@@ -31,9 +31,13 @@ export class Bubble implements Updatable, Actable {
   }
 
   update(t: number) {
+    if (!this.sitting) {
+      this.entity.image = game1.sprites[5].image;
+    }
+
     this.entity.y -= this.sitting ? -0.25 : 0.25;
 
-    if (this.entity.y < 8) {
+    if (this.entity.y < 0) {
       this.destroy();
     }
 

@@ -7,6 +7,7 @@ import { Player } from "./player.js";
 export class Bubble implements Updatable, Actable {
 
   sitting = false;
+  unsat = 0;
 
   constructor(public entity: Entity) { }
 
@@ -23,7 +24,8 @@ export class Bubble implements Updatable, Actable {
     else if (y > 0) {
       // player.entity.y -= 1;
       this.sitting = true;
-      // this.entity.image = game1.sprites[21].image;
+      this.unsat = 1;
+      this.entity.image = game1.sprites[21].image;
       return false;
     }
 
@@ -31,9 +33,17 @@ export class Bubble implements Updatable, Actable {
   }
 
   update(t: number) {
-    // if (!this.sitting) {
-    //   this.entity.image = game1.sprites[5].image;
-    // }
+    if (!this.sitting) {
+      if (this.unsat) {
+        this.unsat++;
+        if (this.unsat === 3) {
+          this.entity.image = game1.sprites[5].image;
+        }
+        else if (this.unsat === 30) {
+          this.destroy();
+        }
+      }
+    }
 
     this.entity.y -= this.sitting ? -0.25 : 0.25;
 

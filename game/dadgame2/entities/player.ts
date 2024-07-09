@@ -8,6 +8,11 @@ export class Player implements Updatable {
   gamepadIndex = players.length;
   get gamepad() { return navigator.getGamepads()[this.gamepadIndex]; }
 
+  // x = 0;
+  // y = 0;
+  xvel = 0;
+  yvel = 0;
+
   constructor(public entity: Entity) {
   }
 
@@ -22,20 +27,49 @@ export class Player implements Updatable {
     if (!this.gamepad) return;
     const [x1, y1] = this.gamepad.axes;
 
-    const speed = this.gamepad.buttons[B].pressed ? 2 : 1;
+    const movingx = ~~(x1 * 100) / 100;
+    const movingy = ~~(y1 * 100) / 100;
 
-    const xAdd = x1 * speed;
-    const yAdd = y1 * speed;
+    const xspeed = 1;
+    const xmaxspeed = 2;
 
-    this.entity.x += xAdd;
-    if (!actables.filter(a => intersects(a.entity, this.entity)).every(a => a.actOn(this, xAdd, 0))) {
-      this.entity.x -= xAdd;
+    if (movingx) {
+      // accel
+      this.xvel += x1 * xspeed;
+      if (this.xvel > xmaxspeed) this.xvel = xmaxspeed;
+      if (this.xvel < -xmaxspeed) this.xvel = -xmaxspeed;
+    }
+    else {
+      // decel
+      if (this.xvel > 0) {
+        this.xvel -= xspeed;
+        if (this.xvel < 0) this.xvel = 0;
+      }
+      else if (this.xvel < 0) {
+        this.xvel += xspeed;
+        if (this.xvel > 0) this.xvel = 0;
+      }
     }
 
-    this.entity.y += yAdd;
-    if (!actables.filter(a => intersects(a.entity, this.entity)).every(a => a.actOn(this, 0, yAdd))) {
-      this.entity.y -= yAdd;
+    if (this.xvel) {
+      const dir = Math.sign(this.xvel);
+      const max = Math.abs(this.xvel);
+      for (let i = 0; i < max; i += 1) {
+        this.entity.x += dir;
+        const touching = actables.filter(a => intersects(a.entity, this.entity));
+        if (!touching.every(a => a.actOn(this, dir, 0))) {
+          this.entity.x -= dir;
+          this.xvel = 0;
+          break;
+        }
+      }
     }
+
+
+    // this.entity.y += this.yvel;
+    // if (!actables.filter(a => intersects(a.entity, this.entity)).every(a => a.actOn(this, 0, this.yvel))) {
+    //   this.entity.y -= this.yvel;
+    // }
   }
 
   rumble(sec: number, weak: number, strong: number) {

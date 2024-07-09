@@ -24,42 +24,61 @@ export class Player implements Updatable {
   }
 
   move() {
-    if (!this.gamepad) return;
-    const [x1, y1] = this.gamepad.axes;
+    if (this.gamepad) {
+      const [x1, y1] = this.gamepad.axes;
 
-    const movingx = ~~(x1 * 100) / 100;
-    const movingy = ~~(y1 * 100) / 100;
+      const movingx = ~~(x1 * 100) / 100;
+      const xspeed = 1;
+      const xmaxspeed = 2;
 
-    const xspeed = 1;
-    const xmaxspeed = 2;
-
-    if (movingx) {
-      // accel
-      this.xvel += x1 * xspeed;
-      if (this.xvel > xmaxspeed) this.xvel = xmaxspeed;
-      if (this.xvel < -xmaxspeed) this.xvel = -xmaxspeed;
-    }
-    else {
-      // decel
-      if (this.xvel > 0) {
-        this.xvel -= xspeed;
-        if (this.xvel < 0) this.xvel = 0;
+      if (movingx) {
+        // accel
+        this.xvel += x1 * xspeed;
+        if (this.xvel > xmaxspeed) this.xvel = xmaxspeed;
+        if (this.xvel < -xmaxspeed) this.xvel = -xmaxspeed;
       }
-      else if (this.xvel < 0) {
-        this.xvel += xspeed;
-        if (this.xvel > 0) this.xvel = 0;
+      else {
+        // decel
+        if (this.xvel > 0) {
+          this.xvel -= xspeed;
+          if (this.xvel < 0) this.xvel = 0;
+        }
+        else if (this.xvel < 0) {
+          this.xvel += xspeed;
+          if (this.xvel > 0) this.xvel = 0;
+        }
+      }
+
+      if (this.xvel) {
+        const dir = Math.sign(this.xvel);
+        const max = Math.abs(this.xvel);
+        for (let i = 0; i < max; i += 1) {
+          this.entity.x += dir;
+          const touching = actables.filter(a => intersects(a.entity, this.entity));
+          if (!touching.every(a => a.actOn(this, dir, 0))) {
+            this.entity.x -= dir;
+            this.xvel = 0;
+            break;
+          }
+        }
       }
     }
 
-    if (this.xvel) {
-      const dir = Math.sign(this.xvel);
-      const max = Math.abs(this.xvel);
+    const yspeed = 0.5;
+    const ymaxspeed = 7;
+
+    this.yvel += yspeed;
+    if (this.yvel > ymaxspeed) this.yvel = ymaxspeed;
+
+    if (this.yvel) {
+      const dir = Math.sign(this.yvel);
+      const max = Math.abs(this.yvel);
       for (let i = 0; i < max; i += 1) {
-        this.entity.x += dir;
+        this.entity.y += dir;
         const touching = actables.filter(a => intersects(a.entity, this.entity));
-        if (!touching.every(a => a.actOn(this, dir, 0))) {
-          this.entity.x -= dir;
-          this.xvel = 0;
+        if (!touching.every(a => a.actOn(this, 0, dir))) {
+          this.entity.y -= dir;
+          this.yvel = 0;
           break;
         }
       }

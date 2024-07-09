@@ -1,6 +1,7 @@
 import { B, X } from "../lib/core.js";
-import { actables, players, Updatable } from "../lib/data.js";
-import { intersects } from "../lib/helpers.js";
+import { actables, drawables, players, Updatable, updatables } from "../lib/data.js";
+import { intersects, removeFrom } from "../lib/helpers.js";
+import { Bubble } from "./bubble.js";
 import { Entity } from "./entity.js";
 
 export class Player implements Updatable {
@@ -13,10 +14,13 @@ export class Player implements Updatable {
 
   stoodFor = 0;
 
-  hasWand = false;
+  hasWand = true;
+  bubble: Bubble | undefined;
 
-  constructor(public entity: Entity) {
-  }
+  constructor(
+    public entity: Entity,
+    private bubbleImage: OffscreenCanvas,
+  ) { }
 
   update(t: number) {
     this.move();
@@ -25,6 +29,24 @@ export class Player implements Updatable {
       this.stoodFor = 0;
       this.yvel = -5.15;
     }
+
+    if (this.hasWand && this.gamepad?.buttons[X].pressed) {
+      this.blowBubble();
+    }
+  }
+
+  blowBubble() {
+    if (this.bubble) {
+      this.bubble.destroy();
+    }
+
+    const entity = new Entity(this.entity.x, this.entity.y, this.bubbleImage);
+    const bubble = new Bubble(entity);
+    drawables.push(entity);
+    updatables.push(bubble);
+    actables.push(bubble);
+
+    this.bubble = bubble;
   }
 
   move() {

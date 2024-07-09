@@ -14,12 +14,14 @@ const engine = runGameLoop();
 
 const game1 = await loadCleanP8('game/dadgame2/explore.p8');
 
+const BUBBLE = game1.sprites[5].image;
+
 function createEntity(tile: MapTile, x: number, y: number) {
   const entity = new Entity(x * 8, y * 8, tile.sprite.image);
   drawables.push(entity);
 
   if (tile.index >= 1 && tile.index <= 3) {
-    const player = new Player(entity);
+    const player = new Player(entity, BUBBLE);
 
     entity.layer = 2;
     players.push(player);

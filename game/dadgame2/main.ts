@@ -30,8 +30,8 @@ function createEntity(tile: MapTile, x: number, y: number) {
   }
 }
 
-for (let y = 0; y < 64; y++) {
-  for (let x = 0; x < 128; x++) {
+for (let y = 0; y < 22; y++) {
+  for (let x = 0; x < 40; x++) {
     const tile = game1.map[y][x];
     if (tile.index > 0) {
       createEntity(tile, x, y);

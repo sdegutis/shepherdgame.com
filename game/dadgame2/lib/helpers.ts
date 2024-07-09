@@ -1,7 +1,7 @@
-// export function removeFrom<T>(array: T[], item: T) {
-//   const index = array.indexOf(item);
-//   array.splice(index, 1);
-// }
+export function removeFrom<T>(array: T[], item: T) {
+  const index = array.indexOf(item);
+  array.splice(index, 1);
+}
 
 interface Entity {
   x: number;

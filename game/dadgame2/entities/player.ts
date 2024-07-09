@@ -13,6 +13,8 @@ export class Player implements Updatable {
 
   stoodFor = 0;
 
+  hasWand = false;
+
   constructor(public entity: Entity) {
   }
 

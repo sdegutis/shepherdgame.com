@@ -1,3 +1,4 @@
+import { BubbleWand } from "./entities/bubblewand.js";
 import { Entity } from "./entities/entity.js";
 import { Player } from "./entities/player.js";
 import { Wall } from "./entities/wall.js";
@@ -27,6 +28,12 @@ function createEntity(tile: MapTile, x: number, y: number) {
   else if (tile.sprite.flags.RED) {
     const wall = new Wall(entity);
     actables.push(wall);
+  }
+  else if (tile.sprite.flags.ORANGE) {
+    const wand = new BubbleWand(entity);
+    entity.layer = 2;
+    actables.push(wand);
+    updatables.push(wand);
   }
 
   return entity;

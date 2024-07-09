@@ -82,12 +82,23 @@ engine.update = (t) => {
 
   // ctx.translate(player.camera.mx, player.camera.my);
   for (const e of drawables) {
-    // if (player.entity.near(e)) {
+    let near = false;
+    for (let i = 0; i < players.length; i++) {
+      const player = players[i];
+      if (player.entity.near(e)) {
+        near = true;
+        break;
+      }
+    }
+
+    if (!near) {
+      ctx.save();
+      ctx.globalAlpha = 0.25;
+    }
     e.draw(ctx);
-    // }
-    // else {
-    //   ctx.fillRect(Math.round(e.x), Math.round(e.y), e.w, e.h);
-    // }
+    if (!near) {
+      ctx.restore();
+    }
   }
 
   // ctx.restore();

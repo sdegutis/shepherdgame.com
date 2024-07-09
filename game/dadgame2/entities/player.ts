@@ -24,9 +24,8 @@ export class Player implements Updatable, Actable {
 
   actOn(player: Player, x: number, y: number): boolean {
     if (this === player) return true;
-
+    if (x) return true;
     if (y < 0) return true;
-
     return false;
   }
 

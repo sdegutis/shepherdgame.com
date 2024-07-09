@@ -37,13 +37,13 @@ export class Bubble implements Updatable, Actable {
   }
 
   update(t: number) {
-    const durationMs = 1000;
-    const percent = ((t % durationMs) / durationMs);
-    const percentOfCircle = percent * Math.PI * 2;
-    const distance = 2;
-    this.entity.x = this.x + -Math.sin(percentOfCircle) * distance;
-
     if (!this.sitting) {
+      const durationMs = 1000;
+      const percent = ((t % durationMs) / durationMs);
+      const percentOfCircle = percent * Math.PI * 2;
+      const distance = 2;
+      this.entity.x = this.x + -Math.sin(percentOfCircle) * distance;
+
       if (this.unsat) {
         this.unsat++;
         if (this.unsat === 3) {

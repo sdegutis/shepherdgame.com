@@ -8,12 +8,10 @@ export class Player implements Updatable {
   gamepadIndex = players.length;
   get gamepad() { return navigator.getGamepads()[this.gamepadIndex]; }
 
-  // x = 0;
-  // y = 0;
   xvel = 0;
   yvel = 0;
 
-  standing = false;
+  stoodFor = 0;
 
   constructor(public entity: Entity) {
   }
@@ -21,8 +19,9 @@ export class Player implements Updatable {
   update(t: number) {
     this.move();
 
-    if (this.gamepad?.buttons[B].pressed && this.standing) {
-      this.yvel = -5;
+    if (this.gamepad?.buttons[B].pressed && this.stoodFor >= 5) {
+      this.stoodFor = 0;
+      this.yvel = -5.15;
     }
   }
 
@@ -69,7 +68,6 @@ export class Player implements Updatable {
 
     const yspeed = 0.5;
     const ymaxspeed = 7;
-    this.standing = false;
 
     this.yvel += yspeed;
     if (this.yvel > ymaxspeed) this.yvel = ymaxspeed;
@@ -77,6 +75,7 @@ export class Player implements Updatable {
     if (this.yvel) {
       const dir = Math.sign(this.yvel);
       const max = Math.abs(this.yvel);
+      let broke = false;
       for (let i = 0; i < max; i += 1) {
         this.entity.y += dir;
         const touching = actables.filter(a => intersects(a.entity, this.entity));
@@ -84,12 +83,16 @@ export class Player implements Updatable {
           this.entity.y -= dir;
 
           if (this.yvel > 0) {
-            this.standing = true;
+            this.stoodFor++;
           }
 
           this.yvel = 0;
+          broke = true;
           break;
         }
+      }
+      if (!broke && this.yvel > 0) {
+        this.stoodFor = 0;
       }
     }
   }

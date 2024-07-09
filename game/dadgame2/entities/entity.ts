@@ -16,7 +16,7 @@ export class Entity {
     // ctx.strokeStyle = '#f00a';
     // ctx.lineWidth = 1;
     // ctx.beginPath();
-    // ctx.rect(x + 0.5, y + 0.5, this.w - 1, this.h - 1);
+    // ctx.rect(x + 0.5, y + 0.5, 7, 7);
     // ctx.stroke();
   }
 

@@ -62,6 +62,15 @@ for (let y = 0; y < 21; y++) {
   }
 }
 
+for (let y = 0; y < 21; y++) {
+  for (let x = 0; x < 40; x++) {
+    const tile = game1.map[y + 42][x];
+    if (tile.index > 0) {
+      createEntity(tile, x, y).layer = -3;
+    }
+  }
+}
+
 drawables.sort((a, b) => {
   if (a.layer > b.layer) return 1;
   if (a.layer < b.layer) return -1;

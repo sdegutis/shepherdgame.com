@@ -46,19 +46,15 @@ export class Player implements Updatable {
     const xAdd = x1 * speed;
     const yAdd = y1 * speed;
 
-    let found;
-
     this.entity.x += xAdd;
-    found = actables.find(a => intersects(a.entity, this.entity));
-    if (found && !found.actOn(this, xAdd, 0)) {
+    if (!actables.filter(a => intersects(a.entity, this.entity)).every(a => a.actOn(this, xAdd, 0))) {
       this.entity.x -= xAdd;
     } else {
       this.camera.update();
     }
 
     this.entity.y += yAdd;
-    found = actables.find(a => intersects(a.entity, this.entity));
-    if (found && !found.actOn(this, 0, yAdd)) {
+    if (!actables.filter(a => intersects(a.entity, this.entity)).every(a => a.actOn(this, 0, yAdd))) {
       this.entity.y -= yAdd;
     } else {
       this.camera.update();

@@ -8,20 +8,7 @@ export class Player implements Updatable {
   gamepadIndex = players.length;
   get gamepad() { return navigator.getGamepads()[this.gamepadIndex]; }
 
-  keys = 0;
-  bombs = 0;
-
-  get isGreen() { return this.gamepadIndex === 0 }
-  get isPink() { return this.gamepadIndex === 2 }
-  get isPurple() { return this.gamepadIndex === 1 }
-
   constructor(public entity: Entity) {
-    entity.ox = 2;
-    entity.oy = 1;
-    entity.w = 4;
-    entity.h = 7;
-    entity.x += entity.ox;
-    entity.y += entity.oy;
   }
 
   update(t: number) {

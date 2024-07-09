@@ -1,8 +1,6 @@
 export class Entity {
 
   layer = 0;
-  ox = 0; oy = 0;
-  w = 8; h = 8;
 
   constructor(
     public x: number,
@@ -11,9 +9,9 @@ export class Entity {
   ) { }
 
   draw(ctx: CanvasRenderingContext2D) {
-    const x = Math.round(this.x);
-    const y = Math.round(this.y);
-    ctx.drawImage(this.image, x - this.ox, y - this.oy);
+    const x = this.x;
+    const y = this.y;
+    ctx.drawImage(this.image, x, y);
 
     // ctx.strokeStyle = '#f00a';
     // ctx.lineWidth = 1;
@@ -23,8 +21,8 @@ export class Entity {
   }
 
   near(entity: Entity) {
-    const dx = (this.x + this.w / 2) - (entity.x + entity.w / 2);
-    const dy = (this.y + this.h / 2) - (entity.y + entity.h / 2);
+    const dx = (this.x + 4) - (entity.x + 4);
+    const dy = (this.y + 4) - (entity.y + 4);
 
     const d = Math.sqrt(dx ** 2 + dy ** 2);
     return (d < 12);

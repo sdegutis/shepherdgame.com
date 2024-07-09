@@ -7,9 +7,9 @@ export function removeFrom<T>(array: T[], item: T) {
 
 export function intersects(a: Entity, b: Entity) {
   return (
-    a.x + a.w >= b.x &&
-    a.y + a.h >= b.y &&
-    a.x < b.x + b.w &&
-    a.y < b.y + b.h
+    a.x + 8 >= b.x &&
+    a.y + 8 >= b.y &&
+    a.x < b.x + 8 &&
+    a.y < b.y + 8
   );
 }

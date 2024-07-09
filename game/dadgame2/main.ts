@@ -24,7 +24,7 @@ function createEntity(tile: MapTile, x: number, y: number) {
     players.push(player);
     updatables.push(player);
   }
-  else if ([18].includes(tile.index)) {
+  else if (tile.sprite.flags.RED) {
     const wall = new Wall(entity);
     actables.push(wall);
   }

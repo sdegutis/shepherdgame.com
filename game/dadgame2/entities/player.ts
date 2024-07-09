@@ -22,7 +22,7 @@ export class Player implements Updatable {
     this.move();
 
     if (this.gamepad?.buttons[B].pressed && this.standing) {
-      this.yvel = -7;
+      this.yvel = -5;
     }
   }
 

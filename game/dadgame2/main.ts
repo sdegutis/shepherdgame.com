@@ -101,7 +101,7 @@ const logic: Logic = {
     entity.y += y;
 
     const touching = entities.filter(a => intersects(a, entity));
-    const canMove = touching.every(a => (!a.dead && a.actOn) ? a.actOn(entity, x, y) : true);
+    const canMove = touching.every(a => (!a.dead && a.actOn) ? a.actOn(entity, x, y) === 'pass' : true);
 
     if (!canMove) {
       entity.x -= x;

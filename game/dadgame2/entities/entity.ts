@@ -2,6 +2,8 @@ export interface Logic {
   tryMove(entity: Entity, x: number, y: number): boolean;
 }
 
+export type Interaction = 'stop' | 'pass';
+
 export class Entity {
 
   dead = false;
@@ -45,6 +47,6 @@ export class Entity {
 
   update?: (t: number, logic: Logic) => void;
 
-  actOn?: (player: Entity, x: number, y: number) => boolean;
+  actOn?: (player: Entity, x: number, y: number) => Interaction;
 
 }

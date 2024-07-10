@@ -1,4 +1,4 @@
-import { Entity } from "./entity.js";
+import { Entity, Interaction } from "./entity.js";
 
 export class Bubble extends Entity {
 
@@ -22,25 +22,25 @@ export class Bubble extends Entity {
     this.dead = false;
   }
 
-  override actOn = (player: Entity, x: number, y: number) => {
+  override actOn = (player: Entity, x: number, y: number): Interaction => {
     if (x) {
       this.x += x;
-      return true;
+      return 'pass';
     }
 
     if (y < 0) {
       this.y -= 1;
-      return true;
+      return 'pass';
     }
     else if (y > 0) {
       // player.y -= 1;
       this.sitting = true;
       this.unsat = 1;
       this.image = this.flatImage;
-      return false;
+      return 'stop';
     }
 
-    return true;
+    return 'pass';
   };
 
   override update = (t: number) => {

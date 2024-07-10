@@ -1,6 +1,6 @@
 import { A, LEFT, RIGHT, X } from "../lib/core.js";
 import { Bubble } from "./bubble.js";
-import { Entity, Logic } from "./entity.js";
+import { Entity, Interaction, Logic } from "./entity.js";
 
 const XVEL = 1;
 const XVELCAP = 2;
@@ -29,11 +29,11 @@ export class Player extends Entity {
     super(x, y, image);
   }
 
-  override actOn = (player: Entity, x: number, y: number): boolean => {
-    if (this === player) return true;
-    if (x) return true;
-    if (y < 0) return true;
-    return false;
+  override actOn = (player: Entity, x: number, y: number): Interaction => {
+    if (this === player) return 'pass';
+    if (x) return 'pass';
+    if (y < 0) return 'pass';
+    return 'stop';
   };
 
   override update = (t: number, logic: Logic) => {

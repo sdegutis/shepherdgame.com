@@ -29,8 +29,8 @@ export class BubbleWand extends Entity {
     const percent = ((t % durationMs) / durationMs);
     const percentOfCircle = percent * Math.PI * 2;
     const distance = 1.5;
-    this.y = Math.round(this.y1 + +Math.cos(percentOfCircle) * distance);
-    this.x = Math.round(this.x1 + -Math.sin(percentOfCircle) * distance);
+    this.y = this.y1 + +Math.cos(percentOfCircle) * distance;
+    this.x = this.x1 + -Math.sin(percentOfCircle) * distance;
   };
 
 }

@@ -5,14 +5,28 @@ export class Entity {
   dead = false;
   layer = 0;
 
+  public rx = 0;
+  public ry = 0;
+
+  private _x = 0;
+  public get x(): number { return this._x; }
+  public set x(v: number) { this._x = v; this.rx = Math.round(v); }
+
+  private _y = 0;
+  public get y(): number { return this._y; }
+  public set y(v: number) { this._y = v; this.ry = Math.round(v); }
+
   constructor(
-    public x: number,
-    public y: number,
+    x: number,
+    y: number,
     public image: OffscreenCanvas,
-  ) { }
+  ) {
+    this.x = x;
+    this.y = y;
+  }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.drawImage(this.image, this.x, this.y);
+    ctx.drawImage(this.image, this.rx, this.ry);
     // ctx.strokeStyle = '#f00a';
     // ctx.lineWidth = 1;
     // ctx.beginPath();

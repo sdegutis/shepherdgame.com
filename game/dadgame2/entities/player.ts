@@ -89,12 +89,13 @@ export class Player extends Entity {
       this.yvel = -5.15;
     }
 
-    if (this.hasWand && this.gamepad?.buttons[X].pressed) {
-      this.blowBubble(t);
-    }
+    this.maybeBlowBubble(t);
   };
 
-  blowBubble(t: number) {
+  maybeBlowBubble(t: number) {
+    if (!this.hasWand) return;
+    if (!this.gamepad?.buttons[X].pressed) return;
+
     if (t - this.wandLastUsed < 300) return;
     this.wandLastUsed = t;
 

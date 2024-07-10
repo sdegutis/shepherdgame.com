@@ -20,7 +20,7 @@ export class Player extends Entity {
   stoodFor = 0;
 
   hasWand = true;
-  wandLastUsed = 0;
+  wandPressed = 0;
 
   constructor(
     x: number,
@@ -94,12 +94,18 @@ export class Player extends Entity {
 
   maybeBlowBubble(t: number) {
     if (!this.hasWand) return;
-    if (!this.gamepad?.buttons[X].pressed) return;
 
-    if (t - this.wandLastUsed < 300) return;
-    this.wandLastUsed = t;
+    if (this.gamepad?.buttons[X].pressed) {
+      this.wandPressed++;
+    }
+    else {
+      this.wandPressed = 0;
+      return;
+    }
 
-    this.bubble.reset(this.x + (8 * this.dir), this.y);
+    if (this.wandPressed === 1) {
+      this.bubble.reset(this.x + (8 * this.dir), this.y);
+    }
   }
 
   move(logic: Logic) {

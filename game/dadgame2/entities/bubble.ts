@@ -53,7 +53,7 @@ export class Bubble extends Entity {
           this.image = game1.sprites[5].image;
         }
         else if (this.unsat === 30) {
-          this.destroy();
+          this.dead = true;
         }
       }
     }
@@ -61,14 +61,10 @@ export class Bubble extends Entity {
     this.y -= this.sitting ? -0.25 : 0.25;
 
     if (this.y < -8) {
-      this.destroy();
+      this.dead = true;
     }
 
     this.sitting = false;
   };
-
-  destroy() {
-    this.dead = true;
-  }
 
 }

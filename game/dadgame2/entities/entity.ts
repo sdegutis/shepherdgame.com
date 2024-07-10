@@ -35,7 +35,7 @@ export class Entity {
     // ctx.strokeStyle = '#f00a';
     // ctx.lineWidth = 1;
     // ctx.beginPath();
-    // ctx.rect(x + 0.5, y + 0.5, 7, 7);
+    // ctx.rect(this.x + 0.5, this.y + 0.5, 7, 7);
     // ctx.stroke();
   }
 

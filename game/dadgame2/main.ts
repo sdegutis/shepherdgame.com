@@ -14,6 +14,8 @@ const engine = runGameLoop();
 
 export const game1 = await loadCleanP8('game/dadgame2/explore.p8');
 
+let playerIndex = 0;
+
 function createEntity(tile: MapTile, x: number, y: number) {
   const px = x * 8;
   const py = y * 8;
@@ -22,7 +24,7 @@ function createEntity(tile: MapTile, x: number, y: number) {
   let entity;
 
   if (tile.index >= 1 && tile.index <= 3) {
-    entity = new Player(px, py, image);
+    entity = new Player(px, py, image, playerIndex++);
     entity.layer = 2;
     players.push(entity);
   }

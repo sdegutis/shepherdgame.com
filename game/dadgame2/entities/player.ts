@@ -1,5 +1,5 @@
 import { A, LEFT, RIGHT, X } from "../lib/core.js";
-import { entities, players } from "../lib/data.js";
+import { entities } from "../lib/data.js";
 import { game1 } from "../main.js";
 import { Bubble } from "./bubble.js";
 import { Entity } from "./entity.js";
@@ -16,7 +16,6 @@ function intersects(a: Entity, b: Entity) {
 
 export class Player extends Entity {
 
-  gamepadIndex = players.length;
   get gamepad() { return navigator.getGamepads()[this.gamepadIndex]; }
 
   xvel = 0;
@@ -32,6 +31,7 @@ export class Player extends Entity {
     x: number,
     y: number,
     image: OffscreenCanvas,
+    public gamepadIndex: number,
   ) {
     super(x, y, image);
 

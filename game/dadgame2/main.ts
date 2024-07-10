@@ -96,16 +96,22 @@ function intersects(a: Entity, b: Entity) {
 }
 
 const logic: Logic = {
-  tryMove: (entity, x, y) => {
-    entity.x += x;
-    entity.y += y;
+  tryMove: (movingEntity, x, y) => {
+    movingEntity.x += x;
+    movingEntity.y += y;
 
-    const touching = entities.filter(a => intersects(a, entity));
-    const canMove = touching.every(a => (!a.dead && a.actOn) ? a.actOn(entity, x, y) === 'pass' : true);
+    const touching = entities.filter(a => intersects(a, movingEntity));
+    const canMove = touching.every(collidedInto => {
+      if (!collidedInto.dead) return true;
+      if (!collidedInto.actOn) return true;
+
+      const result = collidedInto.actOn(movingEntity, x, y);
+      return result === 'pass';
+    });
 
     if (!canMove) {
-      entity.x -= x;
-      entity.y -= y;
+      movingEntity.x -= x;
+      movingEntity.y -= y;
     }
 
     return canMove;

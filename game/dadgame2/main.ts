@@ -4,7 +4,7 @@ import { Entity } from "./entities/entity.js";
 import { Player } from "./entities/player.js";
 import { Wall } from "./entities/wall.js";
 import { createCanvas, runGameLoop } from "./lib/core.js";
-import { entities, players } from "./lib/data.js";
+import { entities } from "./lib/data.js";
 import { loadCleanP8, MapTile } from "./lib/pico8.js";
 
 const WIDTH = 320;
@@ -15,6 +15,7 @@ const engine = runGameLoop();
 
 const game1 = await loadCleanP8('game/dadgame2/explore.p8');
 
+const players: Player[] = [];
 let playerIndex = 0;
 
 function createEntity(tile: MapTile, x: number, y: number) {

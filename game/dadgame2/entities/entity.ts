@@ -47,6 +47,6 @@ export class Entity {
 
   update?: (t: number, logic: Logic) => void;
 
-  collideWith?: (player: Entity, x: number, y: number) => Interaction;
+  collideWith?: (other: Entity, x: number, y: number) => Interaction;
 
 }

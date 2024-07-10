@@ -1,4 +1,5 @@
-import { Entity } from "./entity.js";
+import { Entity, Interaction, Logic } from "./entity.js";
+import { Wall } from "./wall.js";
 
 export class Bubble extends Entity {
 
@@ -23,54 +24,49 @@ export class Bubble extends Entity {
     this.x = x;
     this.y = y;
 
+    this.image = this.openImage;
     this.aliveFor = 0;
     this.unsat = 0;
     this.sitting = false;
   }
 
-  // override collideWith = (player: Entity, x: number, y: number): Interaction => {
-  //   if (x) {
-  //     this.x += x;
-  //     return 'pass';
-  //   }
-
-  //   if (y < 0) {
-  //     this.y -= 1;
-  //     return 'pass';
-  //   }
-  //   else if (y > 0) {
-  //     // player.y -= 1;
-  //     this.sitting = true;
-  //     this.unsat = 1;
-  //     this.image = this.flatImage;
-  //     return 'stop';
-  //   }
-
-  //   return 'pass';
-  // };
-
-  override update = (t: number) => {
-    this.aliveFor++;
-
-    if (!this.sitting) {
-      const durationMs = 1000;
-      const percent = ((t % durationMs) / durationMs);
-      const percentOfCircle = percent * Math.PI * 2;
-      const distance = .5;
-      this.x = this.x + -Math.sin(percentOfCircle) * distance;
-
-      if (this.unsat) {
-        this.unsat++;
-        if (this.unsat === 3) {
-          this.image = this.openImage;
-        }
-        else if (this.unsat === 30) {
-          this.dead = true;
-        }
-      }
+  override collideWith = (other: Entity, x: number, y: number): Interaction => {
+    if (other instanceof Wall && !other.jumpThrough) {
+      this.dead = true;
+      return 'stop';
     }
 
-    this.y -= this.sitting ? -0.25 : 0.25;
+    return 'pass';
+  };
+
+  override update = (t: number, logic: Logic) => {
+    this.aliveFor++;
+
+    // if (!this.sitting) {
+    //   const durationMs = 1000;
+    //   const percent = ((t % durationMs) / durationMs);
+    //   const percentOfCircle = percent * Math.PI * 2;
+    //   const distance = .5;
+
+    //   const toMoveX = this.x + -Math.sin(percentOfCircle) * distance;
+    //   console.log(toMoveX)
+
+    //   for (let i = 0; i < Math.abs(toMoveX); i++) {
+    //     logic.tryMove(this, Math.sign(toMoveX), 0);
+    //   }
+
+    //   if (this.unsat) {
+    //     this.unsat++;
+    //     if (this.unsat === 3) {
+    //       this.image = this.openImage;
+    //     }
+    //     else if (this.unsat === 30) {
+    //       this.dead = true;
+    //     }
+    //   }
+    // }
+
+    logic.tryMove(this, 0, this.sitting ? 0.25 : -0.25);
 
     if (this.y < -8) {
       this.dead = true;

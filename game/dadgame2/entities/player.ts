@@ -60,6 +60,11 @@ export class Player extends Entity {
   }
 
   move() {
+    this.tryMoveX();
+    this.tryMoveY();
+  }
+
+  tryMoveX() {
     let x1 = 0;
     if (this.gamepad) {
       if (this.gamepad.buttons[LEFT].pressed) { x1 = -1; }
@@ -103,7 +108,9 @@ export class Player extends Entity {
         }
       }
     }
+  }
 
+  tryMoveY() {
     const yspeed = 0.5;
     const ymaxspeed = 7;
 

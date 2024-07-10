@@ -7,15 +7,12 @@ export class Bubble extends Entity {
   sitting = false;
   unsat = 0;
 
-  x1 = 0;
   override dead = true;
 
   reset(x: number, y: number) {
     this.x = x;
     this.y = y;
     this.dead = false;
-
-    this.x1 = x;
   }
 
   override actOn = (player: Player, x: number, y: number) => {
@@ -44,8 +41,8 @@ export class Bubble extends Entity {
       const durationMs = 1000;
       const percent = ((t % durationMs) / durationMs);
       const percentOfCircle = percent * Math.PI * 2;
-      const distance = 2;
-      this.x = this.x1 + -Math.sin(percentOfCircle) * distance;
+      const distance = .5;
+      this.x = this.x + -Math.sin(percentOfCircle) * distance;
 
       if (this.unsat) {
         this.unsat++;

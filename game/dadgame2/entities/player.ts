@@ -2,6 +2,7 @@ import { A, LEFT, RIGHT, X } from "../lib/core.js";
 import { Bubble } from "./bubble.js";
 import { BubbleWand } from "./bubblewand.js";
 import { Entity, Interaction, Logic } from "./entity.js";
+import { Marker } from "./marker.js";
 import { Wall } from "./wall.js";
 
 const XVEL = 1;
@@ -19,8 +20,10 @@ export class Player extends Entity {
 
   stoodFor = 0;
 
-  hasWand = true;
+  hasWand = false;
   wandPressed = 0;
+
+  hasMarker = false;
 
   constructor(
     x: number,
@@ -41,6 +44,13 @@ export class Player extends Entity {
     if (other instanceof BubbleWand) {
       if (this.hasWand) return 'pass';
       this.hasWand = true;
+      other.dead = true;
+      return 'pass';
+    }
+
+    if (other instanceof Marker) {
+      if (this.hasMarker) return 'pass';
+      this.hasMarker = true;
       other.dead = true;
       return 'pass';
     }

@@ -64,10 +64,6 @@ export class Bubble extends Entity {
 
     logic.tryMove(this, 0, this.sitting ? 0.25 : -0.25);
 
-    if (this.y < -8) {
-      this.dead = true;
-    }
-
     this.sitting = false;
   };
 

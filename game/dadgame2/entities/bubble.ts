@@ -31,7 +31,7 @@ export class Bubble extends Entity {
   }
 
   override collideWith = (other: Entity, x: number, y: number): Interaction => {
-    if (y < 0 && other instanceof Wall && !other.jumpThrough) {
+    if (y !== 0 && other instanceof Wall && !other.jumpThrough) {
       this.dead = true;
       return 'stop';
     }

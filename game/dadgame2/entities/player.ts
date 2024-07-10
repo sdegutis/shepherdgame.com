@@ -3,6 +3,11 @@ import { entities } from "../lib/data.js";
 import { Bubble } from "./bubble.js";
 import { Entity } from "./entity.js";
 
+const XVEL = 1;
+const XVELCAP = 2;
+const YVEL = 0.5;
+const YVELCAP = 7;
+
 
 function intersects(a: Entity, b: Entity) {
   return (
@@ -73,24 +78,22 @@ export class Player extends Entity {
     }
 
     const movingx = ~~(x1 * 100) / 100;
-    const xspeed = 1;
-    const xmaxspeed = 2;
 
     if (movingx) {
       // accel
       this.dir = Math.sign(movingx);
-      this.xvel += x1 * xspeed;
-      if (this.xvel > xmaxspeed) this.xvel = xmaxspeed;
-      if (this.xvel < -xmaxspeed) this.xvel = -xmaxspeed;
+      this.xvel += x1 * XVEL;
+      if (this.xvel > XVELCAP) this.xvel = XVELCAP;
+      if (this.xvel < -XVELCAP) this.xvel = -XVELCAP;
     }
     else {
       // decel
       if (this.xvel > 0) {
-        this.xvel -= xspeed;
+        this.xvel -= XVEL;
         if (this.xvel < 0) this.xvel = 0;
       }
       else if (this.xvel < 0) {
-        this.xvel += xspeed;
+        this.xvel += XVEL;
         if (this.xvel > 0) this.xvel = 0;
       }
     }
@@ -111,11 +114,8 @@ export class Player extends Entity {
   }
 
   tryMoveY() {
-    const yspeed = 0.5;
-    const ymaxspeed = 7;
-
-    this.yvel += yspeed;
-    if (this.yvel > ymaxspeed) this.yvel = ymaxspeed;
+    this.yvel += YVEL;
+    if (this.yvel > YVELCAP) this.yvel = YVELCAP;
 
     if (this.yvel) {
       const dir = Math.sign(this.yvel);

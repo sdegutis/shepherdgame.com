@@ -34,8 +34,7 @@ export class Player extends Entity {
 
   override collideWith = (other: Entity, x: number, y: number): Interaction => {
     if (other instanceof Player) {
-      if (x) return 'pass';
-      if (y < 0) return 'pass';
+      if (x || y < 0 || this.y > other.y - 7) return 'pass';
       return 'stop';
     }
 

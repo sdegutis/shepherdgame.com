@@ -15,7 +15,7 @@ export class BubbleWand extends Entity {
     this.y1 = y;
   }
 
-  override actOn = (player: Entity): Interaction => {
+  override collideWith = (player: Entity): Interaction => {
     if (!(player instanceof Player)) return 'pass';
     if (player.hasWand) return 'pass';
 

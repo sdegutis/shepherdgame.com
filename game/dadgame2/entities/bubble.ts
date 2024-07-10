@@ -22,7 +22,7 @@ export class Bubble extends Entity {
     this.dead = false;
   }
 
-  override actOn = (player: Entity, x: number, y: number): Interaction => {
+  override collideWith = (player: Entity, x: number, y: number): Interaction => {
     if (x) {
       this.x += x;
       return 'pass';

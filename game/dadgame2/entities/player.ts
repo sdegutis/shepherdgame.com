@@ -29,7 +29,7 @@ export class Player extends Entity {
     super(x, y, image);
   }
 
-  override actOn = (player: Entity, x: number, y: number): Interaction => {
+  override collideWith = (player: Entity, x: number, y: number): Interaction => {
     if (this === player) return 'pass';
     if (x) return 'pass';
     if (y < 0) return 'pass';

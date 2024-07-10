@@ -1,6 +1,5 @@
 import { A, LEFT, RIGHT, X } from "../lib/core.js";
 import { entities } from "../lib/data.js";
-import { game1 } from "../main.js";
 import { Bubble } from "./bubble.js";
 import { Entity } from "./entity.js";
 
@@ -25,18 +24,15 @@ export class Player extends Entity {
   stoodFor = 0;
 
   hasWand = true;
-  bubble;
 
   constructor(
     x: number,
     y: number,
     image: OffscreenCanvas,
     public gamepadIndex: number,
+    public bubble: Bubble,
   ) {
     super(x, y, image);
-
-    this.bubble = new Bubble(x, this.y, game1.sprites[5].image);
-    entities.push(this.bubble);
   }
 
   override actOn = (player: Player, x: number, y: number): boolean => {

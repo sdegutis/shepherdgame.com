@@ -1,3 +1,4 @@
+import { Bubble } from "./entities/bubble.js";
 import { BubbleWand } from "./entities/bubblewand.js";
 import { Entity } from "./entities/entity.js";
 import { Player } from "./entities/player.js";
@@ -24,7 +25,10 @@ function createEntity(tile: MapTile, x: number, y: number) {
   let entity;
 
   if (tile.index >= 1 && tile.index <= 3) {
-    entity = new Player(px, py, image, playerIndex++);
+    const bubble = new Bubble(0, 0, game1.sprites[5].image);
+    entities.push(bubble);
+
+    entity = new Player(px, py, image, playerIndex++, bubble);
     entity.layer = 2;
     players.push(entity);
   }

@@ -1,5 +1,3 @@
-import { entities } from "../lib/data.js";
-import { removeFrom } from "../lib/helpers.js";
 import { game1 } from "../main.js";
 import { Entity } from "./entity.js";
 import { Player } from "./player.js";
@@ -9,14 +7,14 @@ export class Bubble extends Entity {
   sitting = false;
   unsat = 0;
 
-  x1;
+  x1 = 0;
+  override dead = true;
 
-  constructor(
-    x: number,
-    y: number,
-    image: OffscreenCanvas,
-  ) {
-    super(x, y, image);
+  reset(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+    this.dead = false;
+
     this.x1 = x;
   }
 
@@ -70,7 +68,7 @@ export class Bubble extends Entity {
   };
 
   destroy() {
-    removeFrom(entities, this);
+    this.dead = true;
   }
 
 }

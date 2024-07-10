@@ -26,7 +26,18 @@ export class Player extends Entity {
   stoodFor = 0;
 
   hasWand = false;
-  bubble: Bubble | undefined;
+  bubble;
+
+  constructor(
+    x: number,
+    y: number,
+    image: OffscreenCanvas,
+  ) {
+    super(x, y, image);
+
+    this.bubble = new Bubble(x, this.y, game1.sprites[5].image);
+    entities.push(this.bubble);
+  }
 
   override actOn = (player: Player, x: number, y: number): boolean => {
     if (this === player) return true;
@@ -49,16 +60,7 @@ export class Player extends Entity {
   };
 
   blowBubble() {
-    if (this.bubble) {
-      this.bubble.destroy();
-    }
-
-    const x = this.x + (8 * this.dir);
-
-    const entity = new Bubble(x, this.y, game1.sprites[5].image);
-    entities.push(entity);
-
-    this.bubble = entity;
+    this.bubble.reset(this.x + (8 * this.dir), this.y);
   }
 
   move() {

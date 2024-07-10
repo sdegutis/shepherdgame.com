@@ -1,4 +1,4 @@
-import { Entity, Interaction } from "./entity.js";
+import { Entity } from "./entity.js";
 
 export class Bubble extends Entity {
 
@@ -11,7 +11,7 @@ export class Bubble extends Entity {
     x: number,
     y: number,
     private openImage: OffscreenCanvas,
-    private flatImage: OffscreenCanvas,
+    public flatImage: OffscreenCanvas,
   ) {
     super(x, y, openImage);
   }
@@ -22,26 +22,26 @@ export class Bubble extends Entity {
     this.dead = false;
   }
 
-  override collideWith = (player: Entity, x: number, y: number): Interaction => {
-    if (x) {
-      this.x += x;
-      return 'pass';
-    }
+  // override collideWith = (player: Entity, x: number, y: number): Interaction => {
+  //   if (x) {
+  //     this.x += x;
+  //     return 'pass';
+  //   }
 
-    if (y < 0) {
-      this.y -= 1;
-      return 'pass';
-    }
-    else if (y > 0) {
-      // player.y -= 1;
-      this.sitting = true;
-      this.unsat = 1;
-      this.image = this.flatImage;
-      return 'stop';
-    }
+  //   if (y < 0) {
+  //     this.y -= 1;
+  //     return 'pass';
+  //   }
+  //   else if (y > 0) {
+  //     // player.y -= 1;
+  //     this.sitting = true;
+  //     this.unsat = 1;
+  //     this.image = this.flatImage;
+  //     return 'stop';
+  //   }
 
-    return 'pass';
-  };
+  //   return 'pass';
+  // };
 
   override update = (t: number) => {
     if (!this.sitting) {

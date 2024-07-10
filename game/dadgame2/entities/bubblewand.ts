@@ -1,5 +1,4 @@
-import { Entity, Interaction } from "./entity.js";
-import { Player } from "./player.js";
+import { Entity } from "./entity.js";
 
 export class BubbleWand extends Entity {
 
@@ -14,16 +13,6 @@ export class BubbleWand extends Entity {
     this.x1 = x;
     this.y1 = y;
   }
-
-  override collideWith = (player: Entity): Interaction => {
-    if (!(player instanceof Player)) return 'pass';
-    if (player.hasWand) return 'pass';
-
-    player.hasWand = true;
-    this.dead = true;
-    // player.rumble(.3, 1, 1);
-    return 'pass';
-  };
 
   override update = (t: number) => {
     const durationMs = 1000;

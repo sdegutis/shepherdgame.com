@@ -1,6 +1,8 @@
 import { A, LEFT, RIGHT, X } from "../lib/core.js";
 import { Bubble } from "./bubble.js";
+import { BubbleWand } from "./bubblewand.js";
 import { Entity, Interaction, Logic } from "./entity.js";
+import { Wall } from "./wall.js";
 
 const XVEL = 1;
 const XVELCAP = 2;
@@ -17,7 +19,7 @@ export class Player extends Entity {
 
   stoodFor = 0;
 
-  hasWand = true;
+  hasWand = false;
 
   constructor(
     x: number,
@@ -30,9 +32,47 @@ export class Player extends Entity {
   }
 
   override collideWith = (other: Entity, x: number, y: number): Interaction => {
-    if (x) return 'pass';
-    if (y < 0) return 'pass';
-    return 'stop';
+    if (other instanceof Player) {
+      if (x) return 'pass';
+      if (y < 0) return 'pass';
+      return 'stop';
+    }
+
+    if (other instanceof BubbleWand) {
+      if (this.hasWand) return 'pass';
+      this.hasWand = true;
+      other.dead = true;
+      return 'pass';
+    }
+
+    if (other instanceof Wall) {
+      if (!other.jumpThrough) return 'stop';
+      if (y <= 0) return 'pass';
+      return (other.y === this.y + 7) ? 'stop' : 'pass';
+    }
+
+    if (other instanceof Bubble) {
+      if (x) {
+        other.x += x;
+        return 'pass';
+      }
+
+      if (y < 0) {
+        other.y -= 1;
+        return 'pass';
+      }
+      else if (y > 0) {
+        // player.y -= 1;
+        other.sitting = true;
+        other.unsat = 1;
+        other.image = other.flatImage;
+        return 'stop';
+      }
+
+      return 'pass';
+    }
+
+    return 'pass';
   };
 
   override update = (t: number, logic: Logic) => {

@@ -102,10 +102,11 @@ const logic: Logic = {
 
     const touching = entities.filter(a => intersects(a, movingEntity));
     const canMove = touching.every(collidedInto => {
+      if (collidedInto === movingEntity) return true;
       if (!collidedInto.dead) return true;
-      if (!collidedInto.collideWith) return true;
+      if (!movingEntity.collideWith) return true;
 
-      const result = collidedInto.collideWith(movingEntity, x, y);
+      const result = movingEntity.collideWith(collidedInto, x, y);
       return result === 'pass';
     });
 

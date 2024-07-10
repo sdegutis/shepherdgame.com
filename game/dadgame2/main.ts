@@ -3,7 +3,7 @@ import { Entity } from "./entities/entity.js";
 import { Player } from "./entities/player.js";
 import { Wall } from "./entities/wall.js";
 import { createCanvas, runGameLoop } from "./lib/core.js";
-import { actables, drawables, players, updatables } from "./lib/data.js";
+import { entities, players } from "./lib/data.js";
 import { loadCleanP8, MapTile } from "./lib/pico8.js";
 
 const WIDTH = 320;
@@ -15,30 +15,35 @@ const engine = runGameLoop();
 export const game1 = await loadCleanP8('game/dadgame2/explore.p8');
 
 function createEntity(tile: MapTile, x: number, y: number) {
-  const entity = new Entity(x * 8, y * 8, tile.sprite.image);
-  drawables.push(entity);
+  const px = x * 8;
+  const py = y * 8;
+  const image = tile.sprite.image;
+
+  let entity;
 
   if (tile.index >= 1 && tile.index <= 3) {
-    const player = new Player(entity);
-
+    entity = new Player(px, py, image);
     entity.layer = 2;
-    players.push(player);
-    updatables.push(player);
-    actables.push(player);
+    players.push(entity);
+    entities.push(entity);
   }
   else if (tile.sprite.flags.RED) {
-    const wall = new Wall(entity);
-    actables.push(wall);
+    entity = new Wall(px, py, image);
+    entities.push(entity);
   }
   else if (tile.sprite.flags.ORANGE) {
-    const wall = new Wall(entity, true);
-    actables.push(wall);
+    entity = new Wall(px, py, image);
+    entity.jumpThrough = true;
+    entities.push(entity);
   }
   else if (tile.index === 4) {
-    const wand = new BubbleWand(entity);
+    entity = new BubbleWand(px, py, image);
     entity.layer = 2;
-    actables.push(wand);
-    updatables.push(wand);
+    entities.push(entity);
+  }
+  else {
+    entity = new Entity(px, py, image);
+    entities.push(entity);
   }
 
   return entity;
@@ -71,24 +76,24 @@ for (let y = 0; y < 21; y++) {
   }
 }
 
-drawables.sort((a, b) => {
+entities.sort((a, b) => {
   if (a.layer > b.layer) return 1;
   if (a.layer < b.layer) return -1;
   return 0;
 });
 
 engine.update = (t) => {
-  for (const e of updatables) {
-    e.update(t);
+  for (const e of entities) {
+    e.update?.(t);
   }
 
   ctx.reset();
 
-  for (const e of drawables) {
+  for (const e of entities) {
     let near = false;
     for (let i = 0; i < players.length; i++) {
       const player = players[i];
-      if (player.entity.near(e)) {
+      if (player.near(e)) {
         near = true;
         break;
       }

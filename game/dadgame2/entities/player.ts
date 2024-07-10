@@ -1,12 +1,12 @@
 import { A, LEFT, RIGHT, X } from "../lib/core.js";
-import { Actable, actables, drawables, players, Updatable, updatables } from "../lib/data.js";
+import { entities, players } from "../lib/data.js";
 import { intersects } from "../lib/helpers.js";
 import { game1 } from "../main.js";
 import { Bubble } from "./bubble.js";
 import { Entity } from "./entity.js";
 
 
-export class Player implements Updatable, Actable {
+export class Player extends Entity {
 
   gamepadIndex = players.length;
   get gamepad() { return navigator.getGamepads()[this.gamepadIndex]; }
@@ -20,16 +20,14 @@ export class Player implements Updatable, Actable {
   hasWand = true;
   bubble: Bubble | undefined;
 
-  constructor(public entity: Entity) { }
-
-  actOn(player: Player, x: number, y: number): boolean {
+  override actOn = (player: Player, x: number, y: number): boolean => {
     if (this === player) return true;
     if (x) return true;
     if (y < 0) return true;
     return false;
-  }
+  };
 
-  update(t: number) {
+  override update = (t: number) => {
     this.move();
 
     if (this.gamepad?.buttons[A].pressed && this.stoodFor >= 1) {
@@ -40,22 +38,19 @@ export class Player implements Updatable, Actable {
     if (this.hasWand && this.gamepad?.buttons[X].pressed) {
       this.blowBubble();
     }
-  }
+  };
 
   blowBubble() {
     if (this.bubble) {
       this.bubble.destroy();
     }
 
-    const x = this.entity.x + (8 * this.dir);
+    const x = this.x + (8 * this.dir);
 
-    const entity = new Entity(x, this.entity.y, game1.sprites[5].image);
-    const bubble = new Bubble(entity);
-    drawables.push(entity);
-    updatables.push(bubble);
-    actables.push(bubble);
+    const entity = new Bubble(x, this.y, game1.sprites[5].image);
+    entities.push(entity);
 
-    this.bubble = bubble;
+    this.bubble = entity;
   }
 
   move() {
@@ -93,10 +88,10 @@ export class Player implements Updatable, Actable {
       const dir = Math.sign(this.xvel);
       const max = Math.abs(this.xvel);
       for (let i = 0; i < max; i += 1) {
-        this.entity.x += dir;
-        const touching = actables.filter(a => intersects(a.entity, this.entity));
-        if (!touching.every(a => a.actOn(this, dir, 0))) {
-          this.entity.x -= dir;
+        this.x += dir;
+        const touching = entities.filter(a => intersects(a, this));
+        if (!touching.every(a => a.actOn ? a.actOn(this, dir, 0) : true)) {
+          this.x -= dir;
           this.xvel = 0;
           break;
         }
@@ -114,10 +109,10 @@ export class Player implements Updatable, Actable {
       const max = Math.abs(this.yvel);
       let broke = false;
       for (let i = 0; i < max; i += 1) {
-        this.entity.y += dir;
-        const touching = actables.filter(a => intersects(a.entity, this.entity));
-        if (!touching.every(a => a.actOn(this, 0, dir))) {
-          this.entity.y -= dir;
+        this.y += dir;
+        const touching = entities.filter(a => intersects(a, this));
+        if (!touching.every(a => a.actOn ? a.actOn(this, 0, dir) : true)) {
+          this.y -= dir;
 
           if (this.yvel > 0) {
             this.stoodFor++;

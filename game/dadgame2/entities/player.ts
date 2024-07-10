@@ -20,6 +20,7 @@ export class Player extends Entity {
   stoodFor = 0;
 
   hasWand = true;
+  wandLastUsed = 0;
 
   constructor(
     x: number,
@@ -86,11 +87,14 @@ export class Player extends Entity {
     }
 
     if (this.hasWand && this.gamepad?.buttons[X].pressed) {
-      this.blowBubble();
+      this.blowBubble(t);
     }
   };
 
-  blowBubble() {
+  blowBubble(t: number) {
+    if (t - this.wandLastUsed < 300) return;
+    this.wandLastUsed = t;
+
     this.bubble.reset(this.x + (8 * this.dir), this.y);
   }
 

@@ -13,7 +13,7 @@ const HEIGHT = 180;
 const ctx = createCanvas(WIDTH, HEIGHT, 5);
 const engine = runGameLoop();
 
-export const game1 = await loadCleanP8('game/dadgame2/explore.p8');
+const game1 = await loadCleanP8('game/dadgame2/explore.p8');
 
 let playerIndex = 0;
 
@@ -25,7 +25,7 @@ function createEntity(tile: MapTile, x: number, y: number) {
   let entity;
 
   if (tile.index >= 1 && tile.index <= 3) {
-    const bubble = new Bubble(0, 0, game1.sprites[5].image);
+    const bubble = new Bubble(0, 0, game1.sprites[5].image, game1.sprites[21].image);
     entities.push(bubble);
 
     entity = new Player(px, py, image, playerIndex++, bubble);

@@ -1,4 +1,3 @@
-import { game1 } from "../main.js";
 import { Entity } from "./entity.js";
 import { Player } from "./player.js";
 
@@ -8,6 +7,15 @@ export class Bubble extends Entity {
   unsat = 0;
 
   override dead = true;
+
+  constructor(
+    x: number,
+    y: number,
+    private openImage: OffscreenCanvas,
+    private flatImage: OffscreenCanvas,
+  ) {
+    super(x, y, openImage);
+  }
 
   reset(x: number, y: number) {
     this.x = x;
@@ -29,7 +37,7 @@ export class Bubble extends Entity {
       // player.y -= 1;
       this.sitting = true;
       this.unsat = 1;
-      this.image = game1.sprites[21].image;
+      this.image = this.flatImage;
       return false;
     }
 
@@ -47,7 +55,7 @@ export class Bubble extends Entity {
       if (this.unsat) {
         this.unsat++;
         if (this.unsat === 3) {
-          this.image = game1.sprites[5].image;
+          this.image = this.openImage;
         }
         else if (this.unsat === 30) {
           this.dead = true;

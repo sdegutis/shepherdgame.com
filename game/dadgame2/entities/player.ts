@@ -1,22 +1,11 @@
 import { A, LEFT, RIGHT, X } from "../lib/core.js";
-import { entities } from "../lib/data.js";
 import { Bubble } from "./bubble.js";
-import { Entity } from "./entity.js";
+import { Entity, Logic } from "./entity.js";
 
 const XVEL = 1;
 const XVELCAP = 2;
 const YVEL = 0.5;
 const YVELCAP = 7;
-
-
-function intersects(a: Entity, b: Entity) {
-  return (
-    a.x + 7 >= b.x &&
-    a.y + 7 >= b.y &&
-    a.x <= b.x + 7 &&
-    a.y <= b.y + 7
-  );
-}
 
 export class Player extends Entity {
 
@@ -40,15 +29,15 @@ export class Player extends Entity {
     super(x, y, image);
   }
 
-  override actOn = (player: Player, x: number, y: number): boolean => {
+  override actOn = (player: Entity, x: number, y: number): boolean => {
     if (this === player) return true;
     if (x) return true;
     if (y < 0) return true;
     return false;
   };
 
-  override update = (t: number) => {
-    this.move();
+  override update = (t: number, logic: Logic) => {
+    this.move(logic);
 
     if (this.gamepad?.buttons[A].pressed && this.stoodFor >= 1) {
       this.stoodFor = 0;
@@ -64,12 +53,12 @@ export class Player extends Entity {
     this.bubble.reset(this.x + (8 * this.dir), this.y);
   }
 
-  move() {
-    this.tryMoveX();
-    this.tryMoveY();
+  move(logic: Logic) {
+    this.tryMoveX(logic);
+    this.tryMoveY(logic);
   }
 
-  tryMoveX() {
+  tryMoveX(logic: Logic) {
     let x1 = 0;
     if (this.gamepad) {
       if (this.gamepad.buttons[LEFT].pressed) { x1 = -1; }
@@ -102,10 +91,7 @@ export class Player extends Entity {
       const dir = Math.sign(this.xvel);
       const max = Math.abs(this.xvel);
       for (let i = 0; i < max; i += 1) {
-        this.x += dir;
-        const touching = entities.filter(a => intersects(a, this));
-        if (!touching.every(a => (!a.dead && a.actOn) ? a.actOn(this, dir, 0) : true)) {
-          this.x -= dir;
+        if (!logic.tryMove(this, dir, 0)) {
           this.xvel = 0;
           break;
         }
@@ -113,7 +99,7 @@ export class Player extends Entity {
     }
   }
 
-  tryMoveY() {
+  tryMoveY(logic: Logic) {
     this.yvel += YVEL;
     if (this.yvel > YVELCAP) this.yvel = YVELCAP;
 
@@ -122,11 +108,7 @@ export class Player extends Entity {
       const max = Math.abs(this.yvel);
       let broke = false;
       for (let i = 0; i < max; i += 1) {
-        this.y += dir;
-        const touching = entities.filter(a => intersects(a, this));
-        if (!touching.every(a => (!a.dead && a.actOn) ? a.actOn(this, 0, dir) : true)) {
-          this.y -= dir;
-
+        if (!logic.tryMove(this, 0, dir)) {
           if (this.yvel > 0) {
             this.stoodFor++;
           }

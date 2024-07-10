@@ -1,10 +1,9 @@
 import { Bubble } from "./entities/bubble.js";
 import { BubbleWand } from "./entities/bubblewand.js";
-import { Entity } from "./entities/entity.js";
+import { Entity, Logic } from "./entities/entity.js";
 import { Player } from "./entities/player.js";
 import { Wall } from "./entities/wall.js";
 import { createCanvas, runGameLoop } from "./lib/core.js";
-import { entities } from "./lib/data.js";
 import { loadCleanP8, MapTile } from "./lib/pico8.js";
 
 const WIDTH = 320;
@@ -14,6 +13,8 @@ const ctx = createCanvas(WIDTH, HEIGHT, 5);
 const engine = runGameLoop();
 
 const game1 = await loadCleanP8('game/dadgame2/explore.p8');
+
+const entities: Entity[] = [];
 
 const players: Player[] = [];
 let playerIndex = 0;
@@ -85,11 +86,37 @@ entities.sort((a, b) => {
   return 0;
 });
 
+function intersects(a: Entity, b: Entity) {
+  return (
+    a.x + 7 >= b.x &&
+    a.y + 7 >= b.y &&
+    a.x <= b.x + 7 &&
+    a.y <= b.y + 7
+  );
+}
+
+const logic: Logic = {
+  tryMove: (entity, x, y) => {
+    entity.x += x;
+    entity.y += y;
+
+    const touching = entities.filter(a => intersects(a, entity));
+    const canMove = touching.every(a => (!a.dead && a.actOn) ? a.actOn(entity, x, y) : true);
+
+    if (!canMove) {
+      entity.x -= x;
+      entity.y -= y;
+    }
+
+    return canMove;
+  },
+};
+
 engine.update = (t) => {
   for (const e of entities) {
     if (e.dead) continue;
 
-    e.update?.(t);
+    e.update?.(t, logic);
   }
 
   ctx.reset();

@@ -1,5 +1,4 @@
 import { Entity } from "./entity.js";
-import { Player } from "./player.js";
 
 export class Bubble extends Entity {
 
@@ -23,7 +22,7 @@ export class Bubble extends Entity {
     this.dead = false;
   }
 
-  override actOn = (player: Player, x: number, y: number) => {
+  override actOn = (player: Entity, x: number, y: number) => {
     if (x) {
       this.x += x;
       return true;

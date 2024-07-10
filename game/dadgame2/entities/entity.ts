@@ -1,4 +1,6 @@
-import { Player } from "./player.js";
+export interface Logic {
+  tryMove(entity: Entity, x: number, y: number): boolean;
+}
 
 export class Entity {
 
@@ -41,7 +43,8 @@ export class Entity {
     return (d < 20);
   }
 
-  update?: (t: number) => void;
-  actOn?: (player: Player, x: number, y: number) => boolean;
+  update?: (t: number, logic: Logic) => void;
+
+  actOn?: (player: Entity, x: number, y: number) => boolean;
 
 }

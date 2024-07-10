@@ -5,8 +5,6 @@ export class Bubble extends Entity {
   sitting = false;
   unsat = 0;
 
-  override dead = true;
-
   constructor(
     x: number,
     y: number,
@@ -14,6 +12,7 @@ export class Bubble extends Entity {
     public flatImage: OffscreenCanvas,
   ) {
     super(x, y, openImage);
+    this.dead = true;
   }
 
   reset(x: number, y: number) {

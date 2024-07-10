@@ -1,10 +1,18 @@
 import { A, LEFT, RIGHT, X } from "../lib/core.js";
 import { entities, players } from "../lib/data.js";
-import { intersects } from "../lib/helpers.js";
 import { game1 } from "../main.js";
 import { Bubble } from "./bubble.js";
 import { Entity } from "./entity.js";
 
+
+function intersects(a: Entity, b: Entity) {
+  return (
+    a.x + 7 >= b.x &&
+    a.y + 7 >= b.y &&
+    a.x <= b.x + 7 &&
+    a.y <= b.y + 7
+  );
+}
 
 export class Player extends Entity {
 

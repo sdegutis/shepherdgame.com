@@ -25,7 +25,7 @@ export class Player extends Entity {
 
   stoodFor = 0;
 
-  hasWand = false;
+  hasWand = true;
   bubble;
 
   constructor(

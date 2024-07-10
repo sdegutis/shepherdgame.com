@@ -42,29 +42,25 @@ export class Bubble extends Entity {
   override update = (t: number, logic: Logic) => {
     this.aliveFor++;
 
-    // if (!this.sitting) {
-    //   const durationMs = 1000;
-    //   const percent = ((t % durationMs) / durationMs);
-    //   const percentOfCircle = percent * Math.PI * 2;
-    //   const distance = .5;
+    if (!this.sitting) {
+      const durationMs = 1000;
+      const percent = ((t % durationMs) / durationMs);
+      const percentOfCircle = percent * Math.PI * 2;
+      const distance = .5;
 
-    //   const toMoveX = this.x + -Math.sin(percentOfCircle) * distance;
-    //   console.log(toMoveX)
+      const toMoveX = -Math.sin(percentOfCircle) * distance;
+      logic.tryMove(this, toMoveX, 0);
 
-    //   for (let i = 0; i < Math.abs(toMoveX); i++) {
-    //     logic.tryMove(this, Math.sign(toMoveX), 0);
-    //   }
-
-    //   if (this.unsat) {
-    //     this.unsat++;
-    //     if (this.unsat === 3) {
-    //       this.image = this.openImage;
-    //     }
-    //     else if (this.unsat === 30) {
-    //       this.dead = true;
-    //     }
-    //   }
-    // }
+      if (this.unsat) {
+        this.unsat++;
+        if (this.unsat === 3) {
+          this.image = this.openImage;
+        }
+        else if (this.unsat === 30) {
+          this.dead = true;
+        }
+      }
+    }
 
     logic.tryMove(this, 0, this.sitting ? 0.25 : -0.25);
 

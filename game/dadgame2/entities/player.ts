@@ -64,6 +64,10 @@ export class Player extends Entity {
         return 'pass';
       }
       else if (y > 0) {
+        if (this.y > other.y - 6) {
+          return 'pass';
+        }
+
         // player.y -= 1;
         other.sitting = true;
         other.unsat = 1;

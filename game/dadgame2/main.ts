@@ -92,25 +92,26 @@ const logic: Logic = {
     movingEntity.x += x;
     movingEntity.y += y;
 
-    const touching: Entity[] = [];
+    let canMove = true;
     for (let i = 0; i < entities.length; i++) {
-      const other = entities[i];
+      const collidedInto = entities[i];
       if (
-        movingEntity.x + 7 >= other.x &&
-        movingEntity.y + 7 >= other.y &&
-        movingEntity.x <= other.x + 7 &&
-        movingEntity.y <= other.y + 7
-      ) touching.push(other);
+        movingEntity.x + 7 >= collidedInto.x &&
+        movingEntity.y + 7 >= collidedInto.y &&
+        movingEntity.x <= collidedInto.x + 7 &&
+        movingEntity.y <= collidedInto.y + 7
+      ) {
+        if (collidedInto === movingEntity) continue;
+        if (collidedInto.dead) continue;
+        if (!movingEntity.collideWith) continue;
+
+        const result = movingEntity.collideWith(collidedInto, x, y);
+        if (result === 'stop') {
+          canMove = false;
+          break;
+        }
+      }
     }
-
-    const canMove = touching.every(collidedInto => {
-      if (collidedInto === movingEntity) return true;
-      if (collidedInto.dead) return true;
-      if (!movingEntity.collideWith) return true;
-
-      const result = movingEntity.collideWith(collidedInto, x, y);
-      return result === 'pass';
-    });
 
     if (!canMove) {
       movingEntity.x -= x;

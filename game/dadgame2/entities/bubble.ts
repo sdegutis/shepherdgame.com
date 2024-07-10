@@ -18,9 +18,14 @@ export class Bubble extends Entity {
   }
 
   reset(x: number, y: number) {
+    this.dead = false;
+
     this.x = x;
     this.y = y;
-    this.dead = false;
+
+    this.aliveFor = 0;
+    this.unsat = 0;
+    this.sitting = false;
   }
 
   // override collideWith = (player: Entity, x: number, y: number): Interaction => {

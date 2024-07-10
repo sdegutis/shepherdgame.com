@@ -5,6 +5,8 @@ export class Bubble extends Entity {
   sitting = false;
   unsat = 0;
 
+  aliveFor = 0;
+
   constructor(
     x: number,
     y: number,
@@ -43,6 +45,8 @@ export class Bubble extends Entity {
   // };
 
   override update = (t: number) => {
+    this.aliveFor++;
+
     if (!this.sitting) {
       const durationMs = 1000;
       const percent = ((t % durationMs) / durationMs);

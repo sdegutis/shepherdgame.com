@@ -28,6 +28,7 @@ function createEntity(tile: MapTile, x: number, y: number) {
 
   if (tile.index >= 1 && tile.index <= 3) {
     const bubble = new Bubble(0, 0, game1.sprites[5].image, game1.sprites[21].image);
+    bubble.layer = 1;
     entities.push(bubble);
 
     entity = new Player(px, py, image, playerIndex++, bubble);

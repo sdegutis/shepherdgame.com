@@ -19,7 +19,7 @@ export class Player extends Entity {
 
   stoodFor = 0;
 
-  hasWand = false;
+  hasWand = true;
 
   constructor(
     x: number,
@@ -52,6 +52,8 @@ export class Player extends Entity {
     }
 
     if (other instanceof Bubble) {
+      if (other.aliveFor < 100) return 'pass';
+
       if (x) {
         other.x += x;
         return 'pass';

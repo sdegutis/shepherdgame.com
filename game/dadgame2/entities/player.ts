@@ -53,14 +53,14 @@ export class Player extends Entity {
     }
 
     if (other instanceof Bubble) {
-      if (other.aliveFor < 15) return 'pass';
-
       if (x) {
+        if (other.aliveFor < 30) return 'pass';
         other.x += x;
         return 'pass';
       }
 
       if (y < 0) {
+        if (other.aliveFor < 30) return 'pass';
         other.y -= 1;
         return 'pass';
       }

@@ -25,27 +25,23 @@ function createEntity(tile: MapTile, x: number, y: number) {
     entity = new Player(px, py, image);
     entity.layer = 2;
     players.push(entity);
-    entities.push(entity);
   }
   else if (tile.sprite.flags.RED) {
     entity = new Wall(px, py, image);
-    entities.push(entity);
   }
   else if (tile.sprite.flags.ORANGE) {
     entity = new Wall(px, py, image);
     entity.jumpThrough = true;
-    entities.push(entity);
   }
   else if (tile.index === 4) {
     entity = new BubbleWand(px, py, image);
     entity.layer = 2;
-    entities.push(entity);
   }
   else {
     entity = new Entity(px, py, image);
-    entities.push(entity);
   }
 
+  entities.push(entity);
   return entity;
 }
 

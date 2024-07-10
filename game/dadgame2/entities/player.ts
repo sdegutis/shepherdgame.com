@@ -1,4 +1,4 @@
-import { A, LEFT, RIGHT, X } from "../lib/core.js";
+import { A, LEFT, RIGHT, X, Y } from "../lib/core.js";
 import { Bubble } from "./bubble.js";
 import { BubbleWand } from "./bubblewand.js";
 import { Entity, Interaction, Logic } from "./entity.js";
@@ -24,6 +24,7 @@ export class Player extends Entity {
   wandPressed = 0;
 
   hasMarker = false;
+  markerPressed = false;
 
   constructor(
     x: number,
@@ -99,10 +100,11 @@ export class Player extends Entity {
       this.yvel = -5.15;
     }
 
-    this.maybeBlowBubble(t);
+    this.maybeBlowBubble();
+    this.maybeDrawMarker(logic);
   };
 
-  maybeBlowBubble(t: number) {
+  maybeBlowBubble() {
     if (!this.hasWand) return;
 
     if (this.gamepad?.buttons[X].pressed) {
@@ -115,6 +117,25 @@ export class Player extends Entity {
 
     if (this.wandPressed === 1) {
       this.bubble.reset(this.x + (8 * this.dir), this.y);
+    }
+  }
+
+  maybeDrawMarker(logic: Logic) {
+    if (!this.hasMarker) return;
+
+    if (this.gamepad?.buttons[Y].pressed) {
+      if (this.markerPressed) {
+        const x = Math.round(this.x / 8);
+        const y = Math.ceil(this.y / 8) + 1;
+        logic.create(x, y);
+        this.markerPressed = false;
+      }
+      else {
+        this.markerPressed = true;
+      }
+    }
+    else {
+      this.markerPressed = false;
     }
   }
 

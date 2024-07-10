@@ -125,6 +125,13 @@ const logic: Logic = {
 
     return canMove;
   },
+
+  create: (x, y) => {
+    createEntity(game1.map[0][0], x, y);
+    // const entity = new Entity(x, y, game1.ma);
+    // entities.push(entity);
+  },
+
 };
 
 engine.update = (t) => {

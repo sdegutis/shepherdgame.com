@@ -25,7 +25,7 @@ export class Player extends Entity {
 
   stoodFor = 0;
 
-  hasWand = true;
+  hasWand = false;
   bubble: Bubble | undefined;
 
   override actOn = (player: Player, x: number, y: number): boolean => {
@@ -98,7 +98,7 @@ export class Player extends Entity {
       for (let i = 0; i < max; i += 1) {
         this.x += dir;
         const touching = entities.filter(a => intersects(a, this));
-        if (!touching.every(a => a.actOn ? a.actOn(this, dir, 0) : true)) {
+        if (!touching.every(a => (!a.dead && a.actOn) ? a.actOn(this, dir, 0) : true)) {
           this.x -= dir;
           this.xvel = 0;
           break;
@@ -119,7 +119,7 @@ export class Player extends Entity {
       for (let i = 0; i < max; i += 1) {
         this.y += dir;
         const touching = entities.filter(a => intersects(a, this));
-        if (!touching.every(a => a.actOn ? a.actOn(this, 0, dir) : true)) {
+        if (!touching.every(a => (!a.dead && a.actOn) ? a.actOn(this, 0, dir) : true)) {
           this.y -= dir;
 
           if (this.yvel > 0) {

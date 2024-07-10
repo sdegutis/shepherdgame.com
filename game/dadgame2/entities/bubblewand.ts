@@ -1,5 +1,3 @@
-import { entities } from "../lib/data.js";
-import { removeFrom } from "../lib/helpers.js";
 import { Entity } from "./entity.js";
 import { Player } from "./player.js";
 
@@ -21,7 +19,7 @@ export class BubbleWand extends Entity {
     if (player.hasWand) return true;
 
     player.hasWand = true;
-    removeFrom(entities, this);
+    this.dead = true;
     // player.rumble(.3, 1, 1);
     return true;
   };

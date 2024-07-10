@@ -80,12 +80,16 @@ entities.sort((a, b) => {
 
 engine.update = (t) => {
   for (const e of entities) {
+    if (e.dead) continue;
+
     e.update?.(t);
   }
 
   ctx.reset();
 
   for (const e of entities) {
+    if (e.dead) continue;
+
     let near = false;
     for (let i = 0; i < players.length; i++) {
       const player = players[i];

@@ -2,6 +2,7 @@ import { Player } from "./player.js";
 
 export class Entity {
 
+  dead = false;
   layer = 0;
 
   constructor(

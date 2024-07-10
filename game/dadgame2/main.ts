@@ -87,21 +87,22 @@ entities.sort((a, b) => {
   return 0;
 });
 
-function intersects(a: Entity, b: Entity) {
-  return (
-    a.x + 7 >= b.x &&
-    a.y + 7 >= b.y &&
-    a.x <= b.x + 7 &&
-    a.y <= b.y + 7
-  );
-}
-
 const logic: Logic = {
   tryMove: (movingEntity, x, y) => {
     movingEntity.x += x;
     movingEntity.y += y;
 
-    const touching = entities.filter(a => intersects(a, movingEntity));
+    const touching: Entity[] = [];
+    for (let i = 0; i < entities.length; i++) {
+      const other = entities[i];
+      if (
+        movingEntity.x + 7 >= other.x &&
+        movingEntity.y + 7 >= other.y &&
+        movingEntity.x <= other.x + 7 &&
+        movingEntity.y <= other.y + 7
+      ) touching.push(other);
+    }
+
     const canMove = touching.every(collidedInto => {
       if (collidedInto === movingEntity) return true;
       if (collidedInto.dead) return true;

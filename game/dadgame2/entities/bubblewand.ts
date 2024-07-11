@@ -1,4 +1,4 @@
-import { PixelImage } from "../lib/pico8.js";
+import { PixelImage } from '../lib/image.js';
 import { Entity } from "./entity.js";
 
 export class BubbleWand extends Entity {

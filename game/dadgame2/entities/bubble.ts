@@ -1,4 +1,4 @@
-import { PixelImage } from "../lib/pico8.js";
+import { PixelImage } from '../lib/image.js';
 import { Entity, Interaction, Logic } from "./entity.js";
 import { Wall } from "./wall.js";
 

@@ -1,5 +1,5 @@
 import { A, LEFT, RIGHT, X } from "../lib/core.js";
-import { PixelImage } from "../lib/pico8.js";
+import { PixelImage } from '../lib/image.js';
 import { Bubble } from "./bubble.js";
 import { BubbleWand } from "./bubblewand.js";
 import { Entity, Interaction, Logic } from "./entity.js";
@@ -22,6 +22,8 @@ export class Player extends Entity {
 
   hasWand = false;
   wandPressed = 0;
+
+  h = 0;
 
   constructor(
     x: number,
@@ -91,6 +93,12 @@ export class Player extends Entity {
     }
 
     this.maybeBlowBubble();
+
+    const dur = 1_000;
+    this.h = t % dur / dur;
+
+    this.image.reset();
+    // TODO
   };
 
   maybeBlowBubble() {

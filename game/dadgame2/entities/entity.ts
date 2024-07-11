@@ -1,4 +1,4 @@
-import { PixelImage } from "../lib/pico8.js";
+import { PixelImage } from '../lib/image.js';
 
 export interface Logic {
   tryMove(entity: Entity, x: number, y: number): boolean;

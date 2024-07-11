@@ -23,8 +23,6 @@ export class Player extends Entity {
   hasWand = false;
   wandPressed = 0;
 
-  h = 0;
-
   constructor(
     x: number,
     y: number,
@@ -95,10 +93,12 @@ export class Player extends Entity {
     this.maybeBlowBubble();
 
     const dur = 1_000;
-    this.h = t % dur / dur;
+    const h = t % dur / dur;
 
     this.image.reset();
-    // TODO
+    for (const p of this.image.pixels) {
+      p.h = h * 360;
+    }
   };
 
   maybeBlowBubble() {

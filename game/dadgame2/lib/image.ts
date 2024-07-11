@@ -11,11 +11,13 @@ export class Pixel {
 
 export class PixelImage {
 
-  original: Pixel[];
+  private original: Pixel[];
   constructor(public pixels: Pixel[]) {
-    this.original = [...pixels];
+    this.original = pixels.map(p => ({ ...p }));
   }
 
-  reset() { }
+  reset() {
+    this.pixels = this.original.map(p => ({ ...p }));
+  }
 
 }

@@ -184,9 +184,9 @@ engine.update = (t) => {
   for (let y = 0; y < 21 * 8; y += 2) {
     for (let x = 0; x < 40 * 8; x++) {
       const p = (y * 40 * 8 * 4) + (x * 4);
-      pixelsHsla[p + 0] = (pixelsHsla[p + 0] + 90) % 360;
-      pixelsHsla[p + 1] = Math.max(0, pixelsHsla[p + 1] - 20);
-      pixelsHsla[p + 2] = Math.max(0, pixelsHsla[p + 2] - 20);
+      pixelsHsla[p + 0] = (pixelsHsla[p + 0] + 10) % 360;
+      // pixelsHsla[p + 1] = Math.max(0, pixelsHsla[p + 1] - 20);
+      // pixelsHsla[p + 2] = Math.max(0, pixelsHsla[p + 2] - 20);
       pixelsHsla[p + 3] = Math.max(0, pixelsHsla[p + 3] - 20);
     }
   }

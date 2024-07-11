@@ -1,4 +1,6 @@
-export const COLORS = [
+import colorConvert from 'https://cdn.jsdelivr.net/npm/color-convert@2.0.1/+esm';
+
+const COLORS = [
   [0x00, 0x00, 0x00, 0x00],
   [0x1D, 0x2B, 0x53, 0xff],
   [0x7E, 0x25, 0x53, 0xff],
@@ -22,8 +24,10 @@ export interface MapTile {
   sprite: Sprite,
 }
 
+export type HSLA = { h: number, s: number, l: number, a: number };
+
 export interface Sprite {
-  image: number[][],
+  image: HSLA[][],
   flags: Flag,
 }
 
@@ -114,7 +118,7 @@ function parseSprites(data: string) {
 
   for (let y = 0; y < 16; y++) {
     for (let x = 0; x < 16; x++) {
-      const img: number[][] = [];
+      const img: HSLA[][] = [];
 
       for (let yy = 0; yy < 8; yy++) {
         const row = [];
@@ -124,7 +128,10 @@ function parseSprites(data: string) {
 
           const c = data[ly * 128 + lx];
           const n = parseInt(c, 16);
-          row.push(n);
+
+          const [r, g, b, a] = COLORS[n];
+          const [h, s, l] = colorConvert.rgb.hsl(r, g, b);
+          row.push({ h, s, l, a });
         }
         img.push(row);
       }

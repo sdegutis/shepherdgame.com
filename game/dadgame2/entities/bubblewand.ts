@@ -1,3 +1,4 @@
+import { HSLA } from "../lib/pico8.js";
 import { Entity } from "./entity.js";
 
 export class BubbleWand extends Entity {
@@ -7,7 +8,7 @@ export class BubbleWand extends Entity {
   constructor(
     x: number,
     y: number,
-    image: number[][],
+    image: HSLA[][],
   ) {
     super(x, y, image);
     this.x1 = x;

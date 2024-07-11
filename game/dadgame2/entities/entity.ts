@@ -1,10 +1,6 @@
 import colorConvert from 'https://cdn.jsdelivr.net/npm/color-convert@2.0.1/+esm';
-import { COLORS } from "../lib/pico8.js";
 
-const COLORS2 = COLORS.map(([r, g, b, a]) => ({
-  hsl: colorConvert.rgb.hsl(r, g, b),
-  alpha: a,
-}));
+import { HSLA } from "../lib/pico8.js";
 
 export interface Logic {
   tryMove(entity: Entity, x: number, y: number): boolean;
@@ -32,7 +28,7 @@ export class Entity {
   constructor(
     x: number,
     y: number,
-    public image: number[][],
+    public image: HSLA[][],
   ) {
     this.x = x;
     this.y = y;
@@ -51,12 +47,10 @@ export class Entity {
       for (let x = 0; x < 8; x++) {
         const xx = this.rx + x;
 
-        const n = this.image[y][x];
+        const hsla = this.image[y][x];
 
-        if (n > 0) {
-          const hsla = COLORS2[n];
-
-          let [h, s, l] = hsla.hsl;
+        if (hsla.a > 0) {
+          let { h, s, l, a } = hsla;
           h += 100; h %= 360;
           const rgb = colorConvert.hsl.rgb([h, s, l]);
 
@@ -64,7 +58,7 @@ export class Entity {
           pixels[p + 0] = rgb[0];
           pixels[p + 1] = rgb[1];
           pixels[p + 2] = rgb[2];
-          pixels[p + 3] = hsla.alpha;
+          pixels[p + 3] = a;
         }
       }
     }

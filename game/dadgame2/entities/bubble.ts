@@ -1,3 +1,4 @@
+import { HSLA } from "../lib/pico8.js";
 import { Entity, Interaction, Logic } from "./entity.js";
 import { Wall } from "./wall.js";
 
@@ -11,8 +12,8 @@ export class Bubble extends Entity {
   constructor(
     x: number,
     y: number,
-    private openImage: number[][],
-    public flatImage: number[][],
+    private openImage: HSLA[][],
+    public flatImage: HSLA[][],
   ) {
     super(x, y, openImage);
     this.dead = true;

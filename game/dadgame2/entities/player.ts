@@ -1,4 +1,5 @@
 import { A, LEFT, RIGHT, X, Y } from "../lib/core.js";
+import { HSLA } from "../lib/pico8.js";
 import { Bubble } from "./bubble.js";
 import { BubbleWand } from "./bubblewand.js";
 import { Entity, Interaction, Logic } from "./entity.js";
@@ -29,7 +30,7 @@ export class Player extends Entity {
   constructor(
     x: number,
     y: number,
-    image: number[][],
+    image: HSLA[][],
     public gamepadIndex: number,
     public bubble: Bubble,
   ) {

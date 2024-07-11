@@ -148,7 +148,7 @@ engine.update = (t) => {
     e.draw(pixels);
   }
 
-  const perc = t % 1000 / 1000;
+  const perc = t % 10_000 / 10_000;
   const circ = (Math.cos(perc * Math.PI * 2) + 1) / 2;
 
   for (let y = 0; y < 21 * 8; y++) {
@@ -156,7 +156,7 @@ engine.update = (t) => {
       const p = (y * 40 * 8 * 4) + (x * 4);
       // pixels[p + 0] = circ * 255;
       // pixels[p + 0] = circ * pixels[p + 0];
-      pixels[p + 1] = circ * pixels[p + 1];
+      // pixels[p + 1] = circ * pixels[p + 1];
       // pixels[p + 2] = circ * pixels[p + 2];
       // pixels[p + 0] = 0;
       // pixels[p + 1] = 0;

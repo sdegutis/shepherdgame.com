@@ -7,7 +7,7 @@ export class Marker extends Entity {
   constructor(
     x: number,
     y: number,
-    image: OffscreenCanvas,
+    image: number[][],
   ) {
     super(x, y, image);
     this.x1 = x;

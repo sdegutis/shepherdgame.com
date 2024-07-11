@@ -134,6 +134,9 @@ const logic: Logic = {
 
 };
 
+const pixels = new Uint8ClampedArray(40 * 8 * 21 * 8 * 4);
+const imgdata = new ImageData(pixels, 40 * 8, 21 * 8);
+
 engine.update = (t) => {
   for (const e of entities) {
     if (e.dead) continue;
@@ -155,7 +158,9 @@ engine.update = (t) => {
       }
     }
 
-    ctx.globalAlpha = near ? 1 : 0.25;
-    e.draw(ctx);
+    // ctx.globalAlpha = near ? 1 : 0.25;
+    e.draw(pixels);
   }
+
+  ctx.putImageData(imgdata, 0, 0);
 };

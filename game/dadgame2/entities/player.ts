@@ -29,7 +29,7 @@ export class Player extends Entity {
   constructor(
     x: number,
     y: number,
-    image: OffscreenCanvas,
+    image: number[][],
     public gamepadIndex: number,
     public bubble: Bubble,
   ) {

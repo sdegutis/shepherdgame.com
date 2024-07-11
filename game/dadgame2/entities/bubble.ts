@@ -11,8 +11,8 @@ export class Bubble extends Entity {
   constructor(
     x: number,
     y: number,
-    private openImage: OffscreenCanvas,
-    public flatImage: OffscreenCanvas,
+    private openImage: number[][],
+    public flatImage: number[][],
   ) {
     super(x, y, openImage);
     this.dead = true;

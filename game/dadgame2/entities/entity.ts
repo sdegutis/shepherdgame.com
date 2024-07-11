@@ -1,3 +1,5 @@
+import { COLORS } from "../lib/pico8.js";
+
 export interface Logic {
   tryMove(entity: Entity, x: number, y: number): boolean;
   create(x: number, y: number): void;
@@ -24,14 +26,35 @@ export class Entity {
   constructor(
     x: number,
     y: number,
-    public image: OffscreenCanvas,
+    public image: number[][],
   ) {
     this.x = x;
     this.y = y;
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
-    ctx.drawImage(this.image, this.rx, this.ry);
+  draw(pixels: Uint8ClampedArray) {
+    // ctx.drawImage(this.image, this.rx, this.ry);
+
+    for (let y = 0; y < 8; y++) {
+      const yy = this.ry + y;
+
+      for (let x = 0; x < 8; x++) {
+        const xx = this.rx + x;
+
+        const n = this.image[y][x];
+
+        if (n > 0) {
+          const rgba = COLORS[n];
+
+          const p = (yy * 40 * 8 * 4) + (xx * 4);
+          pixels[p + 0] = rgba[0];
+          pixels[p + 1] = rgba[1];
+          pixels[p + 2] = rgba[2];
+          pixels[p + 3] = rgba[3];
+        }
+      }
+    }
+
     // ctx.strokeStyle = '#f00a';
     // ctx.lineWidth = 1;
     // ctx.beginPath();

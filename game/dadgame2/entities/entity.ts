@@ -32,29 +32,6 @@ export class Entity {
     this.y = y;
   }
 
-  draw(pixels: Uint16Array) {
-    for (let y = 0; y < 8; y++) {
-      const yy = this.ry + y;
-
-      for (let x = 0; x < 8; x++) {
-        const xx = this.rx + x;
-
-        const hsla = this.image[y][x];
-
-        if (hsla.a > 0) {
-          let { h, s, l, a } = hsla;
-          // h += 100; h %= 360;
-
-          const p = (yy * 40 * 8 * 4) + (xx * 4);
-          pixels[p + 0] = h;
-          pixels[p + 1] = s;
-          pixels[p + 2] = l;
-          pixels[p + 3] = a;
-        }
-      }
-    }
-  }
-
   update?: (t: number, logic: Logic) => void;
 
   collideWith?: (other: Entity, x: number, y: number) => Interaction;

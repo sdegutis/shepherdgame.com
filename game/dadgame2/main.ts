@@ -147,7 +147,27 @@ engine.update = (t) => {
 
   for (const e of entities) {
     if (e.dead) continue;
-    e.draw(pixelsHsla);
+
+    for (let y = 0; y < 8; y++) {
+      const yy = e.ry + y;
+
+      for (let x = 0; x < 8; x++) {
+        const xx = e.rx + x;
+
+        const hsla = e.image[y][x];
+
+        if (hsla.a > 0) {
+          let { h, s, l, a } = hsla;
+          // h += 100; h %= 360;
+
+          const p = (yy * 40 * 8 * 4) + (xx * 4);
+          pixelsHsla[p + 0] = h;
+          pixelsHsla[p + 1] = s;
+          pixelsHsla[p + 2] = l;
+          pixelsHsla[p + 3] = a;
+        }
+      }
+    }
   }
 
   const perc = t % 10_000 / 10_000;

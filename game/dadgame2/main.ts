@@ -140,26 +140,43 @@ const imgdata = new ImageData(pixels, 40 * 8, 21 * 8);
 engine.update = (t) => {
   for (const e of entities) {
     if (e.dead) continue;
-
     e.update?.(t, logic);
   }
 
-  ctx.reset();
-
   for (const e of entities) {
     if (e.dead) continue;
+    e.draw(pixels);
+  }
 
-    let near = false;
-    for (let i = 0; i < players.length; i++) {
-      const player = players[i];
-      if (player.near(e)) {
-        near = true;
-        break;
+  for (let y = 0; y < 21 * 8; y++) {
+    for (let x = 0; x < 40 * 8; x++) {
+      const p = (y * 40 * 8 * 4) + (x * 4);
+      // pixels[p + 0] = 0;
+      // pixels[p + 1] = 0;
+      // pixels[p + 2] = 0;
+      // pixels[p + 3] = 0;
+
+      let near = false;
+      for (const p of players) {
+        const dx = (p.x + 4) - x;
+        const dy = (p.y + 4) - y;
+        const d = Math.sqrt(dx ** 2 + dy ** 2);
+        if (d < 20) {
+          near = true;
+          break;
+        }
+      }
+      if (!near) {
+        pixels[p + 3] = 100;
       }
     }
+  }
 
-    // ctx.globalAlpha = near ? 1 : 0.25;
-    e.draw(pixels);
+  for (let y = 0; y < 21 * 8; y += 2) {
+    for (let x = 0; x < 40 * 8; x++) {
+      const p = (y * 40 * 8 * 4) + (x * 4);
+      pixels[p + 3] -= 30;
+    }
   }
 
   ctx.putImageData(imgdata, 0, 0);

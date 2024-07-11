@@ -143,12 +143,13 @@ engine.update = (t) => {
       for (let x = 0; x < 8; x++) {
         const xx = e.rx + x;
 
-        const hsla = e.image.pixels[y * 8 + x];
+        const i = y * 8 * 4 + x * 4;
+        const h = e.image.pixels[i + 0];
+        const s = e.image.pixels[i + 1];
+        const l = e.image.pixels[i + 2];
+        const a = e.image.pixels[i + 3];
 
-        if (hsla.a > 0) {
-          let { h, s, l, a } = hsla;
-          // h += 100; h %= 360;
-
+        if (a > 0) {
           const p = (yy * 40 * 8 * 4) + (xx * 4);
           pixelsHsla[p + 0] = h;
           pixelsHsla[p + 1] = s;

@@ -1,23 +1,12 @@
-export class Pixel {
-
-  constructor(
-    public h: number,
-    public s: number,
-    public l: number,
-    public a: number,
-  ) { }
-
-}
-
 export class PixelImage {
 
-  private original: Pixel[];
-  constructor(public pixels: Pixel[]) {
-    this.original = pixels.map(p => ({ ...p }));
+  private original: Uint16Array;
+  constructor(public pixels: Uint16Array) {
+    this.original = new Uint16Array(pixels);
   }
 
   reset() {
-    this.pixels = this.original.map(p => ({ ...p }));
+    this.pixels = new Uint16Array(this.original);
   }
 
 }

@@ -1,5 +1,5 @@
 import colorConvert from 'https://cdn.jsdelivr.net/npm/color-convert@2.0.1/+esm';
-import { Pixel, PixelImage } from './image.js';
+import { PixelImage } from './image.js';
 
 const COLORS = [
   [0x00, 0x00, 0x00, 0x00],
@@ -24,8 +24,6 @@ export interface MapTile {
   index: number,
   sprite: Sprite,
 }
-
-type HSLA = { h: number, s: number, l: number, a: number };
 
 export interface Sprite {
   image: PixelImage,
@@ -119,7 +117,7 @@ function parseSprites(data: string) {
 
   for (let y = 0; y < 16; y++) {
     for (let x = 0; x < 16; x++) {
-      const img: HSLA[] = [];
+      const img = new Uint16Array(8 * 8 * 4);
 
       for (let yy = 0; yy < 8; yy++) {
         for (let xx = 0; xx < 8; xx++) {
@@ -131,7 +129,12 @@ function parseSprites(data: string) {
 
           const [r, g, b, a] = COLORS[n];
           const [h, s, l] = colorConvert.rgb.hsl(r, g, b);
-          img.push(new Pixel(h, s, l, a));
+
+          const i = yy * 8 * 4 + xx * 4;
+          img[i + 0] = h;
+          img[i + 1] = s;
+          img[i + 2] = l;
+          img[i + 3] = a;
         }
       }
 

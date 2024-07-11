@@ -38,7 +38,7 @@ export class Entity {
     // }
   }
 
-  draw(pixels: Uint8ClampedArray) {
+  draw(pixels: Uint8Array) {
     for (let y = 0; y < 8; y++) {
       const yy = this.ry + y;
 

@@ -135,7 +135,7 @@ const logic: Logic = {
 
 };
 
-const pixelsHsla = new Uint8ClampedArray(40 * 8 * 21 * 8 * 4);
+const pixelsHsla = new Uint8Array(40 * 8 * 21 * 8 * 4);
 const pixelsRgba = new Uint8ClampedArray(40 * 8 * 21 * 8 * 4);
 const imgdata = new ImageData(pixelsRgba, 40 * 8, 21 * 8);
 
@@ -184,7 +184,10 @@ engine.update = (t) => {
   for (let y = 0; y < 21 * 8; y += 2) {
     for (let x = 0; x < 40 * 8; x++) {
       const p = (y * 40 * 8 * 4) + (x * 4);
-      pixelsHsla[p + 3] -= 70;
+      // pixelsHsla[p + 0] = (pixelsHsla[p + 0] + 0) % 360;
+      // pixelsHsla[p + 1] -= 70;
+      // pixelsHsla[p + 2] -= 10;
+      // pixelsHsla[p + 3] -= 70;
     }
   }
 

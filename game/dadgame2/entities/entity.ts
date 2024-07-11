@@ -2,7 +2,6 @@ import { PixelImage } from "../lib/pico8.js";
 
 export interface Logic {
   tryMove(entity: Entity, x: number, y: number): boolean;
-  create(x: number, y: number): void;
 }
 
 export type Interaction = 'stop' | 'pass';

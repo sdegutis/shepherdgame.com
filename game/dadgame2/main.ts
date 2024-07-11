@@ -2,7 +2,6 @@ import colorConvert from 'https://cdn.jsdelivr.net/npm/color-convert@2.0.1/+esm'
 import { Bubble } from "./entities/bubble.js";
 import { BubbleWand } from "./entities/bubblewand.js";
 import { Entity, Logic } from "./entities/entity.js";
-import { Marker } from "./entities/marker.js";
 import { Player } from "./entities/player.js";
 import { Wall } from "./entities/wall.js";
 import { createCanvas, runGameLoop } from "./lib/core.js";
@@ -46,10 +45,6 @@ function createEntity(tile: MapTile, x: number, y: number) {
   }
   else if (tile.index === 4) {
     entity = new BubbleWand(px, py, image);
-    entity.layer = 2;
-  }
-  else if (tile.index === 20) {
-    entity = new Marker(px, py, image);
     entity.layer = 2;
   }
   else {
@@ -125,12 +120,6 @@ const logic: Logic = {
     }
 
     return canMove;
-  },
-
-  create: (x, y) => {
-    createEntity(game1.map[0][0], x, y);
-    // const entity = new Entity(x, y, game1.ma);
-    // entities.push(entity);
   },
 
 };

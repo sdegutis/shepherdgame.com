@@ -1,9 +1,8 @@
-import { A, LEFT, RIGHT, X, Y } from "../lib/core.js";
+import { A, LEFT, RIGHT, X } from "../lib/core.js";
 import { PixelImage } from "../lib/pico8.js";
 import { Bubble } from "./bubble.js";
 import { BubbleWand } from "./bubblewand.js";
 import { Entity, Interaction, Logic } from "./entity.js";
-import { Marker } from "./marker.js";
 import { Wall } from "./wall.js";
 
 const XVEL = 1;
@@ -24,9 +23,6 @@ export class Player extends Entity {
   hasWand = false;
   wandPressed = 0;
 
-  hasMarker = false;
-  markerPressed = false;
-
   constructor(
     x: number,
     y: number,
@@ -46,13 +42,6 @@ export class Player extends Entity {
     if (other instanceof BubbleWand) {
       if (this.hasWand) return 'pass';
       this.hasWand = true;
-      other.dead = true;
-      return 'pass';
-    }
-
-    if (other instanceof Marker) {
-      if (this.hasMarker) return 'pass';
-      this.hasMarker = true;
       other.dead = true;
       return 'pass';
     }
@@ -102,7 +91,6 @@ export class Player extends Entity {
     }
 
     this.maybeBlowBubble();
-    this.maybeDrawMarker(logic);
   };
 
   maybeBlowBubble() {
@@ -118,25 +106,6 @@ export class Player extends Entity {
 
     if (this.wandPressed === 1) {
       this.bubble.reset(this.x + (8 * this.dir), this.y);
-    }
-  }
-
-  maybeDrawMarker(logic: Logic) {
-    if (!this.hasMarker) return;
-
-    if (this.gamepad?.buttons[Y].pressed) {
-      if (this.markerPressed) {
-        const x = Math.round(this.x / 8);
-        const y = Math.ceil(this.y / 8) + 1;
-        logic.create(x, y);
-        this.markerPressed = false;
-      }
-      else {
-        this.markerPressed = true;
-      }
-    }
-    else {
-      this.markerPressed = false;
     }
   }
 

@@ -24,7 +24,9 @@ export interface MapTile {
   sprite: Sprite,
 }
 
-export type HSLA = { h: number, s: number, l: number, a: number };
+export type PixelImage = HSLA[][];
+
+type HSLA = { h: number, s: number, l: number, a: number };
 
 export interface Sprite {
   image: HSLA[][],

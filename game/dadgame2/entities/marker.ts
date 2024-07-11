@@ -1,4 +1,4 @@
-import { HSLA } from "../lib/pico8.js";
+import { PixelImage } from "../lib/pico8.js";
 import { Entity } from "./entity.js";
 
 export class Marker extends Entity {
@@ -8,7 +8,7 @@ export class Marker extends Entity {
   constructor(
     x: number,
     y: number,
-    image: HSLA[][],
+    image: PixelImage,
   ) {
     super(x, y, image);
     this.x1 = x;

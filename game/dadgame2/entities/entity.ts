@@ -1,4 +1,4 @@
-import { HSLA } from "../lib/pico8.js";
+import { PixelImage } from "../lib/pico8.js";
 
 export interface Logic {
   tryMove(entity: Entity, x: number, y: number): boolean;
@@ -26,7 +26,7 @@ export class Entity {
   constructor(
     x: number,
     y: number,
-    public image: HSLA[][],
+    public image: PixelImage,
   ) {
     this.x = x;
     this.y = y;

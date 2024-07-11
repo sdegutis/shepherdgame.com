@@ -1,5 +1,3 @@
-import colorConvert from 'https://cdn.jsdelivr.net/npm/color-convert@2.0.1/+esm';
-
 import { HSLA } from "../lib/pico8.js";
 
 export interface Logic {
@@ -51,13 +49,12 @@ export class Entity {
 
         if (hsla.a > 0) {
           let { h, s, l, a } = hsla;
-          h += 100; h %= 360;
-          const rgb = colorConvert.hsl.rgb([h, s, l]);
+          // h += 100; h %= 360;
 
           const p = (yy * 40 * 8 * 4) + (xx * 4);
-          pixels[p + 0] = rgb[0];
-          pixels[p + 1] = rgb[1];
-          pixels[p + 2] = rgb[2];
+          pixels[p + 0] = h;
+          pixels[p + 1] = s;
+          pixels[p + 2] = l;
           pixels[p + 3] = a;
         }
       }

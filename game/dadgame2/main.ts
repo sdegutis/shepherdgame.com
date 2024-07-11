@@ -1,3 +1,4 @@
+import colorConvert from 'https://cdn.jsdelivr.net/npm/color-convert@2.0.1/+esm';
 import { Bubble } from "./entities/bubble.js";
 import { BubbleWand } from "./entities/bubblewand.js";
 import { Entity, Logic } from "./entities/entity.js";
@@ -134,8 +135,9 @@ const logic: Logic = {
 
 };
 
-const pixels = new Uint8ClampedArray(40 * 8 * 21 * 8 * 4);
-const imgdata = new ImageData(pixels, 40 * 8, 21 * 8);
+const pixelsHsla = new Uint8ClampedArray(40 * 8 * 21 * 8 * 4);
+const pixelsRgba = new Uint8ClampedArray(40 * 8 * 21 * 8 * 4);
+const imgdata = new ImageData(pixelsRgba, 40 * 8, 21 * 8);
 
 engine.update = (t) => {
   for (const e of entities) {
@@ -145,7 +147,7 @@ engine.update = (t) => {
 
   for (const e of entities) {
     if (e.dead) continue;
-    e.draw(pixels);
+    e.draw(pixelsHsla);
   }
 
   const perc = t % 10_000 / 10_000;
@@ -174,7 +176,7 @@ engine.update = (t) => {
         }
       }
       if (!near) {
-        pixels[p + 3] = 100;
+        pixelsHsla[p + 3] = 100;
       }
     }
   }
@@ -182,7 +184,22 @@ engine.update = (t) => {
   for (let y = 0; y < 21 * 8; y += 2) {
     for (let x = 0; x < 40 * 8; x++) {
       const p = (y * 40 * 8 * 4) + (x * 4);
-      pixels[p + 3] -= 70;
+      pixelsHsla[p + 3] -= 70;
+    }
+  }
+
+  for (let y = 0; y < 21 * 8; y++) {
+    for (let x = 0; x < 40 * 8; x++) {
+      const p = (y * 40 * 8 * 4) + (x * 4);
+      const h = pixelsHsla[p + 0];
+      const s = pixelsHsla[p + 1];
+      const l = pixelsHsla[p + 2];
+      const a = pixelsHsla[p + 3];
+      const [r, g, b] = colorConvert.hsl.rgb([h, s, l]);
+      pixelsRgba[p + 0] = r;
+      pixelsRgba[p + 1] = g;
+      pixelsRgba[p + 2] = b;
+      pixelsRgba[p + 3] = a;
     }
   }
 

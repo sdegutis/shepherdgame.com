@@ -33,8 +33,6 @@ export class Entity {
   }
 
   draw(pixels: Uint8ClampedArray) {
-    // ctx.drawImage(this.image, this.rx, this.ry);
-
     for (let y = 0; y < 8; y++) {
       const yy = this.ry + y;
 
@@ -54,12 +52,6 @@ export class Entity {
         }
       }
     }
-
-    // ctx.strokeStyle = '#f00a';
-    // ctx.lineWidth = 1;
-    // ctx.beginPath();
-    // ctx.rect(this.x + 0.5, this.y + 0.5, 7, 7);
-    // ctx.stroke();
   }
 
   near(entity: Entity) {

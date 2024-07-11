@@ -1,4 +1,10 @@
+import colorConvert from 'https://cdn.jsdelivr.net/npm/color-convert@2.0.1/+esm';
 import { COLORS } from "../lib/pico8.js";
+
+const COLORS2 = COLORS.map(([r, g, b, a]) => ({
+  hsl: colorConvert.rgb.hsl(r, g, b),
+  alpha: a,
+}));
 
 export interface Logic {
   tryMove(entity: Entity, x: number, y: number): boolean;
@@ -30,6 +36,12 @@ export class Entity {
   ) {
     this.x = x;
     this.y = y;
+
+    // for (let y = 0; y < 8; y++) {
+    //   for (let x = 0; x < 8; x++) {
+    //     this.image[y][x]
+    //   }
+    // }
   }
 
   draw(pixels: Uint8ClampedArray) {
@@ -42,13 +54,17 @@ export class Entity {
         const n = this.image[y][x];
 
         if (n > 0) {
-          const rgba = COLORS[n];
+          const hsla = COLORS2[n];
+
+          let [h, s, l] = hsla.hsl;
+          h += 100; h %= 360;
+          const rgb = colorConvert.hsl.rgb([h, s, l]);
 
           const p = (yy * 40 * 8 * 4) + (xx * 4);
-          pixels[p + 0] = rgba[0];
-          pixels[p + 1] = rgba[1];
-          pixels[p + 2] = rgba[2];
-          pixels[p + 3] = rgba[3];
+          pixels[p + 0] = rgb[0];
+          pixels[p + 1] = rgb[1];
+          pixels[p + 2] = rgb[2];
+          pixels[p + 3] = hsla.alpha;
         }
       }
     }

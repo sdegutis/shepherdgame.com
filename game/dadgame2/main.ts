@@ -175,7 +175,7 @@ engine.update = (t) => {
   for (let y = 0; y < 21 * 8; y += 2) {
     for (let x = 0; x < 40 * 8; x++) {
       const p = (y * 40 * 8 * 4) + (x * 4);
-      pixels[p + 3] -= 30;
+      pixels[p + 3] -= 70;
     }
   }
 

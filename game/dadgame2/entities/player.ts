@@ -92,7 +92,7 @@ export class Player extends Entity {
 
     this.maybeBlowBubble();
 
-    const dur = 1_000;
+    const dur = 10_000;
     const h = t % dur / dur;
 
     this.image.reset();

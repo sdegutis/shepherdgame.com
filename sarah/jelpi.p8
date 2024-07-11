@@ -4,7 +4,7 @@ __lua__
 -- jelpi demo
 -- by zep
 
-level=2
+level9
 
 num_players = 1
 corrupt_mode = false

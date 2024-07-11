@@ -131,7 +131,6 @@ function parseSprites(data: string) {
 
           const [r, g, b, a] = COLORS[n];
           const [h, s, l] = colorConvert.rgb.hsl(r, g, b);
-          // console.log([r, g, b], [h, s, l])
           row.push({ h, s, l, a });
         }
         img.push(row);

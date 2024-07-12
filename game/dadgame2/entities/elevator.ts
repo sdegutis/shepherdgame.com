@@ -1,5 +1,5 @@
 import { PixelImage } from '../lib/image.js';
-import { Entity, Logic } from "./entity.js";
+import { Entity, Interaction, Logic } from "./entity.js";
 import { Player } from './player.js';
 
 export class Elevator extends Entity {
@@ -20,7 +20,7 @@ export class Elevator extends Entity {
   override update = (t: number, logic: Logic) => {
 
     if (this.stoodOn) {
-      if (this.y >= this.y1 - 8) {
+      if (this.y >= this.y1 - 7) {
         logic.tryMove(this, 0, -1);
         logic.tryMove(this.stoodOn, 0, -1);
       }
@@ -40,10 +40,10 @@ export class Elevator extends Entity {
   };
 
   // override collideWith? = (other: Entity, x: number, y: number): Interaction => {
-  //   if (other instanceof Player) {
-  //     other.y += 1;
-  //     return 'pass';
-  //   }
+  //   // if (other instanceof Player) {
+  //   //   // other.y += 1;
+  //   //   return 'pass';
+  //   // }
 
   //   return 'stop';
   // }

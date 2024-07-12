@@ -176,8 +176,10 @@ engine.update = (t) => {
         const dy = (players[i].y + 4) - y;
         const d = Math.sqrt(dx ** 2 + dy ** 2);
         if (d < D) {
+          // if (d % 2 > 0.5) {
           const perc = (D - d + (D / 2)) / D;
           brightness += (1 * perc);
+          // }
         }
       }
 

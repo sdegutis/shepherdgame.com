@@ -191,7 +191,7 @@ engine.update = (t) => {
       }
       else {
         const perc = (20 - d) / 20;
-        pixelsHsla[p + 3] = 255 * perc;
+        pixelsHsla[p + 3] = 155 * perc + 100;
       }
     }
   }

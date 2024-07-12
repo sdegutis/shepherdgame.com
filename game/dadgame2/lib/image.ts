@@ -2,7 +2,7 @@ export class PixelImage {
 
   private original: Uint16Array;
   constructor(public pixels: Uint16Array) {
-    this.original = new Uint16Array(pixels);
+    this.original = pixels;
   }
 
   reset() {

@@ -176,10 +176,11 @@ engine.update = (t) => {
       // pixels[p + 3] = 0;
 
       let near = false;
+      let d = 0;
       for (const p of players) {
         const dx = (p.x + 4) - x;
         const dy = (p.y + 4) - y;
-        const d = Math.sqrt(dx ** 2 + dy ** 2);
+        d = Math.sqrt(dx ** 2 + dy ** 2);
         if (d < 20) {
           near = true;
           break;
@@ -187,6 +188,10 @@ engine.update = (t) => {
       }
       if (!near) {
         pixelsHsla[p + 3] = 100;
+      }
+      else {
+        const perc = (20 - d) / 20;
+        pixelsHsla[p + 3] = 255 * perc;
       }
     }
   }

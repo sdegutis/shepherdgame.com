@@ -129,11 +129,13 @@ const pixelsRgba = new Uint8ClampedArray(40 * 8 * 21 * 8 * 4);
 const imgdata = new ImageData(pixelsRgba, 40 * 8, 21 * 8);
 
 engine.update = (t) => {
+  // Update entities
   for (const e of entities) {
     if (e.dead) continue;
     e.update?.(t, logic);
   }
 
+  // Draw entities
   for (const e of entities) {
     if (e.dead) continue;
 
@@ -160,6 +162,7 @@ engine.update = (t) => {
     }
   }
 
+  // Light around players
   const D = 30;
   for (let y = 0; y < 21 * 8; y++) {
     for (let x = 0; x < 40 * 8; x++) {
@@ -173,29 +176,15 @@ engine.update = (t) => {
         const d = Math.sqrt(dx ** 2 + dy ** 2);
         if (d < D) {
           const perc = (D - d + (D / 2)) / D;
-          // if (perc > 0.95) {
-          //   console.log(perc)
-          // }
           brightness += (1 * perc);
         }
       }
 
-      // if (brightness > 2.8) {
-      //   console.log(brightness)
-      // }
-
       pixelsHsla[ii + 3] = (brightness / 1) * 155 + 100;
-      // if (pixelsHsla[ii + 3] > 200) {
-      //   console.log(brightness)
-      // }
     }
   }
 
-  for (let y = 0; y < 21 * 8; y++) {
-    for (let x = 0; x < 40 * 8; x++) {
-    }
-  }
-
+  // Scanlines
   for (let y = 0; y < 21 * 8; y += 2) {
     for (let x = 0; x < 40 * 8; x++) {
       const p = (y * 40 * 8 * 4) + (x * 4);
@@ -206,6 +195,7 @@ engine.update = (t) => {
     }
   }
 
+  // Apply drawing to screen
   for (let p = 0; p < 21 * 8 * 40 * 8 * 4; p += 4) {
     const h = pixelsHsla[p + 0];
     const s = pixelsHsla[p + 1];
@@ -217,6 +207,5 @@ engine.update = (t) => {
     pixelsRgba[p + 2] = b;
     pixelsRgba[p + 3] = a;
   }
-
   ctx.putImageData(imgdata, 0, 0);
 };

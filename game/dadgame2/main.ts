@@ -170,9 +170,10 @@ engine.update = (t) => {
 
       let brightness = 0;
 
-      for (const p of players) {
-        const dx = (p.x + 4) - x;
-        const dy = (p.y + 4) - y;
+      let i = players.length;
+      while (i--) {
+        const dx = (players[i].x + 4) - x;
+        const dy = (players[i].y + 4) - y;
         const d = Math.sqrt(dx ** 2 + dy ** 2);
         if (d < D) {
           const perc = (D - d + (D / 2)) / D;

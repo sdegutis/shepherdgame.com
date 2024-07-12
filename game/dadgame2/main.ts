@@ -160,7 +160,7 @@ engine.update = (t) => {
     }
   }
 
-  const D = 20;
+  const D = 30;
   for (let y = 0; y < 21 * 8; y++) {
     for (let x = 0; x < 40 * 8; x++) {
       const ii = (y * 40 * 8 * 4) + (x * 4);
@@ -172,7 +172,7 @@ engine.update = (t) => {
         const dy = (p.y + 4) - y;
         const d = Math.sqrt(dx ** 2 + dy ** 2);
         if (d < D) {
-          const perc = (D - d + (D / 10)) / D;
+          const perc = (D - d + (D / 2)) / D;
           // if (perc > 0.95) {
           //   console.log(perc)
           // }

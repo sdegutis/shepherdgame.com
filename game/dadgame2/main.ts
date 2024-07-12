@@ -160,41 +160,39 @@ engine.update = (t) => {
     }
   }
 
-  const perc = t % 10_000 / 10_000;
-  const circ = (Math.cos(perc * Math.PI * 2) + 1) / 2;
-
-  const D = 50;
-
+  const D = 20;
   for (let y = 0; y < 21 * 8; y++) {
     for (let x = 0; x < 40 * 8; x++) {
-      const p = (y * 40 * 8 * 4) + (x * 4);
-      // pixels[p + 0] = circ * 255;
-      // pixels[p + 0] = circ * pixels[p + 0];
-      // pixels[p + 1] = circ * pixels[p + 1];
-      // pixels[p + 2] = circ * pixels[p + 2];
-      // pixels[p + 0] = 0;
-      // pixels[p + 1] = 0;
-      // pixels[p + 2] = 0;
-      // pixels[p + 3] = 0;
+      const ii = (y * 40 * 8 * 4) + (x * 4);
 
-      let near = false;
-      let d = 0;
+      let brightness = 0;
+
       for (const p of players) {
         const dx = (p.x + 4) - x;
         const dy = (p.y + 4) - y;
-        d = Math.sqrt(dx ** 2 + dy ** 2);
+        const d = Math.sqrt(dx ** 2 + dy ** 2);
         if (d < D) {
-          near = true;
-          break;
+          const perc = (D - d + (D / 10)) / D;
+          // if (perc > 0.95) {
+          //   console.log(perc)
+          // }
+          brightness += (1 * perc);
         }
       }
-      if (!near) {
-        pixelsHsla[p + 3] = 100;
-      }
-      else {
-        const perc = (D - d) / D;
-        pixelsHsla[p + 3] = 155 * perc + 100;
-      }
+
+      // if (brightness > 2.8) {
+      //   console.log(brightness)
+      // }
+
+      pixelsHsla[ii + 3] = (brightness / 1) * 155 + 100;
+      // if (pixelsHsla[ii + 3] > 200) {
+      //   console.log(brightness)
+      // }
+    }
+  }
+
+  for (let y = 0; y < 21 * 8; y++) {
+    for (let x = 0; x < 40 * 8; x++) {
     }
   }
 

@@ -2,6 +2,7 @@ import { A, LEFT, RIGHT, X } from "../lib/core.js";
 import { PixelImage } from '../lib/image.js';
 import { Bubble } from "./bubble.js";
 import { BubbleWand } from "./bubblewand.js";
+import { Elevator } from "./elevator.js";
 import { Entity, Interaction, Logic } from "./entity.js";
 import { Wall } from "./wall.js";
 
@@ -22,6 +23,8 @@ export class Player extends Entity {
 
   hasWand = false;
   wandPressed = 0;
+
+  standingOn: Elevator | undefined;
 
   constructor(
     x: number,
@@ -50,6 +53,19 @@ export class Player extends Entity {
       if (!other.jumpThrough) return 'stop';
       if (y <= 0) return 'pass';
       return (other.y === this.y + 7) ? 'stop' : 'pass';
+    }
+
+    if (this.standingOn) {
+      this.standingOn.stoodOn = undefined;
+    }
+
+    this.standingOn = undefined;
+    if (other instanceof Elevator) {
+      if (x || y < 0) return 'pass';
+      if (other.y !== this.y + 7) return 'pass';
+      this.standingOn = other;
+      this.standingOn.stoodOn = this;
+      return 'stop';
     }
 
     if (other instanceof Bubble) {

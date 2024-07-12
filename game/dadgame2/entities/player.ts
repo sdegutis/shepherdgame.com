@@ -92,14 +92,14 @@ export class Player extends Entity {
 
     this.maybeBlowBubble();
 
-    const dur = 10_000;
-    const h = t % dur / dur;
+    // const dur = 10_000;
+    // const h = t % dur / dur;
 
-    this.image.reset();
-    for (let i = 0; i < 8 * 8 * 4; i += 4) {
-      const p = this.image.pixels;
-      p[i + 0] = (p[i + 0] + h * 360) % 360;
-    }
+    // this.image.reset();
+    // for (let i = 0; i < 8 * 8 * 4; i += 4) {
+    //   const p = this.image.pixels;
+    //   p[i + 0] = (p[i + 0] + h * 360) % 360;
+    // }
   };
 
   maybeBlowBubble() {

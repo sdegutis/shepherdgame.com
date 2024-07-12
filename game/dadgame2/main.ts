@@ -163,6 +163,8 @@ engine.update = (t) => {
   const perc = t % 10_000 / 10_000;
   const circ = (Math.cos(perc * Math.PI * 2) + 1) / 2;
 
+  const D = 50;
+
   for (let y = 0; y < 21 * 8; y++) {
     for (let x = 0; x < 40 * 8; x++) {
       const p = (y * 40 * 8 * 4) + (x * 4);
@@ -181,7 +183,7 @@ engine.update = (t) => {
         const dx = (p.x + 4) - x;
         const dy = (p.y + 4) - y;
         d = Math.sqrt(dx ** 2 + dy ** 2);
-        if (d < 20) {
+        if (d < D) {
           near = true;
           break;
         }
@@ -190,8 +192,8 @@ engine.update = (t) => {
         pixelsHsla[p + 3] = 100;
       }
       else {
-        const perc = (20 - d) / 20;
-        pixelsHsla[p + 3] = 255 * perc;
+        const perc = (D - d) / D;
+        pixelsHsla[p + 3] = 155 * perc + 100;
       }
     }
   }

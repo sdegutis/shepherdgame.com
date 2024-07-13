@@ -11,7 +11,7 @@ import { loadCleanP8, MapTile } from "./lib/pico8.js";
 const WIDTH = 320;
 const HEIGHT = 180;
 
-const ctx = createCanvas(WIDTH, HEIGHT, 5);
+const ctx = createCanvas(WIDTH, HEIGHT);
 const engine = runGameLoop();
 
 const game1 = await loadCleanP8('game/dadgame2/explore.p8');

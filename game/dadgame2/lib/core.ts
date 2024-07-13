@@ -24,10 +24,9 @@ export function runGameLoop() {
   return engine;
 }
 
-export function createCanvas(width: number, height: number, scale: number) {
+export function createCanvas(width: number, height: number) {
   const canvas = document.createElement('canvas');
-  canvas.style.width = (width * scale) + 'px';
-  canvas.style.height = (height * scale) + 'px';
+  canvas.style.height = '95vh';
   canvas.width = width;
   canvas.height = height;
   document.body.append(canvas);

@@ -93,6 +93,8 @@ entities.sort((a, b) => {
   return 0;
 });
 
+// 11010011100110011100101100001001010000101100110111011101000010011011000111010110
+
 const logic: Logic = {
   tryMove: (movingEntity, x, y) => {
     movingEntity.x += x;

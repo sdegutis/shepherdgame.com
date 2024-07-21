@@ -7,6 +7,10 @@ __lua__
 -- the sheep are lost!
 -- find them, bring them home.
 
+-- cls()
+-- flip()
+-- reload(0, 0, 0x4300, "sheep.p8")
+
 function _init()
 	emap={}
 	for y=0,63 do

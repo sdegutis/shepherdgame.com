@@ -181,28 +181,28 @@ export class Player extends Entity {
   }
 
   tryMoveY(logic: Logic) {
-    this.yvel += YVEL;
-    if (this.yvel > YVELCAP) this.yvel = YVELCAP;
+    // this.yvel += YVEL;
+    // if (this.yvel > YVELCAP) this.yvel = YVELCAP;
 
-    if (this.yvel) {
-      const dir = Math.sign(this.yvel);
-      const max = Math.abs(this.yvel);
-      let broke = false;
-      for (let i = 0; i < max; i += 1) {
-        if (!logic.tryMove(this, 0, dir)) {
-          if (this.yvel > 0) {
-            this.stoodFor++;
-          }
-
-          this.yvel = 0;
-          broke = true;
-          break;
+    // if (this.yvel) {
+    const dir = Math.sign(this.yvel);
+    const max = Math.abs(this.yvel);
+    let broke = false;
+    for (let i = 0; i < max; i += 1) {
+      if (!logic.tryMove(this, 0, dir)) {
+        if (this.yvel > 0) {
+          this.stoodFor++;
         }
-      }
-      if (!broke && this.yvel > 0) {
-        this.stoodFor = 0;
+
+        this.yvel = 0;
+        broke = true;
+        break;
       }
     }
+    if (!broke && this.yvel > 0) {
+      this.stoodFor = 0;
+    }
+    // }
   }
 
   rumble(sec: number, weak: number, strong: number) {

@@ -14,7 +14,25 @@ const HEIGHT = 180;
 const ctx = createCanvas(WIDTH, HEIGHT);
 const engine = runGameLoop();
 
-const game1 = await loadCleanP8('game/dadgame2/explore.p8');
+// 0 = night
+// 1 = water
+// 2 = leaves
+// 3 = grass
+// 4 = dirt
+// 5 = rocky
+// 6 = ice
+// 7 = snow
+// 8 = red leaves?
+// 9 = magma
+// 10 = autumn grass
+// 11 = light grass
+// 12 = shallow water
+// 13 = concrete?
+// 15 = sand
+
+const map1 = await loadCleanP8('game/dadgame3/explore.p8');
+const map2 = await loadCleanP8('sarah/untitled_7.p8');
+const map3 = await loadCleanP8('jane/untitled_4.p8');
 
 const entities: Entity[] = [];
 
@@ -29,7 +47,7 @@ function createEntity(tile: MapTile, x: number, y: number) {
   let entity;
 
   if (tile.index >= 1 && tile.index <= 3) {
-    const bubble = new Bubble(0, 0, game1.sprites[5].image, game1.sprites[21].image);
+    const bubble = new Bubble(0, 0, map1.sprites[5].image, map1.sprites[21].image);
     bubble.layer = 1;
     entities.push(bubble);
 
@@ -62,7 +80,7 @@ function createEntity(tile: MapTile, x: number, y: number) {
 
 for (let y = 0; y < 21; y++) {
   for (let x = 0; x < 40; x++) {
-    const tile = game1.map[y][x];
+    const tile = map1.map[y][x];
     if (tile.index > 0) {
       createEntity(tile, x, y);
     }
@@ -71,7 +89,7 @@ for (let y = 0; y < 21; y++) {
 
 for (let y = 0; y < 21; y++) {
   for (let x = 0; x < 40; x++) {
-    const tile = game1.map[y + 21][x];
+    const tile = map1.map[y + 21][x];
     if (tile.index > 0) {
       createEntity(tile, x, y).layer = 3;
     }
@@ -80,7 +98,7 @@ for (let y = 0; y < 21; y++) {
 
 for (let y = 0; y < 21; y++) {
   for (let x = 0; x < 40; x++) {
-    const tile = game1.map[y + 42][x];
+    const tile = map1.map[y + 42][x];
     if (tile.index > 0) {
       createEntity(tile, x, y).layer = -3;
     }
@@ -92,8 +110,6 @@ entities.sort((a, b) => {
   if (a.layer < b.layer) return -1;
   return 0;
 });
-
-// 11010011100110011100101100001001010000101100110111011101000010011011000111010110
 
 const logic: Logic = {
   tryMove: (movingEntity, x, y) => {
@@ -194,16 +210,16 @@ engine.update = (t) => {
     }
   }
 
-  // Scanlines
-  for (let y = 0; y < 21 * 8; y += 2) {
-    for (let x = 0; x < 40 * 8; x++) {
-      const p = (y * 40 * 8 * 4) + (x * 4);
-      pixelsHsla[p + 0] = (pixelsHsla[p + 0] + 10) % 360;
-      // pixelsHsla[p + 1] = Math.max(0, pixelsHsla[p + 1] - 20);
-      // pixelsHsla[p + 2] = Math.max(0, pixelsHsla[p + 2] - 20);
-      pixelsHsla[p + 3] = Math.max(0, pixelsHsla[p + 3] - 20);
-    }
-  }
+  // // Scanlines
+  // for (let y = 0; y < 21 * 8; y += 2) {
+  //   for (let x = 0; x < 40 * 8; x++) {
+  //     const p = (y * 40 * 8 * 4) + (x * 4);
+  //     pixelsHsla[p + 0] = (pixelsHsla[p + 0] + 10) % 360;
+  //     // pixelsHsla[p + 1] = Math.max(0, pixelsHsla[p + 1] - 20);
+  //     // pixelsHsla[p + 2] = Math.max(0, pixelsHsla[p + 2] - 20);
+  //     pixelsHsla[p + 3] = Math.max(0, pixelsHsla[p + 3] - 20);
+  //   }
+  // }
 
   // Apply drawing to screen
   for (let p = 0; p < 21 * 8 * 40 * 8 * 4; p += 4) {

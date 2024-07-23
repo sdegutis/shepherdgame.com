@@ -178,30 +178,30 @@ engine.update = (t) => {
     }
   }
 
-  // Light around players
-  const D = 30;
-  for (let y = 0; y < 21 * 8; y++) {
-    for (let x = 0; x < 40 * 8; x++) {
-      const ii = (y * 40 * 8 * 4) + (x * 4);
+  // // Light around players
+  // const D = 30;
+  // for (let y = 0; y < 21 * 8; y++) {
+  //   for (let x = 0; x < 40 * 8; x++) {
+  //     const ii = (y * 40 * 8 * 4) + (x * 4);
 
-      let brightness = 0;
+  //     let brightness = 0;
 
-      let i = players.length;
-      while (i--) {
-        const dx = (players[i].x + 4) - x;
-        const dy = (players[i].y + 4) - y;
-        const d = Math.sqrt(dx ** 2 + dy ** 2);
-        if (d < D) {
-          // if (d % 2 > 0.5) {
-          const perc = (D - d + (D / 2)) / D;
-          brightness += (1 * perc);
-          // }
-        }
-      }
+  //     let i = players.length;
+  //     while (i--) {
+  //       const dx = (players[i].x + 4) - x;
+  //       const dy = (players[i].y + 4) - y;
+  //       const d = Math.sqrt(dx ** 2 + dy ** 2);
+  //       if (d < D) {
+  //         // if (d % 2 > 0.5) {
+  //         const perc = (D - d + (D / 2)) / D;
+  //         brightness += (1 * perc);
+  //         // }
+  //       }
+  //     }
 
-      pixelsHsla[ii + 3] = (brightness / 1) * 155 + 100;
-    }
-  }
+  //     pixelsHsla[ii + 3] = (brightness / 1) * 155 + 100;
+  //   }
+  // }
 
   // // Scanlines
   // for (let y = 0; y < 21 * 8; y += 2) {

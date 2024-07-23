@@ -37,7 +37,27 @@ const map3 = await loadCleanP8('jane/untitled_4.p8');
 const entities: Entity[] = [];
 
 const players: Player[] = [];
-let playerIndex = 0;
+
+createPlayer();
+createPlayer();
+createPlayer();
+
+function createPlayer() {
+  const px = 20 * 8;
+  const py = 10 * 8;
+
+  const playerIndex = players.length;
+  const image = map2.sprites[(playerIndex + 1) * 16].image;
+
+  const bubble = new Bubble(0, 0, map1.sprites[5].image, map1.sprites[21].image);
+  bubble.layer = 1;
+  entities.push(bubble);
+
+  const entity = new Player(px, py, image, playerIndex, bubble);
+  entity.layer = 2;
+  players.push(entity);
+  entities.push(entity);
+}
 
 function createEntity(tile: MapTile, x: number, y: number) {
   const px = x * 8;
@@ -46,16 +66,7 @@ function createEntity(tile: MapTile, x: number, y: number) {
 
   let entity;
 
-  if (tile.index >= 1 && tile.index <= 3) {
-    const bubble = new Bubble(0, 0, map1.sprites[5].image, map1.sprites[21].image);
-    bubble.layer = 1;
-    entities.push(bubble);
-
-    entity = new Player(px, py, image, playerIndex++, bubble);
-    entity.layer = 2;
-    players.push(entity);
-  }
-  else if (tile.sprite.flags.RED) {
+  if (tile.sprite.flags.RED) {
     entity = new Wall(px, py, image);
   }
   else if (tile.sprite.flags.ORANGE) {
@@ -83,24 +94,6 @@ for (let y = 0; y < 21; y++) {
     const tile = map1.map[y][x];
     if (tile.index > 0) {
       createEntity(tile, x, y);
-    }
-  }
-}
-
-for (let y = 0; y < 21; y++) {
-  for (let x = 0; x < 40; x++) {
-    const tile = map1.map[y + 21][x];
-    if (tile.index > 0) {
-      createEntity(tile, x, y).layer = 3;
-    }
-  }
-}
-
-for (let y = 0; y < 21; y++) {
-  for (let x = 0; x < 40; x++) {
-    const tile = map1.map[y + 42][x];
-    if (tile.index > 0) {
-      createEntity(tile, x, y).layer = -3;
     }
   }
 }

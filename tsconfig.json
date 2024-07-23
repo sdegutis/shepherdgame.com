@@ -8,7 +8,7 @@
     ],
     "target": "ESNext",
     "outDir": "out",
-    "rootDir": "game",
+    "rootDir": "src",
     "sourceMap": true,
     "allowSyntheticDefaultImports": false,
     "module": "ESNext",

@@ -53,9 +53,43 @@ async function getLocalDir() {
   });
 }
 
-let cachedDir: FileSystemDirectoryHandle;
+class Fs {
+
+  constructor(private dir: FileSystemDirectoryHandle) { }
+
+  async getFileText(path: string) {
+    const parts = path.split('/');
+
+    let node = this.dir;
+    while (parts.length > 1) {
+      const subdir = parts.shift()!;
+      node = await this.dir.getDirectoryHandle(subdir);
+    }
+
+    const fileHandle = await node.getFileHandle(parts[0]!);
+    const text = await fileHandle.getFile().then(f => f.text());
+    return text;
+  }
+
+  async writeFile(path: string, contents: string) {
+    const fh = await this.dir.getFileHandle(path, {});
+    const f = await fh.createWritable({ keepExistingData: true });
+    f.seek(4);
+    f.write('a');
+    f.close();
+    // w.write('g');
+    // w.write('haha2\n');
+    // w.write('hehe2\n');
+    // f.write('hey');
+    // f.close();
+  }
+
+}
+
+let fs: Fs;
+
 export async function getPico8Dir() {
-  if (cachedDir) return cachedDir;
+  if (fs) return fs;
 
   const db = await getDb();
   let dir = await db.get();
@@ -72,19 +106,5 @@ export async function getPico8Dir() {
     return getPico8Dir();
   }
 
-  return cachedDir = dir;
-}
-
-export async function getFileText(dir: FileSystemDirectoryHandle, path: string) {
-  const parts = path.split('/');
-
-  let node = dir;
-  while (parts.length > 1) {
-    const subdir = parts.shift()!;
-    node = await dir.getDirectoryHandle(subdir);
-  }
-
-  const fileHandle = await node.getFileHandle(parts[0]!);
-  const text = await fileHandle.getFile().then(f => f.text());
-  return text;
+  return fs = new Fs(dir);
 }

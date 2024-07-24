@@ -13,6 +13,12 @@ const dir = await getPico8Dir();
 
 console.log(dir)
 
+// document.onmousedown = () => {
+
+dir.writeFile('hi.txt', 'hmm?');
+// }
+
+
 const screen = createCanvas();
 const engine = runGameLoop();
 

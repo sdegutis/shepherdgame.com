@@ -31,17 +31,13 @@ const map1 = await loadCleanP8('src/explore.p8');
 
 const entities: Entity[] = [];
 
-const players: Player[] = [];
+const player1 = createPlayer(0);
+const player2 = createPlayer(1);
 
-createPlayer();
-createPlayer();
-createPlayer();
-
-function createPlayer() {
+function createPlayer(playerIndex: number) {
   const px = 20 * 8;
   const py = 10 * 8;
 
-  const playerIndex = players.length;
   const image = map1.sprites[(playerIndex + 1) * 16].image;
 
   const bubble = new Bubble(0, 0, map1.sprites[5].image, map1.sprites[21].image);
@@ -50,7 +46,6 @@ function createPlayer() {
 
   const entity = new Player(px, py, image, playerIndex, bubble);
   entity.layer = 2;
-  players.push(entity);
   entities.push(entity);
 }
 

@@ -8,10 +8,7 @@ import { Wall } from "./entities/wall.js";
 import { createCanvas, runGameLoop } from "./lib/core.js";
 import { loadCleanP8, MapTile } from "./lib/pico8.js";
 
-const WIDTH = 320;
-const HEIGHT = 180;
-
-const ctx = createCanvas(WIDTH, HEIGHT);
+const screen = createCanvas();
 const engine = runGameLoop();
 
 // 0 = night
@@ -139,8 +136,6 @@ const logic: Logic = {
 };
 
 const pixelsHsla = new Uint16Array(40 * 8 * 21 * 8 * 4);
-const pixelsRgba = new Uint8ClampedArray(40 * 8 * 21 * 8 * 4);
-const imgdata = new ImageData(pixelsRgba, 40 * 8, 21 * 8);
 
 engine.update = (t) => {
   // Update entities
@@ -219,10 +214,11 @@ engine.update = (t) => {
     const l = pixelsHsla[p + 2];
     const a = pixelsHsla[p + 3];
     const [r, g, b] = colorConvert.hsl.rgb([h, s, l]);
-    pixelsRgba[p + 0] = r;
-    pixelsRgba[p + 1] = g;
-    pixelsRgba[p + 2] = b;
-    pixelsRgba[p + 3] = a;
+    screen.pixels[p + 0] = r;
+    screen.pixels[p + 1] = g;
+    screen.pixels[p + 2] = b;
+    screen.pixels[p + 3] = a;
   }
-  ctx.putImageData(imgdata, 0, 0);
+
+  screen.blit();
 };

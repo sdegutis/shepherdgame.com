@@ -7,6 +7,9 @@ export const HOME = 16;
 
 type Engine = { update: (t: number) => void };
 
+const WIDTH = 320;
+const HEIGHT = 180;
+
 export function runGameLoop() {
   const engine: Engine = { update: () => { } };
   const framerate = 30;
@@ -24,11 +27,17 @@ export function runGameLoop() {
   return engine;
 }
 
-export function createCanvas(width: number, height: number) {
+export function createCanvas() {
   const canvas = document.createElement('canvas');
   canvas.style.height = '95vh';
-  canvas.width = width;
-  canvas.height = height;
+  canvas.width = WIDTH;
+  canvas.height = HEIGHT;
   document.body.append(canvas);
-  return canvas.getContext('2d')!;
+
+  const ctx = canvas.getContext('2d')!;
+  const pixels = new Uint8ClampedArray(40 * 8 * 21 * 8 * 4);
+  const imgdata = new ImageData(pixels, 40 * 8, 21 * 8);
+  const blit = () => ctx.putImageData(imgdata, 0, 0);
+
+  return { pixels, blit };
 }

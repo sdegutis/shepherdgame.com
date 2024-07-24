@@ -5,19 +5,17 @@ export const LTRIGGER = 10, RTRIGGER = 11;
 export const UP = 12, DOWN = 13, LEFT = 14, RIGHT = 15;
 export const HOME = 16;
 
-type Engine = { update: (t: number) => void };
-
 const WIDTH = 320;
 const HEIGHT = 180;
 
 export function runGameLoop() {
-  const engine: Engine = { update: () => { } };
+  const engine = { ontick: (t: number) => { } };
   const framerate = 30;
   let from = +document.timeline.currentTime!;
   const step = () => {
     requestAnimationFrame(t => {
       if (t - from >= framerate) {
-        engine.update(t);
+        engine.ontick(t);
         from = t;
       }
       step();

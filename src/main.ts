@@ -116,7 +116,7 @@ const logic: Logic = {
 
 const pixelsHsla = new Uint16Array(40 * 8 * 21 * 8 * 4);
 
-engine.update = (t) => {
+engine.ontick = (t) => {
   // Update entities
   for (const e of entities) {
     if (e.dead) continue;

@@ -1,7 +1,4 @@
 import colorConvert from 'https://cdn.jsdelivr.net/npm/color-convert@2.0.1/+esm';
-import { Bubble } from "./entities/bubble.js";
-import { BubbleWand } from "./entities/bubblewand.js";
-import { Elevator } from './entities/elevator.js';
 import { Entity, Logic } from "./entities/entity.js";
 import { Player } from "./entities/player.js";
 import { Wall } from "./entities/wall.js";
@@ -9,14 +6,14 @@ import { createCanvas, runGameLoop } from "./lib/core.js";
 import { getPico8Dir } from './lib/fs.js';
 import { loadCleanP8, MapTile } from "./lib/pico8.js";
 
-const dir = await getPico8Dir();
+// const dir = await getPico8Dir();
 
-console.log(dir)
+// console.log(dir)
 
-// document.onmousedown = () => {
+// // document.onmousedown = () => {
 
-dir.writeFile('hi.txt', 'hmm?');
-// }
+// dir.writeFile('hi.txt', 'hmm?');
+// // }
 
 
 const screen = createCanvas();
@@ -51,11 +48,7 @@ function createPlayer(playerIndex: number) {
 
   const image = map1.sprites[(playerIndex + 1) * 16].image;
 
-  const bubble = new Bubble(0, 0, map1.sprites[5].image, map1.sprites[21].image);
-  bubble.layer = 1;
-  entities.push(bubble);
-
-  const entity = new Player(px, py, image, playerIndex, bubble);
+  const entity = new Player(px, py, image, playerIndex);
   entity.layer = 2;
   entities.push(entity);
 }
@@ -72,15 +65,6 @@ function createEntity(tile: MapTile, x: number, y: number) {
   }
   else if (tile.sprite.flags.ORANGE) {
     entity = new Wall(px, py, image);
-    entity.jumpThrough = true;
-  }
-  else if (tile.index === 4) {
-    entity = new BubbleWand(px, py, image);
-    entity.layer = 2;
-  }
-  else if (tile.index === 6) {
-    entity = new Elevator(px, py, image);
-    entity.layer = 2;
   }
   else {
     entity = new Entity(px, py, image);

@@ -3,7 +3,6 @@ import { Entity, Logic } from "./entities/entity.js";
 import { Player } from "./entities/player.js";
 import { Wall } from "./entities/wall.js";
 import { createCanvas, runGameLoop } from "./lib/core.js";
-import { getPico8Dir } from './lib/fs.js';
 import { loadCleanP8, MapTile } from "./lib/pico8.js";
 
 // const dir = await getPico8Dir();
@@ -35,7 +34,7 @@ const engine = runGameLoop();
 // 13 = concrete?
 // 15 = sand
 
-const map1 = await loadCleanP8('src/explore.p8');
+const map1 = await loadCleanP8('sheep.p8');
 
 const entities: Entity[] = [];
 

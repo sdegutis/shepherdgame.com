@@ -6,7 +6,12 @@ import { Entity, Logic } from "./entities/entity.js";
 import { Player } from "./entities/player.js";
 import { Wall } from "./entities/wall.js";
 import { createCanvas, runGameLoop } from "./lib/core.js";
+import { getPico8Dir } from './lib/fs.js';
 import { loadCleanP8, MapTile } from "./lib/pico8.js";
+
+const dir = await getPico8Dir();
+
+console.log(dir)
 
 const screen = createCanvas();
 const engine = runGameLoop();

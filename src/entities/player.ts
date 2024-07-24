@@ -1,8 +1,5 @@
 import { A, LEFT, RIGHT, X } from "../lib/core.js";
 import { PixelImage } from '../lib/image.js';
-import { Bubble } from "./bubble.js";
-import { BubbleWand } from "./bubblewand.js";
-import { Elevator } from "./elevator.js";
 import { Entity, Interaction, Logic } from "./entity.js";
 import { Wall } from "./wall.js";
 
@@ -19,85 +16,25 @@ export class Player extends Entity {
   yvel = 0;
   dir = 1;
 
-  stoodFor = 0;
-
-  hasWand = false;
-  wandPressed = 0;
-
-  standingOn: Elevator | undefined;
-
   public gamepadIndex: number;
-  public bubble: Bubble;
 
   constructor(
     x: number,
     y: number,
     image: PixelImage,
     gamepadIndex: number,
-    bubble: Bubble,
   ) {
     super(x, y, image);
     this.gamepadIndex = gamepadIndex;
-    this.bubble = bubble;
   }
 
   override collideWith = (other: Entity, x: number, y: number): Interaction => {
     if (other instanceof Player) {
-      if (x || y < 0 || this.y > other.y - 7) return 'pass';
-      return 'stop';
-    }
-
-    if (other instanceof BubbleWand) {
-      if (this.hasWand) return 'pass';
-      this.hasWand = true;
-      other.dead = true;
       return 'pass';
     }
 
     if (other instanceof Wall) {
-      if (!other.jumpThrough) return 'stop';
-      if (y <= 0) return 'pass';
-      return (other.y === this.y + 7) ? 'stop' : 'pass';
-    }
-
-    if (this.standingOn) {
-      this.standingOn.stoodOn = undefined;
-    }
-
-    this.standingOn = undefined;
-    if (other instanceof Elevator) {
-      if (x || y < 0) return 'pass';
-      if (other.y !== this.y + 7) return 'pass';
-      this.standingOn = other;
-      this.standingOn.stoodOn = this;
       return 'stop';
-    }
-
-    if (other instanceof Bubble) {
-      if (x) {
-        if (other.aliveFor < 30) return 'pass';
-        other.x += x;
-        return 'pass';
-      }
-
-      if (y < 0) {
-        if (other.aliveFor < 30) return 'pass';
-        other.y -= 1;
-        return 'pass';
-      }
-      else if (y > 0) {
-        if (this.y > other.y - 6) {
-          return 'pass';
-        }
-
-        // player.y -= 1;
-        other.sitting = true;
-        other.unsat = 1;
-        other.image = other.flatImage;
-        return 'stop';
-      }
-
-      return 'pass';
     }
 
     return 'pass';
@@ -105,39 +42,7 @@ export class Player extends Entity {
 
   override update = (t: number, logic: Logic) => {
     this.move(logic);
-
-    if (this.gamepad?.buttons[A].pressed && this.stoodFor >= 1) {
-      this.stoodFor = 0;
-      this.yvel = -5.15;
-    }
-
-    this.maybeBlowBubble();
-
-    // const dur = 10_000;
-    // const h = t % dur / dur;
-
-    // this.image.reset();
-    // for (let i = 0; i < 8 * 8 * 4; i += 4) {
-    //   const p = this.image.pixels;
-    //   p[i + 0] = (p[i + 0] + h * 360) % 360;
-    // }
   };
-
-  maybeBlowBubble() {
-    if (!this.hasWand) return;
-
-    if (this.gamepad?.buttons[X].pressed) {
-      this.wandPressed++;
-    }
-    else {
-      this.wandPressed = 0;
-      return;
-    }
-
-    if (this.wandPressed === 1) {
-      this.bubble.reset(this.x + (8 * this.dir), this.y);
-    }
-  }
 
   move(logic: Logic) {
     this.tryMoveX(logic);
@@ -195,17 +100,11 @@ export class Player extends Entity {
     let broke = false;
     for (let i = 0; i < max; i += 1) {
       if (!logic.tryMove(this, 0, dir)) {
-        if (this.yvel > 0) {
-          this.stoodFor++;
-        }
 
         this.yvel = 0;
         broke = true;
         break;
       }
-    }
-    if (!broke && this.yvel > 0) {
-      this.stoodFor = 0;
     }
     // }
   }

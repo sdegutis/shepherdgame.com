@@ -2,7 +2,7 @@ import colorConvert from 'https://cdn.jsdelivr.net/npm/color-convert@2.0.1/+esm'
 import { Entity, Logic } from "./entities/entity.js";
 import { Player } from "./entities/player.js";
 import { Wall } from "./entities/wall.js";
-import { setupScreen } from './lib/core.js';
+import { setupScreen } from './lib/screen.js';
 import { loadCleanP8, MapTile } from "./lib/pico8.js";
 
 // const dir = await getPico8Dir();

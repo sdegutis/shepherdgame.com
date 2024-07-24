@@ -1,4 +1,4 @@
-import { A, LEFT, RIGHT, X } from "../lib/core.js";
+import { A, LEFT, RIGHT, X } from "../lib/screen.js";
 import { PixelImage } from '../lib/image.js';
 import { Entity, Interaction, Logic } from "./entity.js";
 import { Wall } from "./wall.js";

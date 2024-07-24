@@ -2,7 +2,7 @@ import colorConvert from 'https://cdn.jsdelivr.net/npm/color-convert@2.0.1/+esm'
 import { Entity, Logic } from "./entities/entity.js";
 import { Player } from "./entities/player.js";
 import { Wall } from "./entities/wall.js";
-import { createCanvas, runGameLoop } from "./lib/core.js";
+import { setupScreen } from './lib/core.js';
 import { loadCleanP8, MapTile } from "./lib/pico8.js";
 
 // const dir = await getPico8Dir();
@@ -14,9 +14,7 @@ import { loadCleanP8, MapTile } from "./lib/pico8.js";
 // dir.writeFile('hi.txt', 'hmm?');
 // // }
 
-
-const screen = createCanvas();
-const engine = runGameLoop();
+const screen = setupScreen();
 
 // 0 = night
 // 1 = water
@@ -126,7 +124,7 @@ const logic: Logic = {
 
 const pixelsHsla = new Uint16Array(40 * 8 * 21 * 8 * 4);
 
-engine.update = (t) => {
+screen.update = (t) => {
   // Update entities
   for (const e of entities) {
     if (e.dead) continue;

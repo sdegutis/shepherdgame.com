@@ -55,7 +55,11 @@ async function getLocalDir() {
 
 class Fs {
 
-  constructor(private dir: FileSystemDirectoryHandle) { }
+  private dir: FileSystemDirectoryHandle;
+
+  constructor(dir: FileSystemDirectoryHandle) {
+    this.dir = dir;
+  }
 
   async getFileText(path: string) {
     const parts = path.split('/');

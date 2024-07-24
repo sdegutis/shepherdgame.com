@@ -26,14 +26,19 @@ export class Player extends Entity {
 
   standingOn: Elevator | undefined;
 
+  public gamepadIndex: number;
+  public bubble: Bubble;
+
   constructor(
     x: number,
     y: number,
     image: PixelImage,
-    public gamepadIndex: number,
-    public bubble: Bubble,
+    gamepadIndex: number,
+    bubble: Bubble,
   ) {
     super(x, y, image);
+    this.gamepadIndex = gamepadIndex;
+    this.bubble = bubble;
   }
 
   override collideWith = (other: Entity, x: number, y: number): Interaction => {

@@ -9,14 +9,19 @@ export class Bubble extends Entity {
 
   aliveFor = 0;
 
+  private openImage: PixelImage;
+  public flatImage: PixelImage;
+
   constructor(
     x: number,
     y: number,
-    private openImage: PixelImage,
-    public flatImage: PixelImage,
+    openImage: PixelImage,
+    flatImage: PixelImage,
   ) {
     super(x, y, openImage);
     this.dead = true;
+    this.openImage = openImage;
+    this.flatImage = flatImage;
   }
 
   reset(x: number, y: number) {

@@ -22,13 +22,16 @@ export class Entity {
   public get y(): number { return this._y; }
   public set y(v: number) { this._y = v; this.ry = Math.round(v); }
 
+  image: PixelImage;
+
   constructor(
     x: number,
     y: number,
-    public image: PixelImage,
+    image: PixelImage,
   ) {
     this.x = x;
     this.y = y;
+    this.image = image;
   }
 
   update?: (t: number, logic: Logic) => void;

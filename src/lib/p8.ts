@@ -128,12 +128,12 @@ function parseSprites(data: string) {
           const n = parseInt(c, 16);
 
           const [r, g, b, a] = COLORS[n];
-          const { h, s, l } = rgbToHsl(r, g, b);
+          // const { h, s, l } = rgbToHsl(r, g, b);
 
           const i = yy * 8 * 4 + xx * 4;
-          img[i + 0] = h;
-          img[i + 1] = s;
-          img[i + 2] = l;
+          img[i + 0] = r;
+          img[i + 1] = g;
+          img[i + 2] = b;
           img[i + 3] = a;
         }
       }

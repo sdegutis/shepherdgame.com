@@ -23,6 +23,45 @@ const crt = setupCRT();
 
 const map1 = await loadCleanP8('sheep.p8');
 
+const s = map1.sprites[9].image;
+
+let dx = 10;
+let dy = 20;
+
+crt.update = () => {
+
+  // dx += 2;
+  // dy += 0.1;
+
+  crt.pixels.fill(0);
+
+  for (let y = 0; y < 8; y++) {
+    for (let x = 0; x < 8; x++) {
+      const i = y * 8 * 4 + x * 4;
+      const i2 = Math.round(dy + y) * 320 * 4 + Math.round(dx + x) * 4;
+      crt.pixels[i2 + 0] = s.pixels[i + 0];
+      crt.pixels[i2 + 1] = s.pixels[i + 1];
+      crt.pixels[i2 + 2] = s.pixels[i + 2];
+      crt.pixels[i2 + 3] = s.pixels[i + 3];
+    }
+  }
+
+  crt.blit();
+
+};
+
+// for (let y = 0; y < 180; y++) {
+//   for (let x = 0; x < 320; x++) {
+//     const i = y * 320 * 4 + x * 4;
+
+//     crt.pixels[i + 0] = 100;
+//     crt.pixels[i + 1] = 100;
+//     crt.pixels[i + 2] = 100;
+//     crt.pixels[i + 3] = 255;
+
+//   }
+// }
+
 // const entities: Entity[] = [];
 
 // let player1: Player;
@@ -116,47 +155,49 @@ const map1 = await loadCleanP8('sheep.p8');
 //   }
 // };
 
-crt.update = (t) => {
+// crt.update = (t) => {
 
-  // camera.x = 0;
-  // camera.y = 0;
+//   // camera.x = 0;
+//   // camera.y = 0;
 
-  // // Update entities
-  // for (const e of entities) {
-  //   if (e.dead) continue;
-  //   e.update?.(t, logic);
-  // }
+//   // // Update entities
+//   // for (const e of entities) {
+//   //   if (e.dead) continue;
+//   //   e.update?.(t, logic);
+//   // }
 
-  // // Draw entities
-  // for (const e of entities) {
-  //   if (e.dead) continue;
-  //   e.draw(pixels, 0);
-  // }
+//   // // Draw entities
+//   // for (const e of entities) {
+//   //   if (e.dead) continue;
+//   //   e.draw(pixels, 0);
+//   // }
 
-  for (let y = 0; y < 180; y++) {
-    for (let x = 0; x < 320; x++) {
-      const i = y * 320 * 4 + x * 4;
+//   // for (let y = 0; y < 180; y++) {
+//   //   for (let x = 0; x < 320; x++) {
+//   //     const i = y * 320 * 4 + x * 4;
 
-      crt.pixels[i + 0] = 0;
-      crt.pixels[i + 1] = 0;
-      crt.pixels[i + 2] = 100;
-      crt.pixels[i + 3] = 255;
+//   //     crt.pixels[i + 0] = 100;
+//   //     crt.pixels[i + 1] = 100;
+//   //     crt.pixels[i + 2] = 100;
+//   //     crt.pixels[i + 3] = 255;
 
-    }
-  }
+//   //   }
+//   // }
 
-  // // Apply drawing to screen
-  // for (let p = 0; p < 21 * 8 * 40 * 8 * 4; p += 4) {
-  //   const h = pixels[p + 0];
-  //   const s = pixels[p + 1];
-  //   const l = pixels[p + 2];
-  //   const a = pixels[p + 3];
-  //   const [r, g, b] = colorConvert.hsl.rgb([h, s, l]);
-  //   crt.pixels[p + 0] = r;
-  //   crt.pixels[p + 1] = g;
-  //   crt.pixels[p + 2] = b;
-  //   crt.pixels[p + 3] = a;
-  // }
 
-  crt.blit();
-};
+
+//   // // Apply drawing to screen
+//   // for (let p = 0; p < 21 * 8 * 40 * 8 * 4; p += 4) {
+//   //   const h = pixels[p + 0];
+//   //   const s = pixels[p + 1];
+//   //   const l = pixels[p + 2];
+//   //   const a = pixels[p + 3];
+//   //   const [r, g, b] = colorConvert.hsl.rgb([h, s, l]);
+//   //   crt.pixels[p + 0] = r;
+//   //   crt.pixels[p + 1] = g;
+//   //   crt.pixels[p + 2] = b;
+//   //   crt.pixels[p + 3] = a;
+//   // }
+
+//   crt.blit();
+// };

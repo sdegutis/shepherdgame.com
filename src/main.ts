@@ -36,45 +36,36 @@ const map1 = await loadCleanP8('sheep.p8');
 
 const entities: Entity[] = [];
 
-const player1 = createPlayer(0);
-const player2 = createPlayer(1);
+let player1: Player;
+let player2: Player;
 
-function createPlayer(playerIndex: number) {
-  const px = 20 * 8;
-  const py = 10 * 8;
-
-  const image = map1.sprites[(playerIndex + 1) * 16].image;
-
-  const entity = new Player(px, py, image, playerIndex);
-  entities.push(entity);
-}
-
-function createEntity(tile: MapTile, x: number, y: number) {
-  const px = x * 8;
-  const py = y * 8;
-  const image = tile.sprite.image;
-
-  let entity;
-
-  if (tile.sprite.flags.RED) {
-    entity = new Wall(px, py, image);
-  }
-  else if (tile.sprite.flags.ORANGE) {
-    entity = new Wall(px, py, image);
-  }
-  else {
-    entity = new Entity(px, py, image);
-  }
-
-  entities.push(entity);
-  return entity;
-}
-
-for (let y = 0; y < 21; y++) {
-  for (let x = 0; x < 40; x++) {
+for (let y = 0; y < 64; y++) {
+  for (let x = 0; x < 128; x++) {
     const tile = map1.map[y][x];
     if (tile.index > 0) {
-      createEntity(tile, x, y);
+      const px = x * 8;
+      const py = y * 8;
+      const image = tile.sprite.image;
+
+      let entity;
+
+      if (tile.sprite.flags.RED) {
+        entity = new Wall(px, py, image);
+      }
+      else if (tile.sprite.flags.ORANGE) {
+        entity = new Wall(px, py, image);
+      }
+      else if (tile.index === 12) {
+        entity = player1 = new Player(px, py, image, 0);
+      }
+      else if (tile.index === 13) {
+        entity = player2 = new Player(px, py, image, 1);
+      }
+      else {
+        entity = new Entity(px, py, image);
+      }
+
+      entities.push(entity);
     }
   }
 }

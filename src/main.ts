@@ -28,7 +28,7 @@ const s = map1.sprites[9].image;
 let dx = 10;
 let dy = 20;
 
-crt.update = () => {
+crt.ontick = (t) => {
 
   // dx += 2;
   // dy += 0.1;

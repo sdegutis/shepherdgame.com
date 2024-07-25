@@ -21,7 +21,7 @@ export function setupCRT() {
   const blit = () => ctx.putImageData(imgdata, 0, 0);
 
   const crt = {
-    update: (t: number) => { },
+    ontick: (t: number) => { },
     pixels,
     blit,
   };
@@ -32,7 +32,7 @@ export function setupCRT() {
   const step = () => {
     requestAnimationFrame(t => {
       if (t - from >= framerate) {
-        crt.update(t);
+        crt.ontick(t);
         from = t;
       }
       step();

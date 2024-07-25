@@ -118,28 +118,7 @@ screen.update = (t) => {
   // Draw entities
   for (const e of entities) {
     if (e.dead) continue;
-
-    for (let y = 0; y < 8; y++) {
-      const yy = Math.round(e.y) + y;
-
-      for (let x = 0; x < 8; x++) {
-        const xx = Math.round(e.x) + x;
-
-        const i = y * 8 * 4 + x * 4;
-        const h = e.image.pixels[i + 0];
-        const s = e.image.pixels[i + 1];
-        const l = e.image.pixels[i + 2];
-        const a = e.image.pixels[i + 3];
-
-        if (a > 0) {
-          const p = (yy * 40 * 8 * 4) + (xx * 4);
-          pixelsHsla[p + 0] = h;
-          pixelsHsla[p + 1] = s;
-          pixelsHsla[p + 2] = l;
-          pixelsHsla[p + 3] = a;
-        }
-      }
-    }
+    e.draw(pixelsHsla);
   }
 
   // // Light around players

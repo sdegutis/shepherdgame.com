@@ -1,5 +1,4 @@
-import { rgbToHsl } from './color.js';
-import { PixelImage } from './image.js';
+import { Image } from './image.js';
 
 const COLORS = [
   [0x00, 0x00, 0x00, 0x00],
@@ -26,7 +25,7 @@ export interface MapTile {
 }
 
 export interface Sprite {
-  image: PixelImage,
+  image: Image,
   flags: Flag,
 }
 
@@ -138,7 +137,7 @@ function parseSprites(data: string) {
         }
       }
 
-      sprites.push(new PixelImage(img));
+      sprites.push(new Image(img));
     }
   }
 

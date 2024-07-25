@@ -34,18 +34,7 @@ crt.ontick = (t) => {
   // dy += 0.1;
 
   crt.pixels.fill(0);
-
-  for (let y = 0; y < 8; y++) {
-    for (let x = 0; x < 8; x++) {
-      const i = y * 8 * 4 + x * 4;
-      const i2 = Math.round(dy + y) * 320 * 4 + Math.round(dx + x) * 4;
-      crt.pixels[i2 + 0] = s.pixels[i + 0];
-      crt.pixels[i2 + 1] = s.pixels[i + 1];
-      crt.pixels[i2 + 2] = s.pixels[i + 2];
-      crt.pixels[i2 + 3] = s.pixels[i + 3];
-    }
-  }
-
+  s.draw(crt.pixels, dx, dy);
   crt.blit();
 
 };

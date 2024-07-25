@@ -46,7 +46,6 @@ function createPlayer(playerIndex: number) {
   const image = map1.sprites[(playerIndex + 1) * 16].image;
 
   const entity = new Player(px, py, image, playerIndex);
-  entity.layer = 2;
   entities.push(entity);
 }
 
@@ -79,12 +78,6 @@ for (let y = 0; y < 21; y++) {
     }
   }
 }
-
-entities.sort((a, b) => {
-  if (a.layer > b.layer) return 1;
-  if (a.layer < b.layer) return -1;
-  return 0;
-});
 
 const logic: Logic = {
   tryMove: (movingEntity, x, y) => {
@@ -122,7 +115,7 @@ const logic: Logic = {
 
 };
 
-const pixelsHsla = new Uint16Array(40 * 8 * 21 * 8 * 4);
+const pixelsHsla = new Uint16Array(320 * 180 * 4);
 
 screen.update = (t) => {
   // Update entities

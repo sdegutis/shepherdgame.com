@@ -9,7 +9,6 @@ export type Interaction = 'stop' | 'pass';
 export class Entity {
 
   dead = false;
-  layer = 0;
 
   constructor(
     public x: number,

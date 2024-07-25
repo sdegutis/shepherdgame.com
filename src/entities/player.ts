@@ -1,117 +1,117 @@
-import { A, LEFT, RIGHT, X } from "../lib/screen.js";
-import { PixelImage } from '../lib/image.js';
-import { Entity, Interaction, Logic } from "./entity.js";
-import { Wall } from "./wall.js";
+// import { A, LEFT, RIGHT, X } from "../lib/crt.js";
+// import { PixelImage } from '../lib/image.js';
+// import { Entity, Interaction, Logic } from "./entity.js";
+// import { Wall } from "./wall.js";
 
-const XVEL = 1;
-const XVELCAP = 2;
-const YVEL = 0.5;
-const YVELCAP = 7;
+// const XVEL = 1;
+// const XVELCAP = 2;
+// const YVEL = 0.5;
+// const YVELCAP = 7;
 
-export class Player extends Entity {
+// export class Player extends Entity {
 
-  get gamepad() { return navigator.getGamepads()[this.gamepadIndex]; }
+//   get gamepad() { return navigator.getGamepads()[this.gamepadIndex]; }
 
-  xvel = 0;
-  yvel = 0;
-  dir = 1;
+//   xvel = 0;
+//   yvel = 0;
+//   dir = 1;
 
-  constructor(
-    x: number,
-    y: number,
-    image: PixelImage,
-    public gamepadIndex: number,
-  ) {
-    super(x, y, image);
-  }
+//   constructor(
+//     x: number,
+//     y: number,
+//     image: PixelImage,
+//     public gamepadIndex: number,
+//   ) {
+//     super(x, y, image);
+//   }
 
-  override collideWith = (other: Entity, x: number, y: number): Interaction => {
-    if (other instanceof Player) {
-      return 'stop';
-    }
+//   override collideWith = (other: Entity, x: number, y: number): Interaction => {
+//     if (other instanceof Player) {
+//       return 'stop';
+//     }
 
-    if (other instanceof Wall) {
-      return 'pass';
-    }
+//     if (other instanceof Wall) {
+//       return 'pass';
+//     }
 
-    return 'pass';
-  };
+//     return 'pass';
+//   };
 
-  override update = (t: number, logic: Logic) => {
-    this.move(logic);
-  };
+//   override update = (t: number) => {
+//     this.move();
+//   };
 
-  move(logic: Logic) {
-    this.tryMoveX(logic);
-    this.tryMoveY(logic);
-  }
+//   move(logic: Logic) {
+//     this.tryMoveX();
+//     this.tryMoveY();
+//   }
 
-  tryMoveX(logic: Logic) {
-    let x1 = 0;
-    if (this.gamepad) {
-      if (this.gamepad.buttons[LEFT].pressed) { x1 = -1; }
-      else if (this.gamepad.buttons[RIGHT].pressed) { x1 = 1; }
-      else { [x1] = this.gamepad.axes; }
-    }
+//   tryMoveX() {
+//     let x1 = 0;
+//     if (this.gamepad) {
+//       if (this.gamepad.buttons[LEFT].pressed) { x1 = -1; }
+//       else if (this.gamepad.buttons[RIGHT].pressed) { x1 = 1; }
+//       else { [x1] = this.gamepad.axes; }
+//     }
 
-    const movingx = ~~(x1 * 100) / 100;
+//     const movingx = ~~(x1 * 100) / 100;
 
-    if (movingx) {
-      // accel
-      this.dir = Math.sign(movingx);
-      this.xvel += x1 * XVEL;
-      if (this.xvel > XVELCAP) this.xvel = XVELCAP;
-      if (this.xvel < -XVELCAP) this.xvel = -XVELCAP;
-    }
-    else {
-      // decel
-      if (this.xvel > 0) {
-        this.xvel -= XVEL;
-        if (this.xvel < 0) this.xvel = 0;
-      }
-      else if (this.xvel < 0) {
-        this.xvel += XVEL;
-        if (this.xvel > 0) this.xvel = 0;
-      }
-    }
+//     if (movingx) {
+//       // accel
+//       this.dir = Math.sign(movingx);
+//       this.xvel += x1 * XVEL;
+//       if (this.xvel > XVELCAP) this.xvel = XVELCAP;
+//       if (this.xvel < -XVELCAP) this.xvel = -XVELCAP;
+//     }
+//     else {
+//       // decel
+//       if (this.xvel > 0) {
+//         this.xvel -= XVEL;
+//         if (this.xvel < 0) this.xvel = 0;
+//       }
+//       else if (this.xvel < 0) {
+//         this.xvel += XVEL;
+//         if (this.xvel > 0) this.xvel = 0;
+//       }
+//     }
 
-    if (this.xvel) {
-      const dir = Math.sign(this.xvel);
-      const max = Math.abs(this.xvel);
-      for (let i = 0; i < max; i += 1) {
-        if (!logic.tryMove(this, dir, 0)) {
-          this.xvel = 0;
-          break;
-        }
-      }
-    }
-  }
+//     if (this.xvel) {
+//       const dir = Math.sign(this.xvel);
+//       const max = Math.abs(this.xvel);
+//       for (let i = 0; i < max; i += 1) {
+//         if (!logic.tryMove(this, dir, 0)) {
+//           this.xvel = 0;
+//           break;
+//         }
+//       }
+//     }
+//   }
 
-  tryMoveY(logic: Logic) {
-    // this.yvel += YVEL;
-    // if (this.yvel > YVELCAP) this.yvel = YVELCAP;
+//   tryMoveY() {
+//     // this.yvel += YVEL;
+//     // if (this.yvel > YVELCAP) this.yvel = YVELCAP;
 
-    // if (this.yvel) {
-    const dir = Math.sign(this.yvel);
-    const max = Math.abs(this.yvel);
-    let broke = false;
-    for (let i = 0; i < max; i += 1) {
-      if (!logic.tryMove(this, 0, dir)) {
-        this.yvel = 0;
-        broke = true;
-        break;
-      }
-    }
-    // }
-  }
+//     // if (this.yvel) {
+//     const dir = Math.sign(this.yvel);
+//     const max = Math.abs(this.yvel);
+//     let broke = false;
+//     for (let i = 0; i < max; i += 1) {
+//       if (!logic.tryMove(this, 0, dir)) {
+//         this.yvel = 0;
+//         broke = true;
+//         break;
+//       }
+//     }
+//     // }
+//   }
 
-  rumble(sec: number, weak: number, strong: number) {
-    // this.gamepad!.vibrationActuator.playEffect("dual-rumble", {
-    //   startDelay: 0,
-    //   duration: sec * 1000,
-    //   weakMagnitude: weak,
-    //   strongMagnitude: strong,
-    // });
-  }
+//   rumble(sec: number, weak: number, strong: number) {
+//     // this.gamepad!.vibrationActuator.playEffect("dual-rumble", {
+//     //   startDelay: 0,
+//     //   duration: sec * 1000,
+//     //   weakMagnitude: weak,
+//     //   strongMagnitude: strong,
+//     // });
+//   }
 
-}
+// }

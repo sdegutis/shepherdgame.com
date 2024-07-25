@@ -1,11 +1,9 @@
-import colorConvert from 'https://cdn.jsdelivr.net/npm/color-convert@2.0.1/+esm';
-import { Entity, Logic } from "./entities/entity.js";
-import { Player } from "./entities/player.js";
-import { Wall } from "./entities/wall.js";
+// import { Entity, Logic } from "./entities/entity.js";
+// import { Player } from "./entities/player.js";
+import { setupCRT } from './lib/crt.js';
 import { loadCleanP8 } from "./lib/p8.js";
-import { setupScreen } from './lib/screen.js';
 
-const screen = setupScreen();
+const crt = setupCRT();
 
 // 0 = night
 // 1 = water
@@ -25,141 +23,140 @@ const screen = setupScreen();
 
 const map1 = await loadCleanP8('sheep.p8');
 
-const entities: Entity[] = [];
+// const entities: Entity[] = [];
 
-let player1: Player;
-let player2: Player;
+// let player1: Player;
+// let player2: Player;
 
-for (let y = 0; y < 64; y++) {
-  for (let x = 0; x < 128; x++) {
-    const tile = map1.map[y][x];
-    if (tile.index > 0) {
-      const px = x * 8;
-      const py = y * 8;
-      const image = tile.sprite.image;
+// for (let y = 0; y < 64; y++) {
+//   for (let x = 0; x < 128; x++) {
+//     const tile = map1.map[y][x];
+//     if (tile.index > 0) {
+//       const px = x * 8;
+//       const py = y * 8;
+//       const image = tile.sprite.image;
 
-      let entity;
+//       let entity;
 
-      if (tile.sprite.flags.RED) {
-        entity = new Wall(px, py, image);
-      }
-      else if (tile.sprite.flags.ORANGE) {
-        entity = new Wall(px, py, image);
-      }
-      else if (tile.index === 12) {
-        entity = player1 = new Player(px, py, image, 0);
-      }
-      else if (tile.index === 13) {
-        entity = player2 = new Player(px, py, image, 1);
-      }
-      else {
-        entity = new Entity(px, py, image);
-      }
+//       if (tile.sprite.flags.RED) {
+//         entity = new Wall(px, py, image);
+//       }
+//       else if (tile.sprite.flags.ORANGE) {
+//         entity = new Wall(px, py, image);
+//       }
+//       else if (tile.index === 12) {
+//         entity = player1 = new Player(px, py, image, 0);
+//       }
+//       else if (tile.index === 13) {
+//         entity = player2 = new Player(px, py, image, 1);
+//       }
+//       else {
+//         entity = new Entity(px, py, image);
+//       }
 
-      entities.push(entity);
-    }
-  }
-}
+//       entities.push(entity);
+//     }
+//   }
+// }
 
-const logic: Logic = {
-  tryMove: (movingEntity, x, y) => {
-    movingEntity.x += x;
-    movingEntity.y += y;
+// const logic: Logic = {
+//   tryMove: (movingEntity, x, y) => {
+//     movingEntity.x += x;
+//     movingEntity.y += y;
 
-    let canMove = true;
-    for (let i = 0; i < entities.length; i++) {
-      const collidedInto = entities[i];
-      if (
-        movingEntity.x + 7 >= collidedInto.x &&
-        movingEntity.y + 7 >= collidedInto.y &&
-        movingEntity.x <= collidedInto.x + 7 &&
-        movingEntity.y <= collidedInto.y + 7
-      ) {
-        if (collidedInto === movingEntity) continue;
-        if (collidedInto.dead) continue;
-        if (!movingEntity.collideWith) continue;
+//     let canMove = true;
+//     for (let i = 0; i < entities.length; i++) {
+//       const collidedInto = entities[i];
+//       if (
+//         movingEntity.x + 7 >= collidedInto.x &&
+//         movingEntity.y + 7 >= collidedInto.y &&
+//         movingEntity.x <= collidedInto.x + 7 &&
+//         movingEntity.y <= collidedInto.y + 7
+//       ) {
+//         if (collidedInto === movingEntity) continue;
+//         if (collidedInto.dead) continue;
+//         if (!movingEntity.collideWith) continue;
 
-        const result = movingEntity.collideWith(collidedInto, x, y);
-        if (result === 'stop') {
-          canMove = false;
-          break;
-        }
-      }
-    }
+//         const result = movingEntity.collideWith(collidedInto, x, y);
+//         if (result === 'stop') {
+//           canMove = false;
+//           break;
+//         }
+//       }
+//     }
 
-    if (!canMove) {
-      movingEntity.x -= x;
-      movingEntity.y -= y;
-    }
+//     if (!canMove) {
+//       movingEntity.x -= x;
+//       movingEntity.y -= y;
+//     }
 
-    return canMove;
-  },
+//     return canMove;
+//   },
 
-};
+// };
 
-const pixelsHsla = new Uint16Array(320 * 180 * 4);
+// class Screen {
 
-screen.update = (t) => {
-  // Update entities
-  for (const e of entities) {
-    if (e.dead) continue;
-    e.update?.(t, logic);
-  }
+//   pixels = new Uint16Array(320 * 180 * 4);
 
-  // Draw entities
-  for (const e of entities) {
-    if (e.dead) continue;
-    e.draw(pixelsHsla, 0);
-  }
+// }
 
-  // // Light around players
-  // const D = 30;
-  // for (let y = 0; y < 21 * 8; y++) {
-  //   for (let x = 0; x < 40 * 8; x++) {
-  //     const ii = (y * 40 * 8 * 4) + (x * 4);
+// class Point {
 
-  //     let brightness = 0;
+//   constructor(public x = 0, public y = 0) { }
 
-  //     let i = players.length;
-  //     while (i--) {
-  //       const dx = (players[i].x + 4) - x;
-  //       const dy = (players[i].y + 4) - y;
-  //       const d = Math.sqrt(dx ** 2 + dy ** 2);
-  //       if (d < D) {
-  //         // if (d % 2 > 0.5) {
-  //         const perc = (D - d + (D / 2)) / D;
-  //         brightness += (1 * perc);
-  //         // }
-  //       }
-  //     }
+// }
 
-  //     pixelsHsla[ii + 3] = (brightness / 1) * 155 + 100;
-  //   }
+
+// const camera = new Point();
+
+// document.onkeydown = (e) => {
+//   if (e.key === 'ArrowRight') {
+//     camera.x += 1;
+//   }
+// };
+
+crt.update = (t) => {
+
+  // camera.x = 0;
+  // camera.y = 0;
+
+  // // Update entities
+  // for (const e of entities) {
+  //   if (e.dead) continue;
+  //   e.update?.(t, logic);
   // }
 
-  // // Scanlines
-  // for (let y = 0; y < 21 * 8; y += 2) {
-  //   for (let x = 0; x < 40 * 8; x++) {
-  //     const p = (y * 40 * 8 * 4) + (x * 4);
-  //     pixelsHsla[p + 0] = (pixelsHsla[p + 0] + 10) % 360;
-  //     // pixelsHsla[p + 1] = Math.max(0, pixelsHsla[p + 1] - 20);
-  //     // pixelsHsla[p + 2] = Math.max(0, pixelsHsla[p + 2] - 20);
-  //     pixelsHsla[p + 3] = Math.max(0, pixelsHsla[p + 3] - 20);
-  //   }
+  // // Draw entities
+  // for (const e of entities) {
+  //   if (e.dead) continue;
+  //   e.draw(pixels, 0);
   // }
 
-  // Apply drawing to screen
-  for (let p = 0; p < 21 * 8 * 40 * 8 * 4; p += 4) {
-    const h = pixelsHsla[p + 0];
-    const s = pixelsHsla[p + 1];
-    const l = pixelsHsla[p + 2];
-    const a = pixelsHsla[p + 3];
-    const [r, g, b] = colorConvert.hsl.rgb([h, s, l]);
-    screen.pixels[p + 0] = r;
-    screen.pixels[p + 1] = g;
-    screen.pixels[p + 2] = b;
-    screen.pixels[p + 3] = a;
+  for (let y = 0; y < 180; y++) {
+    for (let x = 0; x < 320; x++) {
+      const i = y * 320 * 4 + x * 4;
+
+      crt.pixels[i + 0] = 0;
+      crt.pixels[i + 1] = 0;
+      crt.pixels[i + 2] = 100;
+      crt.pixels[i + 3] = 255;
+
+    }
   }
 
-  screen.blit();
+  // // Apply drawing to screen
+  // for (let p = 0; p < 21 * 8 * 40 * 8 * 4; p += 4) {
+  //   const h = pixels[p + 0];
+  //   const s = pixels[p + 1];
+  //   const l = pixels[p + 2];
+  //   const a = pixels[p + 3];
+  //   const [r, g, b] = colorConvert.hsl.rgb([h, s, l]);
+  //   crt.pixels[p + 0] = r;
+  //   crt.pixels[p + 1] = g;
+  //   crt.pixels[p + 2] = b;
+  //   crt.pixels[p + 3] = a;
+  // }
+
+  crt.blit();
 };

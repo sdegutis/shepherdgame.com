@@ -8,7 +8,7 @@ export const HOME = 16;
 const WIDTH = 320;
 const HEIGHT = 180;
 
-export function setupScreen() {
+export function setupCRT() {
   const canvas = document.createElement('canvas');
   canvas.style.height = '95vh';
   canvas.width = WIDTH;
@@ -16,11 +16,11 @@ export function setupScreen() {
   document.body.append(canvas);
 
   const ctx = canvas.getContext('2d')!;
-  const pixels = new Uint8ClampedArray(40 * 8 * 21 * 8 * 4);
-  const imgdata = new ImageData(pixels, 40 * 8, 21 * 8);
+  const pixels = new Uint8ClampedArray(320 * 180 * 4);
+  const imgdata = new ImageData(pixels, 320, 180);
   const blit = () => ctx.putImageData(imgdata, 0, 0);
 
-  const screen = {
+  const crt = {
     update: (t: number) => { },
     pixels,
     blit,
@@ -32,7 +32,7 @@ export function setupScreen() {
   const step = () => {
     requestAnimationFrame(t => {
       if (t - from >= framerate) {
-        screen.update(t);
+        crt.update(t);
         from = t;
       }
       step();
@@ -40,5 +40,5 @@ export function setupScreen() {
   };
   step();
 
-  return screen;
+  return crt;
 }

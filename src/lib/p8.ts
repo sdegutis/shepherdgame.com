@@ -1,4 +1,4 @@
-import colorConvert from 'https://cdn.jsdelivr.net/npm/color-convert@2.0.1/+esm';
+import { rgbToHsl } from './color.js';
 import { PixelImage } from './image.js';
 
 const COLORS = [
@@ -128,7 +128,7 @@ function parseSprites(data: string) {
           const n = parseInt(c, 16);
 
           const [r, g, b, a] = COLORS[n];
-          const [h, s, l] = colorConvert.rgb.hsl(r, g, b);
+          const { h, s, l } = rgbToHsl(r, g, b);
 
           const i = yy * 8 * 4 + xx * 4;
           img[i + 0] = h;

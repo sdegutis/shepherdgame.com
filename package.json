@@ -14,7 +14,6 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@types/color-convert": "^2.0.3",
     "@types/wicg-file-system-access": "^2023.10.5",
     "typescript": "^5.5.2"
   }

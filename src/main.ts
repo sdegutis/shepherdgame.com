@@ -136,10 +136,10 @@ screen.update = (t) => {
     if (e.dead) continue;
 
     for (let y = 0; y < 8; y++) {
-      const yy = e.ry + y;
+      const yy = Math.round(e.y) + y;
 
       for (let x = 0; x < 8; x++) {
-        const xx = e.rx + x;
+        const xx = Math.round(e.x) + x;
 
         const i = y * 8 * 4 + x * 4;
         const h = e.image.pixels[i + 0];

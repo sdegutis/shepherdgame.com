@@ -20,7 +20,7 @@ export class Entity {
 
   collideWith?: (other: Entity, x: number, y: number) => Interaction;
 
-  draw(pixels: Uint16Array) {
+  draw(pixels: Uint16Array, layer: number) {
     for (let y = 0; y < 8; y++) {
       const yy = Math.round(this.y) + y;
 

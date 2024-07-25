@@ -2,17 +2,8 @@ import colorConvert from 'https://cdn.jsdelivr.net/npm/color-convert@2.0.1/+esm'
 import { Entity, Logic } from "./entities/entity.js";
 import { Player } from "./entities/player.js";
 import { Wall } from "./entities/wall.js";
-import { loadCleanP8, MapTile } from "./lib/p8.js";
+import { loadCleanP8 } from "./lib/p8.js";
 import { setupScreen } from './lib/screen.js';
-
-// const dir = await getPico8Dir();
-
-// console.log(dir)
-
-// // document.onmousedown = () => {
-
-// dir.writeFile('hi.txt', 'hmm?');
-// // }
 
 const screen = setupScreen();
 
@@ -118,7 +109,7 @@ screen.update = (t) => {
   // Draw entities
   for (const e of entities) {
     if (e.dead) continue;
-    e.draw(pixelsHsla);
+    e.draw(pixelsHsla, 0);
   }
 
   // // Light around players

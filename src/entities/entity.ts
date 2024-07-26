@@ -1,49 +1,15 @@
-// import { PixelImage } from '../lib/image.js';
-
-// export interface Logic {
-//   tryMove(entity: Entity, x: number, y: number): boolean;
-// }
+import { Img } from "../lib/image.js";
 
 // export type Interaction = 'stop' | 'pass';
-
-// export class Entity {
-
-//   dead = false;
-
-//   constructor(
-//     public x: number,
-//     public y: number,
-//     public image: PixelImage,
-//   ) { }
-
 //   update?: (t: number) => void;
-
 //   collideWith?: (other: Entity, x: number, y: number) => Interaction;
 
-//   draw(pixels: Uint16Array, layer: number) {
-//     for (let y = 0; y < 8; y++) {
-//       const yy = Math.round(this.y) + y;
+export class Entity {
 
-//       for (let x = 0; x < 8; x++) {
-//         const xx = Math.round(this.x) + x;
+  constructor(
+    public image: Img,
+    public x: number,
+    public y: number,
+  ) { }
 
-//         const i = y * 8 + x;
-//         const h = this.image.pixels[i + 0];
-//         const s = this.image.pixels[i + 1];
-//         const l = this.image.pixels[i + 2];
-//         const a = this.image.pixels[i + 3];
-
-//         if (a > 0) {
-//           const p = (yy * 320 * 8) + (xx);
-//           pixels[p] = new Color(h, s, l);
-
-//           pixels[p + 0] = h;
-//           pixels[p + 1] = s;
-//           pixels[p + 2] = l;
-//           pixels[p + 3] = a;
-//         }
-//       }
-//     }
-//   }
-
-// }
+}

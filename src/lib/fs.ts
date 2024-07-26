@@ -74,14 +74,8 @@ class Fs {
   async writeFile(path: string, contents: string) {
     const fh = await this.dir.getFileHandle(path, {});
     const f = await fh.createWritable({ keepExistingData: true });
-    f.seek(4);
-    f.write('a');
+    f.write(contents);
     f.close();
-    // w.write('g');
-    // w.write('haha2\n');
-    // w.write('hehe2\n');
-    // f.write('hey');
-    // f.close();
   }
 
 }

@@ -1,6 +1,6 @@
 import { COLORS_RGBA } from "./p8.js";
 
-export class Image {
+export class Img {
 
   constructor(
     public pixels: Uint16Array,
@@ -19,7 +19,7 @@ export class Image {
       img[i + 3] = c[3];
     }
 
-    return new Image(img, w, h);
+    return new Img(img, w, h);
   }
 
   static from(spritesheet: number[], i: number, w = 8, h = 8, ox = 0, oy = 0) {
@@ -41,7 +41,7 @@ export class Image {
       }
     }
 
-    return new Image(img, w, h);
+    return new Img(img, w, h);
   }
 
   draw(pixels: Uint8ClampedArray, dx: number, dy: number) {

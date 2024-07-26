@@ -1,7 +1,6 @@
-// import { Entity, Logic } from "./entities/entity.js";
-// import { Player } from "./entities/player.js";
+import { Entity } from './entities/entity.js';
 import { setupCRT } from './lib/crt.js';
-import { Image } from './lib/image.js';
+import { Img } from './lib/image.js';
 import { loadP8 } from "./lib/p8.js";
 
 const crt = setupCRT();
@@ -24,19 +23,9 @@ const crt = setupCRT();
 
 const map1 = await loadP8('sheep.p8');
 
-class Entity {
-
-  constructor(
-    public image: Image,
-    public x: number,
-    public y: number,
-  ) { }
-
-}
-
 const entities: Entity[] = [];
 
-const bg = new Entity(Image.flatColor(3), 0, 0);
+const bg = new Entity(Img.flatColor(3), 0, 0);
 entities.push(bg);
 
 for (let y = 0; y < 64; y++) {
@@ -44,55 +33,24 @@ for (let y = 0; y < 64; y++) {
     const si = map1.map[y][x];
     if (si === 0) continue;
 
-    const img = Image.from(map1.spritesheet, si);
+    const img = Img.from(map1.spritesheet, si);
     const ent = new Entity(img, x * 8, y * 8);
     entities.push(ent);
   }
 }
 
-// const s = Image.from(map1.spritesheet, 9, 5, 6, 2, 2);
+let dx = 450;
+let dy = 150;
 
-let dx = 0;
-// let dy = 0;
-
-document.onkeydown = (e) => {
-  if (e.key === 'ArrowRight') {
-    dx += 10;
-    console.log('hi')
-  }
-};
 crt.ontick = (t) => {
-
-  // dx += 2;
-  // dy += 0.1;
-
   crt.pixels.fill(0);
 
   for (const ent of entities) {
-    ent.image.draw(crt.pixels, ent.x - dx, ent.y);
+    ent.image.draw(crt.pixels, ent.x - dx, ent.y - dy);
   }
 
   crt.blit();
-
-  // crt.pixels.fill(0);
-  // s.draw(crt.pixels, dx, dy);
-  // crt.blit();
-
 };
-
-// for (let y = 0; y < 180; y++) {
-//   for (let x = 0; x < 320; x++) {
-//     const i = y * 320 * 4 + x * 4;
-
-//     crt.pixels[i + 0] = 100;
-//     crt.pixels[i + 1] = 100;
-//     crt.pixels[i + 2] = 100;
-//     crt.pixels[i + 3] = 255;
-
-//   }
-// }
-
-// const entities: Entity[] = [];
 
 // let player1: Player;
 // let player2: Player;
@@ -164,65 +122,14 @@ crt.ontick = (t) => {
 
 // };
 
-// class Screen {
-
-//   pixels = new Uint16Array(320 * 180 * 4);
-
-// }
 
 // class Point {
-
 //   constructor(public x = 0, public y = 0) { }
-
 // }
-
-
 // const camera = new Point();
-
-
-// crt.update = (t) => {
-
-//   // camera.x = 0;
-//   // camera.y = 0;
 
 //   // // Update entities
 //   // for (const e of entities) {
 //   //   if (e.dead) continue;
 //   //   e.update?.(t, logic);
 //   // }
-
-//   // // Draw entities
-//   // for (const e of entities) {
-//   //   if (e.dead) continue;
-//   //   e.draw(pixels, 0);
-//   // }
-
-//   // for (let y = 0; y < 180; y++) {
-//   //   for (let x = 0; x < 320; x++) {
-//   //     const i = y * 320 * 4 + x * 4;
-
-//   //     crt.pixels[i + 0] = 100;
-//   //     crt.pixels[i + 1] = 100;
-//   //     crt.pixels[i + 2] = 100;
-//   //     crt.pixels[i + 3] = 255;
-
-//   //   }
-//   // }
-
-
-
-//   // // Apply drawing to screen
-//   // for (let p = 0; p < 21 * 8 * 40 * 8 * 4; p += 4) {
-//   //   const h = pixels[p + 0];
-//   //   const s = pixels[p + 1];
-//   //   const l = pixels[p + 2];
-//   //   const a = pixels[p + 3];
-//   //   const [r, g, b] = colorConvert.hsl.rgb([h, s, l]);
-//   //   crt.pixels[p + 0] = r;
-//   //   crt.pixels[p + 1] = g;
-//   //   crt.pixels[p + 2] = b;
-//   //   crt.pixels[p + 3] = a;
-//   // }
-
-//   crt.blit();
-// };

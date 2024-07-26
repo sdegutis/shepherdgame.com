@@ -1,4 +1,4 @@
-import { Image } from './image.js';
+import { Img } from './image.js';
 
 export const COLORS_RGBA = [
   [0x00, 0x00, 0x00, 0x00],
@@ -25,7 +25,7 @@ export interface MapTile {
 }
 
 export interface Sprite {
-  image: Image,
+  image: Img,
   flags: Flag,
 }
 

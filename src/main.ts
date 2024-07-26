@@ -3,7 +3,17 @@ import { setupCRT } from './lib/crt.js';
 import { Img } from './lib/image.js';
 import { loadP8 } from "./lib/p8.js";
 
-const crt = setupCRT();
+class Game {
+
+  entities: Entity[] = [];
+
+  constructor(
+
+  ) {
+
+  }
+
+}
 
 // 0 = night
 // 1 = water
@@ -21,32 +31,31 @@ const crt = setupCRT();
 // 13 = concrete?
 // 15 = sand
 
+export const game = new Game();
+
 const map1 = await loadP8('sheep.p8');
 
-const entities: Entity[] = [];
-
 const bg = new Entity(Img.flatColor(3), 0, 0);
-entities.push(bg);
+game.entities.push(bg);
 
 for (let y = 0; y < 64; y++) {
   for (let x = 0; x < 128; x++) {
-    const si = map1.map[y][x];
-    if (si === 0) continue;
+    const s = map1.map[y][x];
+    if (s === 0) continue;
 
-    const img = Img.from(map1.spritesheet, si);
+    const img = Img.from(map1.spritesheet, s);
     const ent = new Entity(img, x * 8, y * 8);
-    entities.push(ent);
+    game.entities.push(ent);
   }
 }
 
-let dx = 450;
-let dy = 150;
+const crt = setupCRT();
 
 crt.ontick = (t) => {
   crt.pixels.fill(0);
 
-  for (const ent of entities) {
-    ent.image.draw(crt.pixels, ent.x - dx, ent.y - dy);
+  for (const ent of game.entities) {
+    ent.image.draw(crt.pixels, ent.x, ent.y);
   }
 
   crt.blit();

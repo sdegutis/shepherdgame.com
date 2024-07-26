@@ -1,7 +1,6 @@
 import { Img } from "../lib/image.js";
 
 // export type Interaction = 'stop' | 'pass';
-//   update?: (t: number) => void;
 //   collideWith?: (other: Entity, x: number, y: number) => Interaction;
 
 export class Entity {
@@ -11,5 +10,7 @@ export class Entity {
     public x: number,
     public y: number,
   ) { }
+
+  // update?: (t: number) => void;
 
 }

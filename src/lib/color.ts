@@ -1,53 +1,95 @@
-export function hslToRgb(h: number, s: number, l: number) {
-  let r, g, b;
+import { COLORS_RGBA } from "./p8.js";
+
+export function convertRgbToHsl(colors: number[]) {
+  const r = colors[0] / 255;
+  const g = colors[1] / 255;
+  const b = colors[2] / 255;
+  const min = Math.min(r, g, b);
+  const max = Math.max(r, g, b);
+  const delta = max - min;
+  let h = 0;
+  let s;
+
+  if (max === min) {
+    h = 0;
+  } else if (r === max) {
+    h = (g - b) / delta;
+  } else if (g === max) {
+    h = 2 + (b - r) / delta;
+  } else if (b === max) {
+    h = 4 + (r - g) / delta;
+  }
+
+  h = Math.min(h * 60, 360);
+
+  if (h < 0) {
+    h += 360;
+  }
+
+  const l = (min + max) / 2;
+
+  if (max === min) {
+    s = 0;
+  } else if (l <= 0.5) {
+    s = delta / (max + min);
+  } else {
+    s = delta / (2 - max - min);
+  }
+
+  return [
+    h,
+    s * 100,
+    l * 100,
+    colors[3],
+  ] as const;
+};
+
+export function convertHslToRgb(input: Uint16Array, offset: number, output: Uint8ClampedArray) {
+  const h = input[offset + 0] / 360;
+  const s = input[offset + 1] / 100;
+  const l = input[offset + 2] / 100;
+  let t2;
+  let t3;
+  let val;
 
   if (s === 0) {
-    r = g = b = l;
-  }
-  else {
-    let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    let p = 2 * l - q;
-    r = hue2rgb(p, q, h + 1 / 3);
-    g = hue2rgb(p, q, h);
-    b = hue2rgb(p, q, h - 1 / 3);
+    val = l * 255;
+    output[offset + 0] = val;
+    output[offset + 1] = val;
+    output[offset + 2] = val;
+    return;
   }
 
-  return { r, g, b };
-}
-
-function hue2rgb(p: number, q: number, t: number) {
-  if (t < 0) t += 1;
-  if (t > 1) t -= 1;
-  if (t < 1 / 6) return p + (q - p) * 6 * t;
-  if (t < 1 / 2) return q;
-  if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-  return p;
-}
-
-export function rgbToHsl(r: number, g: number, b: number) {
-  let max = Math.max(r, g, b), min = Math.min(r, g, b);
-  let h, s, l = (max + min) / 2;
-
-  if (max == min) {
-    h = s = 0;
+  if (l < 0.5) {
+    t2 = l * (1 + s);
   } else {
-    let d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r:
-        h = (g - b) / d + (g < b ? 6 : 0);
-        break;
-      case g:
-        h = (b - r) / d + 2;
-        break;
-      default:
-      case b:
-        h = (r - g) / d + 4;
-        break;
+    t2 = l + s - l * s;
+  }
+
+  const t1 = 2 * l - t2;
+
+  for (let i = 0; i < 3; i++) {
+    t3 = h + 1 / 3 * -(i - 1);
+    if (t3 < 0) {
+      t3++;
     }
 
-    h /= 6;
-  }
+    if (t3 > 1) {
+      t3--;
+    }
 
-  return { h, s, l };
-}
+    if (6 * t3 < 1) {
+      val = t1 + (t2 - t1) * 6 * t3;
+    } else if (2 * t3 < 1) {
+      val = t2;
+    } else if (3 * t3 < 2) {
+      val = t1 + (t2 - t1) * (2 / 3 - t3) * 6;
+    } else {
+      val = t1;
+    }
+
+    output[offset + i] = val * 255;
+  }
+};
+
+export const COLORS_HSLA = COLORS_RGBA.map(convertRgbToHsl);

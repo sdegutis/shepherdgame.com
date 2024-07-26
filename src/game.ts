@@ -1,11 +1,16 @@
 import { Entity } from './entities/entity.js';
 import { Player } from './entities/player.js';
+import { convertHslToRgb } from './lib/color.js';
 import { CRT } from './lib/crt.js';
+
+let pos = 0;
 
 export class Game {
 
   entityGrid: Set<Entity>[][] = [];
   liveEntities = new Set<Entity>();
+
+  pixels = new Uint16Array(320 * 180 * 4);
 
   players: Player[] = [];
   camera = { x: 0, y: 0 };
@@ -23,10 +28,33 @@ export class Game {
 
   start() {
     this.moved();
+
     this.crt.ontick = (t) => {
-      this.crt.pixels.fill(0);
-      this.updateEntities(t);
-      this.drawEntities(this.crt.pixels);
+      this.pixels.fill(0);
+
+      for (const ent of this.liveEntities) {
+        ent.update?.(t);
+      }
+
+      for (const ent of this.liveEntities) {
+        ent.image.draw(this.pixels, ent.x - this.camera.x, ent.y - this.camera.y);
+      }
+
+      pos = pos + 1 % (320 - 20);
+
+      for (let y = 0; y < 180; y++) {
+        for (let x = 0; x < 20; x++) {
+          const i = y * 320 * 4 + (x + pos) * 4;
+
+          this.pixels[i + 3] = 100;
+        }
+      }
+
+      for (let i = 0; i < 320 * 180 * 4; i += 4) {
+        convertHslToRgb(this.pixels, i, this.crt.pixels);
+        this.crt.pixels[i + 3] = this.pixels[i + 3];
+      }
+
       this.crt.blit();
     };
   }
@@ -74,18 +102,6 @@ export class Game {
           }
         }
       }
-    }
-  }
-
-  updateEntities(t: number) {
-    for (const ent of this.liveEntities) {
-      ent.update?.(t);
-    }
-  }
-
-  drawEntities(pixels: Uint8ClampedArray) {
-    for (const ent of this.liveEntities) {
-      ent.image.draw(pixels, ent.x - this.camera.x, ent.y - this.camera.y);
     }
   }
 

@@ -1,4 +1,4 @@
-import { COLORS_RGBA } from "./p8.js";
+import { COLORS_HSLA } from "./color.js";
 
 export class Img {
 
@@ -10,7 +10,7 @@ export class Img {
 
   static flatColor(i: number, w = 128 * 8, h = 64 * 8) {
     const img = new Uint16Array(w * h * 4);
-    const c = COLORS_RGBA[i];
+    const c = COLORS_HSLA[i];
 
     for (let i = 0; i < w * h * 4; i += 4) {
       img[i + 0] = c[0];
@@ -31,7 +31,7 @@ export class Img {
     for (let yy = 0; yy < h; yy++) {
       for (let xx = 0; xx < w; xx++) {
         const n = spritesheet[(y + yy) * 128 + (x + xx)];
-        const c = COLORS_RGBA[n];
+        const c = COLORS_HSLA[n];
 
         const i = yy * w * 4 + xx * 4;
         img[i + 0] = c[0];
@@ -44,7 +44,7 @@ export class Img {
     return new Img(img, w, h);
   }
 
-  draw(pixels: Uint8ClampedArray, dx: number, dy: number) {
+  draw(pixels: Uint16Array, dx: number, dy: number) {
     for (let y = 0; y < this.h; y++) {
       for (let x = 0; x < this.w; x++) {
         const xx = Math.round(dx + x);

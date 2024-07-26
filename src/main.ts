@@ -5,6 +5,8 @@ import { setupCRT } from './lib/crt.js';
 import { Img } from './lib/image.js';
 import { loadP8 } from "./lib/p8.js";
 
+const crt = setupCRT();
+
 // 0 = night
 // 1 = water
 // 2 = leaves
@@ -21,7 +23,7 @@ import { loadP8 } from "./lib/p8.js";
 // 13 = concrete?
 // 15 = sand
 
-export const game = new Game();
+export const game = new Game(crt);
 
 const map1 = await loadP8('sheep.p8');
 
@@ -49,15 +51,7 @@ for (let y = 0; y < 64; y++) {
   }
 }
 
-game.moved();
-
-const crt = setupCRT();
-crt.ontick = (t) => {
-  crt.pixels.fill(0);
-  game.updateEntities(t);
-  game.drawEntities(crt.pixels);
-  crt.blit();
-};
+game.start();
 
 // const logic: Logic = {
 //   tryMove: (movingEntity, x, y) => {

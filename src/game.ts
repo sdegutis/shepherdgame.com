@@ -1,5 +1,6 @@
 import { Entity } from './entities/entity.js';
 import { Player } from './entities/player.js';
+import { CRT } from './lib/crt.js';
 
 class Point {
   x = 0;
@@ -20,13 +21,23 @@ export class Game {
 
   entPoint = new Point();
 
-  constructor() {
+  constructor(private crt: CRT) {
     document.onkeydown = (e) => {
       if (e.key === 'ArrowRight') this.players[0].x += 1;
       if (e.key === 'ArrowLeft') this.players[0].x -= 1;
       if (e.key === 'ArrowDown') this.players[0].y += 1;
       if (e.key === 'ArrowUp') this.players[0].y -= 1;
       this.moved();
+    };
+  }
+
+  start() {
+    this.moved();
+    this.crt.ontick = (t) => {
+      this.crt.pixels.fill(0);
+      this.updateEntities(t);
+      this.drawEntities(this.crt.pixels);
+      this.crt.blit();
     };
   }
 

@@ -8,6 +8,8 @@ export const HOME = 16;
 const WIDTH = 320;
 const HEIGHT = 180;
 
+export type CRT = ReturnType<typeof setupCRT>;
+
 export function setupCRT() {
   const canvas = document.createElement('canvas');
   canvas.style.height = '95vh';

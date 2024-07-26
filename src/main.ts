@@ -1,24 +1,16 @@
 import { Entity } from './entities/entity.js';
+import { Player } from './entities/player.js';
 import { setupCRT } from './lib/crt.js';
 import { Img } from './lib/image.js';
 import { loadP8 } from "./lib/p8.js";
-
-class Player extends Entity {
-
-}
 
 class Game {
 
   entities: Entity[] = [];
 
-  player1!: Player;
-  player2!: Player;
+  players: Player[] = [];
 
-  constructor(
-
-  ) {
-
-  }
+  constructor() { }
 
 }
 
@@ -52,15 +44,14 @@ for (let y = 0; y < 64; y++) {
       continue;
     }
     else if (s === 12) {
-      const img = Img.from(map1.pixels, s);
-      game.player1 = new Player(x * 8, y * 8, img);
+      new Player(x * 8, y * 8, 0, map1.pixels, s);
     }
     else if (s === 13) {
-
+      new Player(x * 8, y * 8, 1, map1.pixels, s);
     }
-    else if (map1.flags[s].RED) {
+    // else if (map1.flags[s].RED) {
 
-    }
+    // }
     else {
       const img = Img.from(map1.pixels, s);
       new Entity(x * 8, y * 8, img);

@@ -1,3 +1,26 @@
+import { Img } from "../lib/image.js";
+import { game } from "../main.js";
+import { Entity } from "./entity.js";
+
+export class Player extends Entity {
+
+  constructor(
+    x: number,
+    y: number,
+    private playerNum: number,
+    spritesheet: number[],
+    spriteIndex: number,
+  ) {
+    const img = Img.from(spritesheet, spriteIndex);
+    super(x, y, img);
+
+    game.players[playerNum] = this;
+  }
+
+}
+
+
+
 // import { A, LEFT, RIGHT, X } from "../lib/crt.js";
 // import { PixelImage } from '../lib/image.js';
 // import { Entity, Interaction, Logic } from "./entity.js";

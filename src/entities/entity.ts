@@ -14,6 +14,6 @@ export class Entity {
     game.entities.push(this);
   }
 
-  // update?: (t: number) => void;
+  update?: (t: number) => void;
 
 }

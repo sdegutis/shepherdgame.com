@@ -8,6 +8,8 @@ export class Entity {
 
   inSets: Set<Entity>[] = [];
 
+  layer = 0;
+
   constructor(
     public x: number,
     public y: number,
@@ -17,5 +19,11 @@ export class Entity {
   }
 
   update?: (t: number) => void;
+
+  draw(layer: number) {
+    if (layer === this.layer) {
+      this.image.draw(game.pixels, this.x - game.camera.x, this.y - game.camera.y);
+    }
+  }
 
 }

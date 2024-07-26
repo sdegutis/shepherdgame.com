@@ -34,28 +34,16 @@ export class Game {
         ent.update?.(t);
       }
 
-      for (const ent of this.liveEntities) {
-        ent.image.draw(this.pixels, ent.x - this.camera.x, ent.y - this.camera.y);
-      }
-
-      for (let i = 0; i < 320 * 180 * 4; i += 4) {
-        this.pixels[i + 3] = Math.max(0, this.pixels[i + 3] - 200);
-      }
-
-      for (const p of this.players) {
-        const cx = Math.round(p.x + (p.image.w / 2) - this.camera.x);
-        const cy = Math.round(p.y + (p.image.h / 2) - this.camera.y);
-
-        for (let x = -10; x < 10; x++) {
-          for (let y = -10; y < 10; y++) {
-            const d = Math.sqrt((x ** 2) + (y ** 2));
-            if (d < 10) {
-              const i = (cy + y) * 320 * 4 + (cx + x) * 4;
-              this.pixels[i + 3] = 255;
-            }
+      for (let i = 0; i < 3; i++) {
+        if (i === 2) {
+          for (let i = 0; i < 320 * 180 * 4; i += 4) {
+            this.pixels[i + 3] = Math.max(0, this.pixels[i + 3] - 200);
           }
         }
 
+        for (const ent of this.liveEntities) {
+          ent.draw(i);
+        }
       }
 
       for (let i = 0; i < 320 * 180 * 4; i += 4) {

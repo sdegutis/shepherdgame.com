@@ -4,6 +4,8 @@ import { Entity } from "./entity.js";
 
 export class Player extends Entity {
 
+  override layer = 1;
+
   constructor(
     x: number,
     y: number,
@@ -13,6 +15,25 @@ export class Player extends Entity {
   ) {
     super(x, y, Img.from(spritesheet, spriteIndex));
     game.players[playerNum] = this;
+  }
+
+  override draw(layer: number): void {
+    super.draw(layer);
+
+    if (layer === 2) {
+      const cx = Math.round(this.x + (this.image.w / 2) - game.camera.x);
+      const cy = Math.round(this.y + (this.image.h / 2) - game.camera.y);
+
+      for (let x = -10; x < 10; x++) {
+        for (let y = -10; y < 10; y++) {
+          const d = Math.sqrt((x ** 2) + (y ** 2));
+          if (d < 10) {
+            const i = (cy + y) * 320 * 4 + (cx + x) * 4;
+            game.pixels[i + 3] = 255;
+          }
+        }
+      }
+    }
   }
 
 }

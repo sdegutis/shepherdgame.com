@@ -29,50 +29,37 @@ export async function loadP8(filename: string) {
   const text = await res.text();
 
   const flat = text.replace(/[\r\n]/g, '');
-  const gfx = (flat.match(/__gfx__([0-9abcdef]+)/)?.[1] ?? '').padEnd(128 * 128, '0');
-  const map = (flat.match(/__map__([0-9abcdef]+)/)?.[1] ?? '').padEnd(128 * 32 * 2, '0') + gfx.slice(128 * 64);
-  const gff = (flat.match(/__gff__([0-9abcdef]+)/)?.[1] ?? '').padEnd(256 * 2, '0');
+  const _gfx = (flat.match(/__gfx__([0-9abcdef]+)/)?.[1] ?? '').padEnd(128 * 128, '0');
+  const _map = (flat.match(/__map__([0-9abcdef]+)/)?.[1] ?? '').padEnd(128 * 32 * 2, '0') + _gfx.slice(128 * 64);
+  const _gff = (flat.match(/__gff__([0-9abcdef]+)/)?.[1] ?? '').padEnd(256 * 2, '0');
 
-  return {
-    flags: parseFlags(gff),
-    pixels: gfx.split('').map(c => parseInt(c, 16)),
-    map: parseMap(map),
-  };
-}
+  const pixels = _gfx.split('').map(c => parseInt(c, 16));
 
-function parseMap(data: string) {
   const map = [];
   for (let y = 0; y < 64; y++) {
     const row = [];
     for (let x = 0; x < 128; x++) {
       const i = x * 2;
       const ii = y * 256 + i;
-      const c = data.slice(ii, ii + 2);
+      const c = _map.slice(ii, ii + 2);
       const n = parseInt(y < 32 ? c : c[1] + c[0], 16);
       row.push(n);
     }
     map.push(row);
   }
-  return map;
-}
 
-function parseFlags(chars: string) {
   const flags: Flag[] = [];
-
   for (let i = 0; i < 256; i++) {
     const ii = i * 2;
-    const hex = chars.slice(ii, ii + 2);
+    const hex = _gff.slice(ii, ii + 2);
     const n = parseInt(hex, 16);
-
     const flag: Flag = Object.create(null);
-
     for (let b = 0; b < 8; b++) {
       const bb = 1 << b;
       if (n & bb) flag[FLAGS[b]] = true;
     }
-
     flags.push(flag);
   }
 
-  return flags;
+  return { flags, pixels, map };
 }

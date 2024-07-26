@@ -58,6 +58,9 @@ for (let y = 0; y < 64; y++) {
     else if (s === 13) {
 
     }
+    else if (map1.flags[s].RED) {
+
+    }
     else {
       const img = Img.from(map1.pixels, s);
       new Entity(x * 8, y * 8, img);

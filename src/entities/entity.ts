@@ -11,7 +11,7 @@ export class Entity {
     public y: number,
     public image: Img,
   ) {
-    game.entities.push(this);
+    game.putEntity(this, x, y);
   }
 
   update?: (t: number) => void;

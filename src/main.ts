@@ -4,21 +4,33 @@ import { setupCRT } from './lib/crt.js';
 import { Img } from './lib/image.js';
 import { loadP8 } from "./lib/p8.js";
 
+class Camera {
+  x = 0;
+  y = 0;
+}
+
 class Game {
 
   entities: Entity[] = [];
 
   players: Player[] = [];
+  camera = new Camera();
 
   constructor() { }
 
-  updateEntities() {
+  putEntity(entity: Entity, x: number, y: number) {
+    this.entities.push(entity);
+  }
 
+  updateEntities(t: number) {
+    for (const e of this.entities) {
+      e.update?.(t);
+    }
   }
 
   drawEntities(pixels: Uint8ClampedArray) {
     for (const ent of this.entities) {
-      ent.image.draw(pixels, ent.x, ent.y);
+      ent.image.draw(pixels, ent.x - this.camera.x, ent.y - this.camera.y);
     }
   }
 
@@ -71,13 +83,10 @@ for (let y = 0; y < 64; y++) {
 const crt = setupCRT();
 crt.ontick = (t) => {
   crt.pixels.fill(0);
-  game.updateEntities();
+  game.updateEntities(t);
   game.drawEntities(crt.pixels);
   crt.blit();
 };
-
-// let player1: Player;
-// let player2: Player;
 
 // for (let y = 0; y < 64; y++) {
 //   for (let x = 0; x < 128; x++) {
@@ -145,15 +154,3 @@ crt.ontick = (t) => {
 //   },
 
 // };
-
-
-// class Point {
-//   constructor(public x = 0, public y = 0) { }
-// }
-// const camera = new Point();
-
-//   // // Update entities
-//   // for (const e of entities) {
-//   //   if (e.dead) continue;
-//   //   e.update?.(t, logic);
-//   // }

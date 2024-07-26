@@ -40,13 +40,14 @@ export class Game {
         ent.image.draw(this.pixels, ent.x - this.camera.x, ent.y - this.camera.y);
       }
 
-      pos = pos + 1 % (320 - 20);
+      pos = (pos + 1) % (320 - 20);
 
       for (let y = 0; y < 180; y++) {
         for (let x = 0; x < 20; x++) {
           const i = y * 320 * 4 + (x + pos) * 4;
 
-          this.pixels[i + 3] = 100;
+          // this.pixels[i + 0] = this.pixels[i + 0] + 180 % 360;
+          this.pixels[i + 1] = 10;
         }
       }
 

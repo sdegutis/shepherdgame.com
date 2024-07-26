@@ -4,7 +4,7 @@ import { CRT } from './lib/crt.js';
 
 export class Game {
 
-  entities: Set<Entity>[][] = [];
+  entityGrid: Set<Entity>[][] = [];
   liveEntities = new Set<Entity>();
 
   players: Player[] = [];
@@ -41,9 +41,9 @@ export class Game {
 
     for (let yy = 0; yy < entity.image.h / 8; yy++) {
       for (let xx = 0; xx < entity.image.w / 8; xx++) {
-        this.entities[y + yy] ??= [];
-        this.entities[y + yy][x + xx] ??= new Set();
-        this.entities[y + yy][x + xx].add(entity);
+        this.entityGrid[y + yy] ??= [];
+        this.entityGrid[y + yy][x + xx] ??= new Set();
+        this.entityGrid[y + yy][x + xx].add(entity);
       }
     }
   }
@@ -66,7 +66,7 @@ export class Game {
 
       for (let y = -1; y < 24; y++) {
         for (let x = -1; x < 41; x++) {
-          const cell = this.entities[y + this.entPoint.y]?.[x + this.entPoint.x];
+          const cell = this.entityGrid[y + this.entPoint.y]?.[x + this.entPoint.x];
           if (!cell) continue;
 
           for (const ent of cell) {

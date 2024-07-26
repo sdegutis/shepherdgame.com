@@ -36,6 +36,9 @@ class Entity {
 
 const entities: Entity[] = [];
 
+const bg = new Entity(Image.flatColor(3), 0, 0);
+entities.push(bg);
+
 for (let y = 0; y < 64; y++) {
   for (let x = 0; x < 128; x++) {
     const si = map1.map[y][x];
@@ -49,16 +52,24 @@ for (let y = 0; y < 64; y++) {
 
 // const s = Image.from(map1.spritesheet, 9, 5, 6, 2, 2);
 
-// let dx = 0;
+let dx = 0;
 // let dy = 0;
 
+document.onkeydown = (e) => {
+  if (e.key === 'ArrowRight') {
+    dx += 10;
+    console.log('hi')
+  }
+};
 crt.ontick = (t) => {
 
   // dx += 2;
   // dy += 0.1;
 
+  crt.pixels.fill(0);
+
   for (const ent of entities) {
-    ent.image.draw(crt.pixels, ent.x, ent.y);
+    ent.image.draw(crt.pixels, ent.x - dx, ent.y);
   }
 
   crt.blit();
@@ -168,11 +179,6 @@ crt.ontick = (t) => {
 
 // const camera = new Point();
 
-// document.onkeydown = (e) => {
-//   if (e.key === 'ArrowRight') {
-//     camera.x += 1;
-//   }
-// };
 
 // crt.update = (t) => {
 

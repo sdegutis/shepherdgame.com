@@ -35,11 +35,11 @@ export class Game {
       }
 
       for (let i = 0; i < 3; i++) {
-        if (i === 2) {
-          for (let i = 0; i < 320 * 180 * 4; i += 4) {
-            this.pixels[i + 3] = Math.max(0, this.pixels[i + 3] - 200);
-          }
-        }
+        // if (i === 2) {
+        //   for (let i = 0; i < 320 * 180 * 4; i += 4) {
+        //     this.pixels[i + 3] = Math.max(0, this.pixels[i + 3] - 200);
+        //   }
+        // }
 
         for (const ent of this.liveEntities) {
           ent.draw(i);

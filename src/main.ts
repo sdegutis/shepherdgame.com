@@ -104,37 +104,6 @@ crt.ontick = (t) => {
   crt.blit();
 };
 
-// for (let y = 0; y < 64; y++) {
-//   for (let x = 0; x < 128; x++) {
-//     const tile = map1.map[y][x];
-//     if (tile.index > 0) {
-//       const px = x * 8;
-//       const py = y * 8;
-//       const image = tile.sprite.image;
-
-//       let entity;
-
-//       if (tile.sprite.flags.RED) {
-//         entity = new Wall(px, py, image);
-//       }
-//       else if (tile.sprite.flags.ORANGE) {
-//         entity = new Wall(px, py, image);
-//       }
-//       else if (tile.index === 12) {
-//         entity = player1 = new Player(px, py, image, 0);
-//       }
-//       else if (tile.index === 13) {
-//         entity = player2 = new Player(px, py, image, 1);
-//       }
-//       else {
-//         entity = new Entity(px, py, image);
-//       }
-
-//       entities.push(entity);
-//     }
-//   }
-// }
-
 // const logic: Logic = {
 //   tryMove: (movingEntity, x, y) => {
 //     movingEntity.x += x;

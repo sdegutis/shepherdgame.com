@@ -22,10 +22,10 @@ export class Game {
 
   constructor() {
     document.onkeydown = (e) => {
-      if (e.key === 'ArrowRight') this.camera.x++;
-      if (e.key === 'ArrowLeft') this.camera.x--;
-      if (e.key === 'ArrowDown') this.camera.y++;
-      if (e.key === 'ArrowUp') this.camera.y--;
+      if (e.key === 'ArrowRight') this.camera.x += 1;
+      if (e.key === 'ArrowLeft') this.camera.x -= 1;
+      if (e.key === 'ArrowDown') this.camera.y += 1;
+      if (e.key === 'ArrowUp') this.camera.y -= 1;
 
       const entPoint = new Point();
 
@@ -59,9 +59,9 @@ export class Game {
   resetLiveEntities() {
     this.liveEntities.clear();
 
-    for (let y = -1; y < 23; y++) {
-      for (let x = -1; x < 40; x++) {
-        const cell = this.entities[y + this.camera.y / 8]?.[x + this.camera.x / 8];
+    for (let y = -1; y < 24; y++) {
+      for (let x = -1; x < 41; x++) {
+        const cell = this.entities[y + this.entPoint.y]?.[x + this.entPoint.x];
         if (!cell) continue;
 
         for (const ent of cell) {

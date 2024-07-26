@@ -39,11 +39,16 @@ export type Flag = { [key in typeof FLAGS[number]]?: true };
 export async function loadP8(filename: string) {
   const res = await fetch(filename, { cache: 'no-store' });
   const text = await res.text();
-  const groups = parseGroups(text);
+
+  const flat = text.replace(/[\r\n]/g, '');
+  const gfx = (flat.match(/__gfx__([0-9abcdef]+)/)?.[1] ?? '').padEnd(128 * 128, '0');
+  const map = (flat.match(/__map__([0-9abcdef]+)/)?.[1] ?? '').padEnd(128 * 32 * 2, '0') + gfx.slice(128 * 64);
+  const gff = (flat.match(/__gff__([0-9abcdef]+)/)?.[1] ?? '').padEnd(256 * 2, '0');
+
   return {
-    flags: parseFlags(groups.gff),
-    spritesheet: parseSprites(groups.gfx),
-    map: parseMap(groups.map),
+    flags: parseFlags(gff),
+    pixels: parseSprites(gfx),
+    map: parseMap(map),
   };
 }
 
@@ -86,12 +91,4 @@ function parseFlags(chars: string) {
 
 function parseSprites(data: string) {
   return data.split('').map(c => parseInt(c, 16));
-}
-
-function parseGroups(text: string) {
-  const flat = text.replace(/[\r\n]/g, '');
-  const gfx = (flat.match(/__gfx__([0-9abcdef]+)/)?.[1] ?? '').padEnd(128 * 128, '0');
-  const map = (flat.match(/__map__([0-9abcdef]+)/)?.[1] ?? '').padEnd(128 * 32 * 2, '0') + gfx.slice(128 * 64);
-  const gff = (flat.match(/__gff__([0-9abcdef]+)/)?.[1] ?? '').padEnd(256 * 2, '0');
-  return { gfx, map, gff };
 }

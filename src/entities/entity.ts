@@ -1,4 +1,5 @@
 import { Img } from "../lib/image.js";
+import { game } from "../main.js";
 
 // export type Interaction = 'stop' | 'pass';
 //   collideWith?: (other: Entity, x: number, y: number) => Interaction;
@@ -6,10 +7,12 @@ import { Img } from "../lib/image.js";
 export class Entity {
 
   constructor(
-    public image: Img,
     public x: number,
     public y: number,
-  ) { }
+    public image: Img,
+  ) {
+    game.entities.push(this);
+  }
 
   // update?: (t: number) => void;
 

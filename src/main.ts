@@ -3,9 +3,16 @@ import { setupCRT } from './lib/crt.js';
 import { Img } from './lib/image.js';
 import { loadP8 } from "./lib/p8.js";
 
+class Player extends Entity {
+
+}
+
 class Game {
 
   entities: Entity[] = [];
+
+  player1!: Player;
+  player2!: Player;
 
   constructor(
 
@@ -35,17 +42,26 @@ export const game = new Game();
 
 const map1 = await loadP8('sheep.p8');
 
-const bg = new Entity(Img.flatColor(3), 0, 0);
+const bg = new Entity(0, 0, Img.flatColor(3));
 game.entities.push(bg);
 
 for (let y = 0; y < 64; y++) {
   for (let x = 0; x < 128; x++) {
     const s = map1.map[y][x];
-    if (s === 0) continue;
+    if (s === 0) {
+      continue;
+    }
+    else if (s === 12) {
+      const img = Img.from(map1.pixels, s);
+      game.player1 = new Player(x * 8, y * 8, img);
+    }
+    else if (s === 13) {
 
-    const img = Img.from(map1.spritesheet, s);
-    const ent = new Entity(img, x * 8, y * 8);
-    game.entities.push(ent);
+    }
+    else {
+      const img = Img.from(map1.pixels, s);
+      new Entity(x * 8, y * 8, img);
+    }
   }
 }
 

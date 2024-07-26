@@ -28,14 +28,17 @@ export class Image {
     }
 
     return new Image(img, w, h);
-
   }
 
   draw(pixels: Uint8ClampedArray, dx: number, dy: number) {
     for (let y = 0; y < this.h; y++) {
       for (let x = 0; x < this.w; x++) {
+        const xx = Math.round(dx + x);
+        const yy = Math.round(dy + y);
+        if (xx < 0 || yy < 0 || xx >= 320 || yy >= 180) continue;
+
         const i = y * this.w * 4 + x * 4;
-        const i2 = Math.round(dy + y) * 320 * 4 + Math.round(dx + x) * 4;
+        const i2 = yy * 320 * 4 + xx * 4;
         pixels[i2 + 0] = this.pixels[i + 0];
         pixels[i2 + 1] = this.pixels[i + 1];
         pixels[i2 + 2] = this.pixels[i + 2];

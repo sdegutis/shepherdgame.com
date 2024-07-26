@@ -24,19 +24,48 @@ const crt = setupCRT();
 
 const map1 = await loadP8('sheep.p8');
 
-const s = Image.from(map1.spritesheet, 9, 5, 6, 2, 2);
+class Entity {
 
-let dx = 0;
-let dy = 0;
+  constructor(
+    public image: Image,
+    public x: number,
+    public y: number,
+  ) { }
+
+}
+
+const entities: Entity[] = [];
+
+for (let y = 0; y < 64; y++) {
+  for (let x = 0; x < 128; x++) {
+    const si = map1.map[y][x];
+    if (si === 0) continue;
+
+    const img = Image.from(map1.spritesheet, si);
+    const ent = new Entity(img, x * 8, y * 8);
+    entities.push(ent);
+  }
+}
+
+// const s = Image.from(map1.spritesheet, 9, 5, 6, 2, 2);
+
+// let dx = 0;
+// let dy = 0;
 
 crt.ontick = (t) => {
 
   // dx += 2;
   // dy += 0.1;
 
-  crt.pixels.fill(0);
-  s.draw(crt.pixels, dx, dy);
+  for (const ent of entities) {
+    ent.image.draw(crt.pixels, ent.x, ent.y);
+  }
+
   crt.blit();
+
+  // crt.pixels.fill(0);
+  // s.draw(crt.pixels, dx, dy);
+  // crt.blit();
 
 };
 

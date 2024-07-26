@@ -49,7 +49,7 @@ for (let y = 0; y < 64; y++) {
   }
 }
 
-game.resetLiveEntities();
+game.moved();
 
 const crt = setupCRT();
 crt.ontick = (t) => {

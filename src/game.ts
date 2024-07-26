@@ -22,20 +22,11 @@ export class Game {
 
   constructor() {
     document.onkeydown = (e) => {
-      if (e.key === 'ArrowRight') this.camera.x += 1;
-      if (e.key === 'ArrowLeft') this.camera.x -= 1;
-      if (e.key === 'ArrowDown') this.camera.y += 1;
-      if (e.key === 'ArrowUp') this.camera.y -= 1;
-
-      const entPoint = new Point();
-
-      entPoint.x = Math.floor(this.camera.x / 8);
-      entPoint.y = Math.floor(this.camera.y / 8);
-
-      if (!this.entPoint.isSame(entPoint)) {
-        this.entPoint = entPoint;
-        this.resetLiveEntities();
-      }
+      if (e.key === 'ArrowRight') this.players[0].x += 1;
+      if (e.key === 'ArrowLeft') this.players[0].x -= 1;
+      if (e.key === 'ArrowDown') this.players[0].y += 1;
+      if (e.key === 'ArrowUp') this.players[0].y -= 1;
+      this.moved();
     };
   }
 
@@ -56,20 +47,34 @@ export class Game {
     }
   }
 
-  resetLiveEntities() {
-    this.liveEntities.clear();
+  moved() {
+    // average player points
+    const x = (this.players[0].x + (this.players[0].image.w / 2) + this.players[1].x + (this.players[1].image.w / 2)) / 2;
+    const y = (this.players[0].y + (this.players[0].image.h / 2) + this.players[1].y + (this.players[1].image.h / 2)) / 2;
 
-    for (let y = -1; y < 24; y++) {
-      for (let x = -1; x < 41; x++) {
-        const cell = this.entities[y + this.entPoint.y]?.[x + this.entPoint.x];
-        if (!cell) continue;
+    this.camera.x = x - 160;
+    this.camera.y = y - 90;
 
-        for (const ent of cell) {
-          this.liveEntities.add(ent);
+    const entPoint = new Point();
+    entPoint.x = Math.floor(this.camera.x / 8);
+    entPoint.y = Math.floor(this.camera.y / 8);
+
+    if (!this.entPoint.isSame(entPoint)) {
+      this.entPoint = entPoint;
+
+      this.liveEntities.clear();
+
+      for (let y = -1; y < 24; y++) {
+        for (let x = -1; x < 41; x++) {
+          const cell = this.entities[y + this.entPoint.y]?.[x + this.entPoint.x];
+          if (!cell) continue;
+
+          for (const ent of cell) {
+            this.liveEntities.add(ent);
+          }
         }
       }
     }
-
   }
 
   updateEntities(t: number) {

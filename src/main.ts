@@ -11,7 +11,7 @@ class Camera {
 
 class Game {
 
-  entities: Entity[] = [];
+  entities: Set<Entity>[][] = [];
 
   players: Player[] = [];
   camera = new Camera();
@@ -19,18 +19,34 @@ class Game {
   constructor() { }
 
   putEntity(entity: Entity, x: number, y: number) {
-    this.entities.push(entity);
+    x = Math.floor(x / 8);
+    y = Math.floor(y / 8);
+    this.entities[y] ??= [];
+    this.entities[y][x] ??= new Set();
+    this.entities[y][x].add(entity);
   }
 
   updateEntities(t: number) {
-    for (const e of this.entities) {
-      e.update?.(t);
-    }
+
+    // for (const e of this.entities) {
+    //   e.update?.(t);
+    // }
   }
 
   drawEntities(pixels: Uint8ClampedArray) {
-    for (const ent of this.entities) {
-      ent.image.draw(pixels, ent.x - this.camera.x, ent.y - this.camera.y);
+
+    for (let y = -1; y < 23; y++) {
+      for (let x = -1; x < 40; x++) {
+        const row = this.entities[y + this.camera.y];
+        if (!row) continue;
+
+        const cell = row[x + this.camera.x];
+        if (!cell) continue;
+
+        for (const ent of cell) {
+          ent.image.draw(pixels, ent.x - this.camera.x, ent.y - this.camera.y);
+        }
+      }
     }
   }
 

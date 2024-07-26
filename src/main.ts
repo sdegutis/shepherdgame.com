@@ -12,6 +12,16 @@ class Game {
 
   constructor() { }
 
+  updateEntities() {
+
+  }
+
+  drawEntities(pixels: Uint8ClampedArray) {
+    for (const ent of this.entities) {
+      ent.image.draw(pixels, ent.x, ent.y);
+    }
+  }
+
 }
 
 // 0 = night
@@ -60,14 +70,10 @@ for (let y = 0; y < 64; y++) {
 }
 
 const crt = setupCRT();
-
 crt.ontick = (t) => {
   crt.pixels.fill(0);
-
-  for (const ent of game.entities) {
-    ent.image.draw(crt.pixels, ent.x, ent.y);
-  }
-
+  game.updateEntities();
+  game.drawEntities(crt.pixels);
   crt.blit();
 };
 

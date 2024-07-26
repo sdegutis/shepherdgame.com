@@ -47,7 +47,7 @@ export async function loadP8(filename: string) {
 
   return {
     flags: parseFlags(gff),
-    pixels: parseSprites(gfx),
+    pixels: gfx.split('').map(c => parseInt(c, 16)),
     map: parseMap(map),
   };
 }
@@ -87,8 +87,4 @@ function parseFlags(chars: string) {
   }
 
   return flags;
-}
-
-function parseSprites(data: string) {
-  return data.split('').map(c => parseInt(c, 16));
 }

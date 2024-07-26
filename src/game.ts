@@ -2,15 +2,6 @@ import { Entity } from './entities/entity.js';
 import { Player } from './entities/player.js';
 import { CRT } from './lib/crt.js';
 
-class Point {
-  x = 0;
-  y = 0;
-
-  isSame(p: Point) {
-    return this.x === p.x && this.y === p.y;
-  }
-}
-
 export class Game {
 
   entities: Set<Entity>[][] = [];
@@ -18,8 +9,7 @@ export class Game {
 
   players: Player[] = [];
   camera = { x: 0, y: 0 };
-
-  entPoint = new Point();
+  entPoint = { x: 0, y: 0 };
 
   constructor(private crt: CRT) {
     document.onkeydown = (e) => {
@@ -66,12 +56,12 @@ export class Game {
     this.camera.x = x - 160;
     this.camera.y = y - 90;
 
-    const entPoint = new Point();
-    entPoint.x = Math.floor(this.camera.x / 8);
-    entPoint.y = Math.floor(this.camera.y / 8);
+    const ex = Math.floor(this.camera.x / 8);
+    const ey = Math.floor(this.camera.y / 8);
 
-    if (!this.entPoint.isSame(entPoint)) {
-      this.entPoint = entPoint;
+    if (this.entPoint.x !== ex || this.entPoint.y !== ey) {
+      this.entPoint.x = ex;
+      this.entPoint.y = ey;
 
       this.liveEntities.clear();
 

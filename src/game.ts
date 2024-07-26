@@ -1,11 +1,6 @@
 import { Entity } from './entities/entity.js';
 import { Player } from './entities/player.js';
 
-class Camera {
-  x = 0;
-  y = 0;
-}
-
 class Point {
   x = 0;
   y = 0;
@@ -21,7 +16,7 @@ export class Game {
   liveEntities = new Set<Entity>();
 
   players: Player[] = [];
-  camera = new Camera();
+  camera = { x: 0, y: 0 };
 
   entPoint = new Point();
 

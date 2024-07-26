@@ -1,6 +1,6 @@
 import { Image } from './image.js';
 
-const COLORS = [
+export const COLORS_RGBA = [
   [0x00, 0x00, 0x00, 0x00],
   [0x1D, 0x2B, 0x53, 0xff],
   [0x7E, 0x25, 0x53, 0xff],
@@ -36,40 +36,13 @@ const FLAGS = [
 
 export type Flag = { [key in typeof FLAGS[number]]?: true };
 
-export async function loadCleanP8(filename: string) {
-  const data = await loadP8(filename);
-
-  const sprites: Sprite[] = [];
-  for (let i = 0; i < 256; i++) {
-    sprites.push({
-      image: data.sprites[i],
-      flags: data.flags[i],
-    });
-  }
-
-  const map = [];
-  for (let y = 0; y < 64; y++) {
-    const row: MapTile[] = [];
-    for (let x = 0; x < 128; x++) {
-      const spr = data.map[y][x];
-      row.push({
-        index: spr,
-        sprite: sprites[spr],
-      });
-    }
-    map.push(row);
-  }
-
-  return { sprites, map };
-}
-
 export async function loadP8(filename: string) {
   const res = await fetch(filename, { cache: 'no-store' });
   const text = await res.text();
   const groups = parseGroups(text);
   return {
     flags: parseFlags(groups.gff),
-    sprites: parseSprites(groups.gfx),
+    spritesheet: parseSprites(groups.gfx),
     map: parseMap(groups.map),
   };
 }
@@ -112,36 +85,7 @@ function parseFlags(chars: string) {
 }
 
 function parseSprites(data: string) {
-  const sprites = [];
-
-  for (let y = 0; y < 16; y++) {
-    for (let x = 0; x < 16; x++) {
-      const img = new Uint16Array(8 * 8 * 4);
-
-      for (let yy = 0; yy < 8; yy++) {
-        for (let xx = 0; xx < 8; xx++) {
-          const ly = y * 8 + yy;
-          const lx = x * 8 + xx;
-
-          const c = data[ly * 128 + lx];
-          const n = parseInt(c, 16);
-
-          const [r, g, b, a] = COLORS[n];
-          // const { h, s, l } = rgbToHsl(r, g, b);
-
-          const i = yy * 8 * 4 + xx * 4;
-          img[i + 0] = r;
-          img[i + 1] = g;
-          img[i + 2] = b;
-          img[i + 3] = a;
-        }
-      }
-
-      sprites.push(new Image(img));
-    }
-  }
-
-  return sprites;
+  return data.split('').map(c => parseInt(c, 16));
 }
 
 function parseGroups(text: string) {

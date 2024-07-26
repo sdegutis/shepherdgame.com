@@ -1,7 +1,8 @@
 // import { Entity, Logic } from "./entities/entity.js";
 // import { Player } from "./entities/player.js";
 import { setupCRT } from './lib/crt.js';
-import { loadCleanP8 } from "./lib/p8.js";
+import { Image } from './lib/image.js';
+import { loadP8 } from "./lib/p8.js";
 
 const crt = setupCRT();
 
@@ -21,12 +22,12 @@ const crt = setupCRT();
 // 13 = concrete?
 // 15 = sand
 
-const map1 = await loadCleanP8('sheep.p8');
+const map1 = await loadP8('sheep.p8');
 
-const s = map1.sprites[9].image;
+const s = Image.from(map1.spritesheet, 9, 5, 6, 2, 2);
 
-let dx = 10;
-let dy = 20;
+let dx = 0;
+let dy = 0;
 
 crt.ontick = (t) => {
 

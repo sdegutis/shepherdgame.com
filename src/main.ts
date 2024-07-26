@@ -37,10 +37,10 @@ for (let y = 0; y < 64; y++) {
       continue;
     }
     else if (s === 12) {
-      new Player(x * 8, y * 8, 0, map1.pixels, s);
+      new Player(x * 8, y * 8, map1.pixels, s, 0);
     }
     else if (s === 13) {
-      new Player(x * 8, y * 8, 1, map1.pixels, s);
+      new Player(x * 8, y * 8, map1.pixels, s, 1);
     }
     else if (s === 8) {
       // bees

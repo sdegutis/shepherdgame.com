@@ -7,9 +7,9 @@ export class Player extends Entity {
   constructor(
     x: number,
     y: number,
-    private playerNum: number,
     spritesheet: number[],
     spriteIndex: number,
+    private playerNum: number,
   ) {
     super(x, y, Img.from(spritesheet, spriteIndex));
     game.players[playerNum] = this;

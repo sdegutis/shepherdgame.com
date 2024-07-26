@@ -44,8 +44,7 @@ export const game = new Game();
 
 const map1 = await loadP8('sheep.p8');
 
-const bg = new Entity(0, 0, Img.flatColor(3));
-game.entities.push(bg);
+new Entity(0, 0, Img.flatColor(3));
 
 for (let y = 0; y < 64; y++) {
   for (let x = 0; x < 128; x++) {

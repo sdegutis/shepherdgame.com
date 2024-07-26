@@ -16,14 +16,28 @@ class Game {
   players: Player[] = [];
   camera = new Camera();
 
-  constructor() { }
+  constructor() {
+    document.onkeydown = () => {
+      this.camera.x++;
+      this.camera.y++;
+    };
+  }
 
   putEntity(entity: Entity, x: number, y: number) {
+    for (const set of entity.inSets) {
+      set.delete(entity);
+    }
+
     x = Math.floor(x / 8);
     y = Math.floor(y / 8);
-    this.entities[y] ??= [];
-    this.entities[y][x] ??= new Set();
-    this.entities[y][x].add(entity);
+
+    for (let yy = 0; yy < entity.image.h / 8; yy++) {
+      for (let xx = 0; xx < entity.image.w / 8; xx++) {
+        this.entities[y + yy] ??= [];
+        this.entities[y + yy][x + xx] ??= new Set();
+        this.entities[y + yy][x + xx].add(entity);
+      }
+    }
   }
 
   updateEntities(t: number) {
@@ -34,16 +48,25 @@ class Game {
   }
 
   drawEntities(pixels: Uint8ClampedArray) {
-
     for (let y = -1; y < 23; y++) {
       for (let x = -1; x < 40; x++) {
-        const row = this.entities[y + this.camera.y];
-        if (!row) continue;
-
-        const cell = row[x + this.camera.x];
+        const cell = this.entities[y + this.camera.y]?.[x + this.camera.x];
         if (!cell) continue;
 
         for (const ent of cell) {
+          ent.drawn = false;
+        }
+      }
+    }
+
+    for (let y = -1; y < 23; y++) {
+      for (let x = -1; x < 40; x++) {
+        const cell = this.entities[y + this.camera.y]?.[x + this.camera.x];
+        if (!cell) continue;
+
+        for (const ent of cell) {
+          if (ent.drawn) continue;
+          ent.drawn = true;
           ent.image.draw(pixels, ent.x - this.camera.x, ent.y - this.camera.y);
         }
       }

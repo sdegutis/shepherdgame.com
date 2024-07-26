@@ -6,6 +6,9 @@ import { game } from "../main.js";
 
 export class Entity {
 
+  inSets: Set<Entity>[] = [];
+  drawn = false;
+
   constructor(
     public x: number,
     public y: number,

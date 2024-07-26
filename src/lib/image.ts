@@ -4,8 +4,8 @@ export class Img {
 
   constructor(
     public pixels: Uint16Array,
-    private w: number,
-    private h: number,
+    public w: number,
+    public h: number,
   ) { }
 
   static flatColor(i: number, w = 128 * 8, h = 64 * 8) {

@@ -1,5 +1,3 @@
-import { Img } from './image.js';
-
 export const COLORS_RGBA = [
   [0x00, 0x00, 0x00, 0x00],
   [0x1D, 0x2B, 0x53, 0xff],
@@ -18,16 +16,6 @@ export const COLORS_RGBA = [
   [0xFF, 0x77, 0xA8, 0xff],
   [0xFF, 0xCC, 0xAA, 0xff],
 ] as [number, number, number, number][];
-
-export interface MapTile {
-  index: number,
-  sprite: Sprite,
-}
-
-export interface Sprite {
-  image: Img,
-  flags: Flag,
-}
 
 const FLAGS = [
   'RED', 'ORANGE', 'YELLOW', 'GREEN',

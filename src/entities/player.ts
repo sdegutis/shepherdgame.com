@@ -11,9 +11,7 @@ export class Player extends Entity {
     spritesheet: number[],
     spriteIndex: number,
   ) {
-    const img = Img.from(spritesheet, spriteIndex);
-    super(x, y, img);
-
+    super(x, y, Img.from(spritesheet, spriteIndex));
     game.players[playerNum] = this;
   }
 

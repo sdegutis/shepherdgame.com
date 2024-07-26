@@ -3,8 +3,6 @@ import { Player } from './entities/player.js';
 import { convertHslToRgb } from './lib/color.js';
 import { CRT } from './lib/crt.js';
 
-let pos = 0;
-
 export class Game {
 
   entityGrid: Set<Entity>[][] = [];
@@ -40,15 +38,24 @@ export class Game {
         ent.image.draw(this.pixels, ent.x - this.camera.x, ent.y - this.camera.y);
       }
 
-      pos = (pos + 1) % (320 - 20);
+      for (let i = 0; i < 320 * 180 * 4; i += 4) {
+        this.pixels[i + 3] = Math.max(0, this.pixels[i + 3] - 200);
+      }
 
-      for (let y = 0; y < 180; y++) {
-        for (let x = 0; x < 20; x++) {
-          const i = y * 320 * 4 + (x + pos) * 4;
+      for (const p of this.players) {
+        const cx = Math.round(p.x + (p.image.w / 2) - this.camera.x);
+        const cy = Math.round(p.y + (p.image.h / 2) - this.camera.y);
 
-          // this.pixels[i + 0] = this.pixels[i + 0] + 180 % 360;
-          this.pixels[i + 1] = 10;
+        for (let x = -10; x < 10; x++) {
+          for (let y = -10; y < 10; y++) {
+            const d = Math.sqrt((x ** 2) + (y ** 2));
+            if (d < 10) {
+              const i = (cy + y) * 320 * 4 + (cx + x) * 4;
+              this.pixels[i + 3] = 255;
+            }
+          }
         }
+
       }
 
       for (let i = 0; i < 320 * 180 * 4; i += 4) {
@@ -88,8 +95,7 @@ export class Game {
     const ey = Math.floor(this.camera.y / 8);
 
     if (this.entPoint.x !== ex || this.entPoint.y !== ey) {
-      this.entPoint.x = ex;
-      this.entPoint.y = ey;
+      this.entPoint = { x: ex, y: ey };
 
       this.liveEntities.clear();
 

@@ -17,9 +17,11 @@ class Game {
   camera = new Camera();
 
   constructor() {
-    document.onkeydown = () => {
-      this.camera.x++;
-      this.camera.y++;
+    document.onkeydown = (e) => {
+      if (e.key === 'ArrowRight') this.camera.x++;
+      if (e.key === 'ArrowLeft') this.camera.x--;
+      if (e.key === 'ArrowDown') this.camera.y++;
+      if (e.key === 'ArrowUp') this.camera.y--;
     };
   }
 
@@ -48,16 +50,7 @@ class Game {
   }
 
   drawEntities(pixels: Uint8ClampedArray) {
-    for (let y = -1; y < 23; y++) {
-      for (let x = -1; x < 40; x++) {
-        const cell = this.entities[y + this.camera.y]?.[x + this.camera.x];
-        if (!cell) continue;
-
-        for (const ent of cell) {
-          ent.drawn = false;
-        }
-      }
-    }
+    const drawn = new Set<Entity>();
 
     for (let y = -1; y < 23; y++) {
       for (let x = -1; x < 40; x++) {
@@ -65,8 +58,8 @@ class Game {
         if (!cell) continue;
 
         for (const ent of cell) {
-          if (ent.drawn) continue;
-          ent.drawn = true;
+          if (drawn.has(ent)) continue;
+          drawn.add(ent);
           ent.image.draw(pixels, ent.x - this.camera.x, ent.y - this.camera.y);
         }
       }
@@ -95,7 +88,7 @@ export const game = new Game();
 
 const map1 = await loadP8('sheep.p8');
 
-new Entity(0, 0, Img.flatColor(3));
+new Entity(0, 0, Img.flatColor(3, 20));
 
 for (let y = 0; y < 64; y++) {
   for (let x = 0; x < 128; x++) {

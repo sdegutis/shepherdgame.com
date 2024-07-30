@@ -1,4 +1,4 @@
-import { COLORS_RGBA } from "./p8.js";
+import { COLORS_RGBA } from "./$p8.js";
 
 export function convertRgbToHsl(colors: number[]) {
   const r = colors[0] / 255;

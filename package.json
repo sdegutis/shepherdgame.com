@@ -2,11 +2,10 @@
   "name": "carts",
   "version": "1.0.0",
   "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "imlib dev",
+    "generate": "imlib generate",
     "watch": "tsc --watch"
   },
   "keywords": [],
@@ -16,5 +15,8 @@
   "devDependencies": {
     "@types/wicg-file-system-access": "^2023.10.5",
     "typescript": "^5.5.2"
+  },
+  "dependencies": {
+    "@imlib/core": "^2.1.2"
   }
 }

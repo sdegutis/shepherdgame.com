@@ -7,8 +7,8 @@
     {
       "type": "node-terminal",
       "request": "launch",
-      "name": "Launch",
-      "command": "python -m http.server 8080",
+      "name": "Launch Program",
+      "command": "npm run dev",
     }
   ]
 }

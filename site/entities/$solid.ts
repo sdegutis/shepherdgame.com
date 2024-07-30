@@ -1,5 +1,5 @@
-import { Img } from "../lib/image.js";
-import { Entity } from "./entity.js";
+import { Img } from "../lib/$image.js";
+import { Entity } from "./$entity.js";
 
 export class Solid extends Entity {
 

@@ -1,5 +1,5 @@
-import { Img } from "../lib/image.js";
-import { game } from "../main.js";
+import { Img } from "../lib/$image.js";
+import { game } from "../$main.js";
 
 // export type Interaction = 'stop' | 'pass';
 //   collideWith?: (other: Entity, x: number, y: number) => Interaction;

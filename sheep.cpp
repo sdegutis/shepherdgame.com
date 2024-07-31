@@ -9,9 +9,9 @@
 // extern char _binary_main_cpp_end[];
 // extern size_t _binary_main_cpp_size;
 
-#define SCALE (5)
+constexpr auto SCALE = 5;
 
-[[noreturn]] void loop(SDL_Window* window)
+[[noreturn]] static void loop(SDL_Window* window)
 {
     SDL_Event event;
     while (true)
@@ -39,8 +39,8 @@
         320 * SCALE, 180 * SCALE,
         SDL_WINDOW_SHOWN);
 
-    int pixels[320 * 180 * 3];
-    memset(pixels, 0, 320 * 180 * 3 * sizeof(int));
+    int *pixels = new int[320 * 180 * 3];
+    memset(pixels, 0, 320ull *180 * 3 * sizeof(int));
     for (int y = 0; y < 160; y++)
     {
         int x = y;

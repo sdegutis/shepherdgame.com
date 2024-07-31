@@ -4,21 +4,27 @@
 #include <stdio.h>
 #include <algorithm>
 #include <fplus/fplus.hpp>
+#include <fmt/core.h>
 
 // extern char _binary_main_cpp_start[];
 // extern char _binary_main_cpp_end[];
 // extern size_t _binary_main_cpp_size;
-
+    
 constexpr auto SCALE = 5;
 
 [[noreturn]] static void loop(SDL_Window* window)
 {
+    printf("testing\n");
+
     SDL_Event event;
     while (true)
     {
         while (SDL_PollEvent(&event))
         {
-            if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT)
+            if (event.type == SDL_CONTROLLERDEVICEADDED) {
+                fmt::print("2testing {}", event.cdevice.which);
+            }
+            else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT)
             {
                 SDL_DestroyWindow(window);
                 SDL_Quit();
@@ -30,9 +36,9 @@ constexpr auto SCALE = 5;
 
 [[noreturn]] int main(int argc, char* args[])
 {
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
 
-    // fplus::
+    fplus::fill_right(0, 10, std::string("hello"));
 
     SDL_Window* window = SDL_CreateWindow("testing...",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,

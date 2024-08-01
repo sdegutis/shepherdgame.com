@@ -56,15 +56,12 @@ void crt::updatePixels() {
 	printf("testing\n");
 
 	SDL_Event event;
-	while (true)
-	{
-		while (SDL_PollEvent(&event))
-		{
+	while (true) {
+		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_CONTROLLERDEVICEADDED) {
 				fmt::print("2testing {}", event.cdevice.which);
 			}
-			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT)
-			{
+			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT) {
 				SDL_DestroyWindow(window);
 				SDL_Quit();
 				exit(0);
@@ -87,8 +84,7 @@ void crt::updatePixels() {
 	crt crt(window);
 
 	memset(crt.pixels, 0, 320ull * 180 * 3 * sizeof(int));
-	for (int y = 0; y < 160; y++)
-	{
+	for (int y = 0; y < 160; y++) {
 		int x = y;
 		int i = y * 320 * 3 + x * 3;
 		crt.pixels[i + 0] = 0xff;

@@ -8,6 +8,51 @@
 
 constexpr auto SCALE = 5;
 
+
+
+class pixel {
+
+public:
+
+	int r = 0, g = 0, b = 0;
+
+	void reset();
+
+};
+
+void pixel::reset() {
+	r = 0;
+	g = 0;
+	b = 0;
+}
+
+
+
+
+class grid {
+
+	std::array<pixel, 320 * 180> pixels;
+
+public:
+
+	void clear();
+
+	pixel& get(unsigned long long x, unsigned long long y);
+
+};
+
+void grid::clear() {
+	for (auto& pixel : pixels) {
+		pixel.reset();
+	}
+}
+
+pixel& grid::get(unsigned long long x, unsigned long long y) {
+	return pixels[y * 320 + x];
+}
+
+
+
 class crt {
 
 public:
@@ -15,7 +60,7 @@ public:
 	crt(SDL_Window* window);
 	void blit();
 
-	int* pixels = new int[320 * 180 * 3];
+	grid pixels;
 
 private:
 
@@ -36,9 +81,9 @@ crt::crt(SDL_Window* window) :
 void crt::blit() {
 	for (int y = 0; y < 180; y++) {
 		for (int x = 0; x < 320; x++) {
-			int r = pixels[y * 320 * 3 + x * 3 + 0];
-			int g = pixels[y * 320 * 3 + x * 3 + 1];
-			int b = pixels[y * 320 * 3 + x * 3 + 2];
+			int r = pixels.get(x, y).r;
+			int g = pixels.get(x, y).g;
+			int b = pixels.get(x, y).b;
 			int c = SDL_MapRGB(pixelFormat, r, g, b);
 
 			for (int z = 0; z < SCALE; z++) {
@@ -75,18 +120,19 @@ void crt::blit() {
 
 	crt crt(window);
 
-	memset(crt.pixels, 0, 320ull * 180 * 3 * sizeof(int));
+	crt.pixels.clear();
+
 	for (int y = 0; y < 160; y++) {
 		int x = y;
 		int i = y * 320 * 3 + x * 3;
-		crt.pixels[i + 0] = 0xff;
-		crt.pixels[i + 1] = 0x00;
-		crt.pixels[i + 2] = 0x00;
+		crt.pixels.get(x, y).r = 0xff;
+		crt.pixels.get(x, y).g = 0x00;
+		crt.pixels.get(x, y).b = 0x00;
 	}
 
-	crt.pixels[179 * 320 * 3 + 319 * 3 + 0] = 0x00;
-	crt.pixels[179 * 320 * 3 + 319 * 3 + 1] = 0xff;
-	crt.pixels[179 * 320 * 3 + 319 * 3 + 2] = 0x00;
+	crt.pixels.get(319, 179).r = 0x00;
+	crt.pixels.get(319, 179).g = 0xff;
+	crt.pixels.get(319, 179).b = 0x00;
 
 	crt.blit();
 

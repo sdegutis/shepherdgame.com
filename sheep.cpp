@@ -13,7 +13,7 @@ class crt {
 public:
 
 	crt(SDL_Window* window);
-	void updatePixels();
+	void blit();
 
 	int* pixels = new int[320 * 180 * 3];
 
@@ -33,7 +33,7 @@ crt::crt(SDL_Window* window) :
 	surfacePixels(static_cast<Uint32*>(screenSurface->pixels))
 {}
 
-void crt::updatePixels() {
+void crt::blit() {
 	for (int y = 0; y < 180; y++) {
 		for (int x = 0; x < 320; x++) {
 			int r = pixels[y * 320 * 3 + x * 3 + 0];
@@ -46,15 +46,10 @@ void crt::updatePixels() {
 			}
 		}
 	}
-
 	SDL_UpdateWindowSurface(window);
-
 }
 
-[[noreturn]] static void loop(SDL_Window* window)
-{
-	printf("testing\n");
-
+[[noreturn]] static void loop(SDL_Window* window) {
 	SDL_Event event;
 	while (true) {
 		while (SDL_PollEvent(&event)) {
@@ -70,13 +65,10 @@ void crt::updatePixels() {
 	}
 }
 
-[[noreturn]] int main(int argc, char* args[])
-{
+[[noreturn]] int main(int argc, char* args[]) {
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
 
-	fplus::fill_right(0, 10, std::string("hello"));
-
-	SDL_Window* window = SDL_CreateWindow("testing...",
+	SDL_Window* window = SDL_CreateWindow("shepherdgame",
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		320 * SCALE, 180 * SCALE,
 		SDL_WINDOW_SHOWN);
@@ -96,7 +88,7 @@ void crt::updatePixels() {
 	crt.pixels[179 * 320 * 3 + 319 * 3 + 1] = 0xff;
 	crt.pixels[179 * 320 * 3 + 319 * 3 + 2] = 0x00;
 
-	crt.updatePixels();
+	crt.blit();
 
 	loop(window);
 }

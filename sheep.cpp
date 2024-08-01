@@ -43,7 +43,7 @@ public:
 
 void grid::clear() {
 	std::for_each(pixels.begin(), pixels.end(), [](pixel& p) {p.reset(); });
-	}
+}
 
 pixel& grid::get(unsigned long long x, unsigned long long y) {
 	return pixels[y * 320 + x];
@@ -51,11 +51,11 @@ pixel& grid::get(unsigned long long x, unsigned long long y) {
 
 
 
-class crt {
+class CRT {
 
 public:
 
-	crt(SDL_Window* window);
+	CRT(SDL_Window* window);
 	void blit();
 
 	grid pixels;
@@ -69,14 +69,14 @@ private:
 
 };
 
-crt::crt(SDL_Window* window) :
+CRT::CRT(SDL_Window* window) :
 	window(window),
 	screenSurface(SDL_GetWindowSurface(window)),
 	pixelFormat(screenSurface->format),
 	surfacePixels(static_cast<Uint32*>(screenSurface->pixels))
 {}
 
-void crt::blit() {
+void CRT::blit() {
 	for (int y = 0; y < 180; y++) {
 		for (int x = 0; x < 320; x++) {
 			int r = pixels.get(x, y).r;
@@ -116,23 +116,23 @@ void crt::blit() {
 		320 * SCALE, 180 * SCALE,
 		SDL_WINDOW_SHOWN);
 
-	crt crt(window);
+	CRT* crt = new CRT(window);
 
-	crt.pixels.clear();
+	crt->pixels.clear();
 
 	for (int y = 0; y < 160; y++) {
 		int x = y;
 		int i = y * 320 * 3 + x * 3;
-		crt.pixels.get(x, y).r = 0xff;
-		crt.pixels.get(x, y).g = 0x00;
-		crt.pixels.get(x, y).b = 0x00;
+		crt->pixels.get(x, y).r = 0xff;
+		crt->pixels.get(x, y).g = 0x00;
+		crt->pixels.get(x, y).b = 0x00;
 	}
 
-	crt.pixels.get(319, 179).r = 0x00;
-	crt.pixels.get(319, 179).g = 0xff;
-	crt.pixels.get(319, 179).b = 0x00;
+	crt->pixels.get(319, 179).r = 0x00;
+	crt->pixels.get(319, 179).g = 0xff;
+	crt->pixels.get(319, 179).b = 0x00;
 
-	crt.blit();
+	crt->blit();
 
 	loop(window);
 }

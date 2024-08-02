@@ -1,7 +1,7 @@
-import { Entity } from './entities/$entity.js';
-import { Player } from './entities/$player.js';
-import { convertHslToRgb } from './lib/$color.js';
-import { CRT } from './lib/$crt.js';
+import { Entity } from './entities/entity.js';
+import { Player } from './entities/player.js';
+import { convertHslToRgb } from './lib/color.js';
+import { CRT } from './lib/crt.js';
 
 export class Game {
 

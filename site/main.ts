@@ -1,10 +1,10 @@
-import { Entity } from './entities/$entity.js';
-import { Player } from './entities/$player.js';
-import { Solid } from './entities/$solid.js';
-import { Game } from './$game.js';
-import { setupCRT } from './lib/$crt.js';
-import { Img } from './lib/$image.js';
-import { loadP8 } from "./lib/$p8.js";
+import { Entity } from './entities/entity.js';
+import { Player } from './entities/player.js';
+import { Solid } from './entities/solid.js';
+import { Game } from './game.js';
+import { setupCRT } from './lib/crt.js';
+import { Img } from './lib/image.js';
+import { loadP8 } from "./lib/p8.js";
 
 const crt = setupCRT();
 

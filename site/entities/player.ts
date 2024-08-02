@@ -1,6 +1,6 @@
-import { Img } from "../lib/$image.js";
-import { game } from "../$main.js";
-import { Entity } from "./$entity.js";
+import { Img } from "../lib/image.js";
+import { game } from "../main.js";
+import { Entity } from "./entity.js";
 
 export class Player extends Entity {
 

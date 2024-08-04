@@ -11,10 +11,10 @@ export class grid {
 
 public:
 
-	pixel& get(unsigned long long x, unsigned long long y);
+	auto get(unsigned long long x, unsigned long long y) -> pixel&;
 
 };
 
-pixel& grid::get(unsigned long long x, unsigned long long y) {
+auto grid::get(unsigned long long x, unsigned long long y) -> pixel& {
 	return pixels[y * 320 + x];
 }

@@ -5,6 +5,8 @@ export class pixel {
 
 public:
 
-	int r = 0, g = 0, b = 0;
+	int r = 0x00;
+	int g = 0x00;
+	int b = 0x00;
 
 };

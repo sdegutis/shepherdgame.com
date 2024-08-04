@@ -21,8 +21,7 @@ export int COLORS[16][4] = {
 	{0xFF, 0xCC, 0xAA, 0xff},
 };
 
-export class p8file
-{
+export class p8file {
 
 public:
 

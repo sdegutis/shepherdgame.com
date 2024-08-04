@@ -35,7 +35,7 @@ public:
 };
 
 template <int N>
-void populate(vector<string>& lines, array<int, N>& vals, int linelen, int strlen) {
+void populate(const vector<string>& lines, array<int, N>& vals, int linelen, int strlen) {
 	for (int j = 0; j < lines.size(); j++) {
 		auto& line = lines[j];
 		for (int i = 0; i < linelen / strlen; i++) {
@@ -46,7 +46,7 @@ void populate(vector<string>& lines, array<int, N>& vals, int linelen, int strle
 	}
 }
 
-p8file::p8file(string filename) {
+p8file::p8file(const string filename) {
 	ifstream file(filename);
 
 	map<string, vector<string>> groups;

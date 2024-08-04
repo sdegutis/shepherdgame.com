@@ -16,8 +16,6 @@ import std;
 
 	CRT* crt = new CRT(window);
 
-	crt->pixels.clear();
-
 	for (int y = 0; y < 160; y++) {
 		int x = y;
 		int i = y * 320 * 3 + x * 3;

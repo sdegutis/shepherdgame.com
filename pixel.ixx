@@ -1,7 +1,7 @@
 export module pixel;
 
 
-class pixel {
+export class pixel {
 
 public:
 

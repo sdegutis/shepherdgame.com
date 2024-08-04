@@ -24,6 +24,9 @@
     <ClCompile Include="grid.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pixel.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="p8file.h">

@@ -1,23 +1,9 @@
 export module grid;
 
+import pixel;
+
 #include <array>
 #include <algorithm>
-
-class pixel {
-
-public:
-
-	int r = 0, g = 0, b = 0;
-
-	void reset() {
-		r = 0;
-		g = 0;
-		b = 0;
-	}
-
-};
-
-
 
 export class grid {
 
@@ -25,12 +11,15 @@ export class grid {
 
 public:
 
-	void clear() {
-		std::for_each(pixels.begin(), pixels.end(), [](pixel& p) {p.reset(); });
-	}
-
-	pixel& get(unsigned long long x, unsigned long long y) {
-		return pixels[y * 320 + x];
-	}
+	void clear();
+	pixel& get(unsigned long long x, unsigned long long y);
 
 };
+
+void grid::clear() {
+	std::for_each(pixels.begin(), pixels.end(), [](pixel& p) {p.reset(); });
+}
+
+pixel& grid::get(unsigned long long x, unsigned long long y) {
+	return pixels[y * 320 + x];
+}

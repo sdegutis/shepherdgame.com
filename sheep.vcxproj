@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="grid.ixx" />
     <ClCompile Include="p8file.cpp" />
+    <ClCompile Include="pixel.ixx" />
     <ClCompile Include="sheep.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -18,19 +18,14 @@
     <ClCompile Include="sheep.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="p8file.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="grid.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pixel.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="p8file.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClCompile Include="p8file.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

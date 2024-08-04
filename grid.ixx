@@ -1,9 +1,7 @@
 export module grid;
 
 import pixel;
-
-#include <array>
-#include <algorithm>
+import std;
 
 export class grid {
 

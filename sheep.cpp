@@ -1,9 +1,8 @@
 #define SDL_MAIN_HANDLED
 
+
 #include <SDL2/SDL.h>
-#include <stdio.h>
-//#include <algorithm>
-#include <fplus/fplus.hpp>
+//#include <fplus/fplus.hpp>
 #include <fmt/core.h>
 
 constexpr auto SCALE = 5;

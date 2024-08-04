@@ -3,61 +3,18 @@
 
 #include <SDL2/SDL.h>
 //#include <fplus/fplus.hpp>
-#include <fmt/core.h>
 
-constexpr auto SCALE = 5;
-
-
+import crt;
 import grid;
+import std;
 
-
-class CRT {
-
-public:
-
-	CRT(SDL_Window* window);
-	void blit();
-
-	grid pixels;
-
-private:
-
-	SDL_Window* window;
-	SDL_Surface* screenSurface;
-	SDL_PixelFormat* pixelFormat;
-	Uint32* surfacePixels;
-
-};
-
-CRT::CRT(SDL_Window* window) :
-	window(window),
-	screenSurface(SDL_GetWindowSurface(window)),
-	pixelFormat(screenSurface->format),
-	surfacePixels(static_cast<Uint32*>(screenSurface->pixels))
-{}
-
-void CRT::blit() {
-	for (int y = 0; y < 180; y++) {
-		for (int x = 0; x < 320; x++) {
-			int r = pixels.get(x, y).r;
-			int g = pixels.get(x, y).g;
-			int b = pixels.get(x, y).b;
-			int c = SDL_MapRGB(pixelFormat, r, g, b);
-
-			for (int z = 0; z < SCALE; z++) {
-				std::fill_n(surfacePixels + (y * 320 * (SCALE * SCALE) + (z * 320 * SCALE) + x * SCALE), SCALE, c);
-			}
-		}
-	}
-	SDL_UpdateWindowSurface(window);
-}
 
 [[noreturn]] static void loop(SDL_Window* window) {
 	SDL_Event event;
 	while (true) {
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_CONTROLLERDEVICEADDED) {
-				fmt::print("2testing {}", event.cdevice.which);
+				std::print("2testing {}", event.cdevice.which);
 			}
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT) {
 				SDL_DestroyWindow(window);
@@ -74,7 +31,7 @@ public:
 };
 
 void Foo::operator[](std::string s) {
-	fmt::print("testing: [{}]", s);
+	std::print("testing: [{}]", s);
 }
 
 [[noreturn]] int main(int argc, char* args[]) {

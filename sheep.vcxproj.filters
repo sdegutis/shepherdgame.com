@@ -27,5 +27,8 @@
     <ClCompile Include="p8file.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="crt.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

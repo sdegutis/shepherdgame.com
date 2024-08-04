@@ -3,9 +3,11 @@ export module grid;
 import pixel;
 import std;
 
+using namespace std;
+
 export class grid {
 
-	std::array<pixel, 320 * 180> pixels;
+	array<pixel, 320 * 180> pixels;
 
 public:
 
@@ -15,7 +17,7 @@ public:
 };
 
 void grid::clear() {
-	std::for_each(pixels.begin(), pixels.end(), [](pixel& p) {p.reset(); });
+	for_each(pixels.begin(), pixels.end(), [](pixel& p) {p.reset(); });
 }
 
 pixel& grid::get(unsigned long long x, unsigned long long y) {

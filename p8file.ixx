@@ -1,6 +1,7 @@
 export module p8file;
 
 import std;
+using namespace std;
 
 export int COLORS[16][4] = {
 	{0x00, 0x00, 0x00, 0x00},
@@ -25,34 +26,34 @@ export class p8file {
 
 public:
 
-	std::array<int, 128 * 128> spriteColors{};
-	std::array<int, 128 * 64> mapIndexes{};
-	std::array<int, 256> flags{};
+	array<int, 128 * 128> spriteColors{};
+	array<int, 128 * 64> mapIndexes{};
+	array<int, 256> flags{};
 
-	p8file(std::string filename);
+	p8file(string filename);
 
 };
 
 template <int N>
-void populate(std::vector<std::string>& lines, std::array<int, N>& vals, int linelen, int strlen) {
+void populate(vector<string>& lines, array<int, N>& vals, int linelen, int strlen) {
 	for (int j = 0; j < lines.size(); j++) {
 		auto& line = lines[j];
 		for (int i = 0; i < linelen / strlen; i++) {
 			auto str = line.substr(i * strlen, strlen);
-			int n = std::stoi(str, nullptr, 16);
+			int n = stoi(str, nullptr, 16);
 			vals[j * linelen / strlen + i] = n;
 		}
 	}
 }
 
-p8file::p8file(std::string filename) {
-	std::ifstream file(filename);
+p8file::p8file(string filename) {
+	ifstream file(filename);
 
-	std::map<std::string, std::vector<std::string>> groups;
-	std::string key;
+	map<string, vector<string>> groups;
+	string key;
 
-	std::string line;
-	while (std::getline(file, line)) {
+	string line;
+	while (getline(file, line)) {
 		if (line.starts_with("__")) { key = line; }
 		else { groups[key].push_back(line); }
 	}

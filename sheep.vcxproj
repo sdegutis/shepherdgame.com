@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="grid.ixx" />
     <ClCompile Include="p8file.cpp" />
     <ClCompile Include="sheep.cpp" />
   </ItemGroup>

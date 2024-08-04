@@ -2,53 +2,14 @@
 
 #include <SDL2/SDL.h>
 #include <stdio.h>
-#include <algorithm>
+//#include <algorithm>
 #include <fplus/fplus.hpp>
 #include <fmt/core.h>
 
 constexpr auto SCALE = 5;
 
 
-
-class pixel {
-
-public:
-
-	int r = 0, g = 0, b = 0;
-
-	void reset();
-
-};
-
-void pixel::reset() {
-	r = 0;
-	g = 0;
-	b = 0;
-}
-
-
-
-
-class grid {
-
-	std::array<pixel, 320 * 180> pixels;
-
-public:
-
-	void clear();
-
-	pixel& get(unsigned long long x, unsigned long long y);
-
-};
-
-void grid::clear() {
-	std::for_each(pixels.begin(), pixels.end(), [](pixel& p) {p.reset(); });
-}
-
-pixel& grid::get(unsigned long long x, unsigned long long y) {
-	return pixels[y * 320 + x];
-}
-
+import grid;
 
 
 class CRT {
@@ -108,7 +69,21 @@ void CRT::blit() {
 	}
 }
 
+class Foo {
+public:
+	void operator[](std::string s);
+};
+
+void Foo::operator[](std::string s) {
+	fmt::print("testing: [{}]", s);
+}
+
 [[noreturn]] int main(int argc, char* args[]) {
+	//Foo foo;
+	//foo["bar"];
+
+	//return 0;
+
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
 
 	SDL_Window* window = SDL_CreateWindow("shepherdgame",

@@ -1,7 +1,5 @@
 {
   "dependencies": [
-    "fplus",
-    "sdl2",
-    "fmt"
+    "sdl2"
   ]
 }

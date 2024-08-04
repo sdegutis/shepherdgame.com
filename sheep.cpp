@@ -1,45 +1,12 @@
 #define SDL_MAIN_HANDLED
 
-
 #include <SDL2/SDL.h>
-//#include <fplus/fplus.hpp>
 
 import crt;
 import grid;
 import std;
 
-
-[[noreturn]] static void loop(SDL_Window* window) {
-	SDL_Event event;
-	while (true) {
-		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_CONTROLLERDEVICEADDED) {
-				std::print("2testing {}", event.cdevice.which);
-			}
-			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT) {
-				SDL_DestroyWindow(window);
-				SDL_Quit();
-				exit(0);
-			}
-		}
-	}
-}
-
-class Foo {
-public:
-	void operator[](std::string s);
-};
-
-void Foo::operator[](std::string s) {
-	std::print("testing: [{}]", s);
-}
-
 [[noreturn]] int main(int argc, char* args[]) {
-	//Foo foo;
-	//foo["bar"];
-
-	//return 0;
-
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
 
 	SDL_Window* window = SDL_CreateWindow("shepherdgame",
@@ -65,5 +32,17 @@ void Foo::operator[](std::string s) {
 
 	crt->blit();
 
-	loop(window);
+	SDL_Event event;
+	while (true) {
+		while (SDL_PollEvent(&event)) {
+			if (event.type == SDL_CONTROLLERDEVICEADDED) {
+				std::print("2testing {}", event.cdevice.which);
+			}
+			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT) {
+				SDL_DestroyWindow(window);
+				SDL_Quit();
+				exit(0);
+			}
+		}
+	}
 }

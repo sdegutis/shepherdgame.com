@@ -2,7 +2,6 @@ export module grid;
 
 import pixel;
 import std;
-
 using namespace std;
 
 export constexpr auto WIDTH = 320;

@@ -19,24 +19,24 @@ void printthem() {
 int main(int argc, char* args[]) {
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
 
-	SDL_Window* window = SDL_CreateWindow("shepherdgame",
+	auto window = SDL_CreateWindow("shepherdgame",
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		320 * SCALE, 180 * SCALE,
+		WIDTH * SCALE, HEIGHT * SCALE,
 		SDL_WINDOW_SHOWN);
 
-	Screen* screen = new Screen(window);
+	auto screen = new Screen(window);
 
-	for (int y = 0; y < 160; y++) {
+	for (int y = 0; y < HEIGHT - 20; y++) {
 		int x = y;
-		int i = y * 320 * 3 + x * 3;
+		int i = y * WIDTH * 3 + x * 3;
 		screen->pixels.get(x, y).r = 0xff;
 		screen->pixels.get(x, y).g = 0x00;
 		screen->pixels.get(x, y).b = 0x00;
 	}
 
-	screen->pixels.get(319, 179).r = 0x00;
-	screen->pixels.get(319, 179).g = 0xff;
-	screen->pixels.get(319, 179).b = 0x00;
+	screen->pixels.get(WIDTH - 2, HEIGHT - 2).r = 0x00;
+	screen->pixels.get(WIDTH - 2, HEIGHT - 2).g = 0xff;
+	screen->pixels.get(WIDTH - 2, HEIGHT - 2).b = 0x00;
 
 	screen->blit();
 

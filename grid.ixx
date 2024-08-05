@@ -11,10 +11,8 @@ export class grid {
 
 public:
 
-	auto get(unsigned long long x, unsigned long long y) -> pixel&;
+	auto get(unsigned long long x, unsigned long long y) -> pixel& {
+		return pixels[y * 320 + x];
+	}
 
 };
-
-auto grid::get(unsigned long long x, unsigned long long y) -> pixel& {
-	return pixels[y * 320 + x];
-}

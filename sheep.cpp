@@ -6,7 +6,17 @@ import crt;
 import grid;
 import std;
 
-[[noreturn]] int main(int argc, char* args[]) {
+using namespace std;
+
+void printthem() {
+	print("num joysticks: {}\n", SDL_NumJoysticks());
+	for (int i = 0; i < SDL_NumJoysticks(); i++) {
+		::printf("%d: %d\n", i, SDL_IsGameController(i));
+	}
+	print("\n");
+}
+
+int main(int argc, char* args[]) {
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
 
 	SDL_Window* window = SDL_CreateWindow("shepherdgame",
@@ -30,11 +40,18 @@ import std;
 
 	crt->blit();
 
+	printthem();
+
 	SDL_Event event;
 	while (true) {
 		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_CONTROLLERDEVICEADDED) {
-				std::print("2testing {}", event.cdevice.which);
+			if (event.type == SDL_CONTROLLERDEVICEREMOVED) {
+				print("removed: {}\n", event.cdevice.which);
+				printthem();
+			}
+			else if (event.type == SDL_CONTROLLERDEVICEADDED) {
+				print("added: {}\n", event.cdevice.which);
+				printthem();
 			}
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT) {
 				SDL_DestroyWindow(window);

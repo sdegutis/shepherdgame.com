@@ -22,18 +22,6 @@ export int COLORS[16][4] = {
 	{0xFF, 0xCC, 0xAA, 0xff},
 };
 
-export class p8file {
-
-public:
-
-	array<int, 128 * 128> spriteColors{};
-	array<int, 128 * 64> mapIndexes{};
-	array<int, 256> flags{};
-
-	p8file(string filename);
-
-};
-
 template <int N>
 void populate(const vector<string>& lines, array<int, N>& vals, int linelen, int strlen) {
 	for (int j = 0; j < lines.size(); j++) {
@@ -46,22 +34,32 @@ void populate(const vector<string>& lines, array<int, N>& vals, int linelen, int
 	}
 }
 
-p8file::p8file(const string filename) {
-	ifstream file(filename);
+export class p8file {
 
-	map<string, vector<string>> groups;
-	string key;
+public:
 
-	string line;
-	while (getline(file, line)) {
-		if (line.starts_with("__")) { key = line; }
-		else { groups[key].push_back(line); }
+	array<int, 128 * 128> spriteColors{};
+	array<int, 128 * 64> mapIndexes{};
+	array<int, 256> flags{};
+
+	p8file(string filename) {
+		ifstream file(filename);
+
+		map<string, vector<string>> groups;
+		string key;
+
+		string line;
+		while (getline(file, line)) {
+			if (line.starts_with("__")) { key = line; }
+			else { groups[key].push_back(line); }
+		}
+
+		file.close();
+
+		populate(groups["__gfx__"], spriteColors, 128, 1);
+		populate(groups["__gff__"], flags, 256, 2);
+		populate(groups["__map__"], mapIndexes, 256, 2);
+		//populate(groups["__gfx__"], spriteColors, 128, 1);
 	}
 
-	file.close();
-
-	populate(groups["__gfx__"], spriteColors, 128, 1);
-	populate(groups["__gff__"], flags, 256, 2);
-	populate(groups["__map__"], mapIndexes, 256, 2);
-	//populate(groups["__gfx__"], spriteColors, 128, 1);
-}
+};

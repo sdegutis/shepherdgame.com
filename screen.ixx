@@ -15,6 +15,8 @@ export class Screen {
 
 public:
 
+	Grid pixels;
+
 	Screen() :
 		window(
 			SDL_CreateWindow("shepherdgame",
@@ -34,10 +36,8 @@ public:
 	void blit() {
 		for (int y = 0; y < HEIGHT; y++) {
 			for (int x = 0; x < WIDTH; x++) {
-				int r = pixels.get(x, y).r;
-				int g = pixels.get(x, y).g;
-				int b = pixels.get(x, y).b;
-				int c = SDL_MapRGB(pixelFormat, r, g, b);
+				auto& p = pixels.get(x, y);
+				int c = SDL_MapRGB(pixelFormat, p.r, p.g, p.b);
 
 				for (int z = 0; z < SCALE; z++) {
 					std::fill_n(surfacePixels + (y * WIDTH * (SCALE * SCALE) + (z * WIDTH * SCALE) + x * SCALE), SCALE, c);
@@ -46,7 +46,5 @@ public:
 		}
 		SDL_UpdateWindowSurface(window);
 	}
-
-	Grid pixels;
 
 };

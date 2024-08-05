@@ -15,12 +15,21 @@ export class Screen {
 
 public:
 
-	Screen(SDL_Window* window) :
-		window(window),
+	Screen() :
+		window(
+			SDL_CreateWindow("shepherdgame",
+				SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+				WIDTH* SCALE, HEIGHT* SCALE,
+				SDL_WINDOW_SHOWN)
+		),
 		screenSurface(SDL_GetWindowSurface(window)),
 		pixelFormat(screenSurface->format),
 		surfacePixels(static_cast<Uint32*>(screenSurface->pixels))
 	{}
+
+	~Screen() {
+		SDL_DestroyWindow(window);
+	}
 
 	void blit() {
 		for (int y = 0; y < HEIGHT; y++) {

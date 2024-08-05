@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="game.ixx" />
     <ClCompile Include="screen.ixx" />
     <ClCompile Include="grid.ixx" />
     <ClCompile Include="p8file.ixx" />

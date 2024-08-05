@@ -17,6 +17,8 @@ void printthem() {
 }
 
 int main(int argc, char* args[]) {
+	print("{}\n", thread::hardware_concurrency());
+
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
 
 	auto window = SDL_CreateWindow("shepherdgame",

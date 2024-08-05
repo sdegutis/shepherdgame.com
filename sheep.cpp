@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL.h>
 
-import crt;
+import screen;
 import grid;
 import std;
 
@@ -24,21 +24,21 @@ int main(int argc, char* args[]) {
 		320 * SCALE, 180 * SCALE,
 		SDL_WINDOW_SHOWN);
 
-	CRT* crt = new CRT(window);
+	Screen* screen = new Screen(window);
 
 	for (int y = 0; y < 160; y++) {
 		int x = y;
 		int i = y * 320 * 3 + x * 3;
-		crt->pixels.get(x, y).r = 0xff;
-		crt->pixels.get(x, y).g = 0x00;
-		crt->pixels.get(x, y).b = 0x00;
+		screen->pixels.get(x, y).r = 0xff;
+		screen->pixels.get(x, y).g = 0x00;
+		screen->pixels.get(x, y).b = 0x00;
 	}
 
-	crt->pixels.get(319, 179).r = 0x00;
-	crt->pixels.get(319, 179).g = 0xff;
-	crt->pixels.get(319, 179).b = 0x00;
+	screen->pixels.get(319, 179).r = 0x00;
+	screen->pixels.get(319, 179).g = 0xff;
+	screen->pixels.get(319, 179).b = 0x00;
 
-	crt->blit();
+	screen->blit();
 
 	printthem();
 

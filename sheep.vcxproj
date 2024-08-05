@@ -131,7 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="crt.ixx" />
+    <ClCompile Include="screen.ixx" />
     <ClCompile Include="grid.ixx" />
     <ClCompile Include="p8file.ixx" />
     <ClCompile Include="pixel.ixx" />

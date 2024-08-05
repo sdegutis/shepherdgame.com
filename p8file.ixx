@@ -34,7 +34,7 @@ void populate(const vector<string>& lines, array<int, N>& vals, int linelen, int
 	}
 }
 
-export class p8file {
+export class P8file {
 
 public:
 
@@ -42,7 +42,7 @@ public:
 	array<int, 128 * 64> mapIndexes{};
 	array<int, 256> flags{};
 
-	p8file(string filename) {
+	P8file(string filename) {
 		ifstream file(filename);
 
 		map<string, vector<string>> groups;

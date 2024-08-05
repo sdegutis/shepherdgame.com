@@ -1,4 +1,4 @@
-export module crt;
+export module screen;
 
 #include <SDL2/SDL.h>
 
@@ -6,7 +6,7 @@ import grid;
 
 export constexpr auto SCALE = 5;
 
-export class CRT {
+export class Screen {
 
 	SDL_Window* window;
 	SDL_Surface* screenSurface;
@@ -15,7 +15,7 @@ export class CRT {
 
 public:
 
-	CRT(SDL_Window* window) :
+	Screen(SDL_Window* window) :
 		window(window),
 		screenSurface(SDL_GetWindowSurface(window)),
 		pixelFormat(screenSurface->format),
@@ -38,6 +38,6 @@ public:
 		SDL_UpdateWindowSurface(window);
 	}
 
-	grid pixels;
+	Grid pixels;
 
 };

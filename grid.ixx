@@ -5,13 +5,13 @@ import std;
 
 using namespace std;
 
-export class grid {
+export class Grid {
 
-	array<pixel, 320 * 180> pixels;
+	array<Pixel, 320 * 180> pixels;
 
 public:
 
-	auto get(unsigned long long x, unsigned long long y) -> pixel& {
+	auto get(unsigned long long x, unsigned long long y) -> Pixel& {
 		return pixels[y * 320 + x];
 	}
 

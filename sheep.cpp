@@ -42,32 +42,33 @@ int main(int argc, char* args[]) {
 
 	screen->blit();
 
-	map<Sint32, SDL_GameController*> gamepads;
+	map<Sint32, SDL_Joystick*> gamepads;
 
 	//printthem();
 
 	SDL_Event event;
 	while (true) {
 		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_CONTROLLERDEVICEREMOVED) {
+			if (event.type == SDL_CONTROLLERDEVICEADDED) {
+				print("added: {}\n", event.cdevice.which);
+				//printthem();
+
+				auto j = SDL_JoystickOpen(event.cdevice.which);
+				auto jj = SDL_JoystickGetDeviceInstanceID(event.cdevice.which);
+				gamepads[jj] = j;
+				auto i = SDL_JoystickGetPlayerIndex(j);
+				print("player index: {}\n", i);
+
+			}
+			else if (event.type == SDL_CONTROLLERDEVICEREMOVED) {
 				print("removed: {}\n", event.cdevice.which);
 
-				SDL_GameControllerClose(gamepads[event.cdevice.which]);
+				SDL_JoystickClose(gamepads[event.cdevice.which]);
 				gamepads.erase(event.cdevice.which);
 
 				//SDL_GameControllerClose(gc);
 
 				//printthem();
-			}
-			else if (event.type == SDL_CONTROLLERDEVICEADDED) {
-				print("added: {}\n", event.cdevice.which);
-				//printthem();
-
-				auto j = SDL_GameControllerOpen(event.cdevice.which);
-				gamepads[event.cdevice.which] = j;
-				auto i = SDL_GameControllerGetPlayerIndex(j);
-				print("player index: {}\n", i);
-
 			}
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT) {
 				SDL_DestroyWindow(window);
@@ -76,14 +77,11 @@ int main(int argc, char* args[]) {
 			}
 		}
 
-		if (gamepads.size() > 0) {
+		for (auto& [k, j] : gamepads) {
+			if (SDL_JoystickGetButton(j, SDL_CONTROLLER_BUTTON_A)) {
+				auto i = SDL_JoystickGetPlayerIndex(j);
 
-			auto o = gamepads.begin();
-			auto k = *o;
-			auto j = k.second;
-
-			if (SDL_GameControllerGetButton(j, SDL_CONTROLLER_BUTTON_A)) {
-				print(".");
+				print("{}", i);
 			}
 		}
 	}

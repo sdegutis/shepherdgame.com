@@ -45,6 +45,9 @@ public:
 	}
 
 	void loop() {
+		Uint64 last = SDL_GetTicks64();
+		Uint64 fps = 1000 / 30;
+
 		bool quit = false;
 		SDL_Event event;
 		while (!quit) {
@@ -76,12 +79,25 @@ public:
 				}
 			}
 
-			for (auto& [k, j] : gamepads) {
-				if (SDL_JoystickGetButton(j, SDL_CONTROLLER_BUTTON_A)) {
-					auto i = SDL_JoystickGetPlayerIndex(j);
+			Uint64 now = SDL_GetTicks64();
 
-					print("{}", i);
-				}
+			if (now - last >= fps) {
+				last = now;
+
+				update();
+			}
+			else {
+				//print(".");
+			}
+		}
+	}
+
+	void update() {
+		for (auto& [k, j] : gamepads) {
+			if (SDL_JoystickGetButton(j, SDL_CONTROLLER_BUTTON_A)) {
+				auto i = SDL_JoystickGetPlayerIndex(j);
+
+				print("{}", i);
 			}
 		}
 	}

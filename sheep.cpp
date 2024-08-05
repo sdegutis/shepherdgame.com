@@ -8,18 +8,18 @@ import std;
 
 using namespace std;
 
-void printthem() {
-	print("num joysticks: {}\n", SDL_NumJoysticks());
-	for (int i = 0; i < SDL_NumJoysticks(); i++) {
-		::printf("%d: %d\n", i, SDL_IsGameController(i));
-	}
-	print("\n");
-}
+//void printthem() {
+//	print("num joysticks: {}\n", SDL_NumJoysticks());
+//	for (int i = 0; i < SDL_NumJoysticks(); i++) {
+//		::printf("%d: %d\n", i, SDL_IsGameController(i));
+//	}
+//	print("\n");
+//}
 
 int main(int argc, char* args[]) {
-	print("{}\n", thread::hardware_concurrency());
+	//print("{}\n", thread::hardware_concurrency());
 
-	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
+	SDL_Init(SDL_INIT_EVERYTHING);
 
 	auto window = SDL_CreateWindow("shepherdgame",
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
@@ -42,18 +42,32 @@ int main(int argc, char* args[]) {
 
 	screen->blit();
 
-	printthem();
+	map<Sint32, SDL_GameController*> gamepads;
+
+	//printthem();
 
 	SDL_Event event;
 	while (true) {
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_CONTROLLERDEVICEREMOVED) {
 				print("removed: {}\n", event.cdevice.which);
-				printthem();
+
+				SDL_GameControllerClose(gamepads[event.cdevice.which]);
+				gamepads.erase(event.cdevice.which);
+
+				//SDL_GameControllerClose(gc);
+
+				//printthem();
 			}
 			else if (event.type == SDL_CONTROLLERDEVICEADDED) {
 				print("added: {}\n", event.cdevice.which);
-				printthem();
+				//printthem();
+
+				auto j = SDL_GameControllerOpen(event.cdevice.which);
+				gamepads[event.cdevice.which] = j;
+				auto i = SDL_GameControllerGetPlayerIndex(j);
+				print("player index: {}\n", i);
+
 			}
 			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT) {
 				SDL_DestroyWindow(window);
@@ -61,5 +75,18 @@ int main(int argc, char* args[]) {
 				exit(0);
 			}
 		}
+
+		if (gamepads.size() > 0) {
+
+			auto o = gamepads.begin();
+			auto k = *o;
+			auto j = k.second;
+
+			if (SDL_GameControllerGetButton(j, SDL_CONTROLLER_BUTTON_A)) {
+				print(".");
+			}
+		}
 	}
+
+
 }

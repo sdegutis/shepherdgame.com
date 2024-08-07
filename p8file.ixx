@@ -54,8 +54,6 @@ public:
 			else { groups[key].push_back(line); }
 		}
 
-		file.close();
-
 		populate(groups["__gfx__"], spriteColors, 128, 1);
 		populate(groups["__gff__"], flags, 256, 2);
 		populate(groups["__map__"], mapIndexes, 256, 2);

@@ -44,44 +44,47 @@ public:
 		screen.blit();
 	}
 
+	bool quit = false;
+
 	void loop() {
 		Uint64 last = SDL_GetTicks64();
 		Uint64 fps = 1000 / 30;
 
-		bool quit = false;
-		SDL_Event event;
 		while (!quit) {
-			while (SDL_PollEvent(&event)) {
-				if (event.type == SDL_CONTROLLERDEVICEADDED) {
-					print("added: {}\n", event.cdevice.which);
-					//printthem();
-
-					auto con = SDL_JoystickOpen(event.cdevice.which);
-					auto conid = SDL_JoystickGetDeviceInstanceID(event.cdevice.which);
-					gamepads[conid] = con;
-					auto i = SDL_JoystickGetPlayerIndex(con);
-					print("player index: {}\n", i);
-
-				}
-				else if (event.type == SDL_CONTROLLERDEVICEREMOVED) {
-					auto conid = event.cdevice.which;
-					print("removed: {}\n", conid);
-
-					SDL_JoystickClose(gamepads[conid]);
-					gamepads.erase(conid);
-				}
-				else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT) {
-					quit = true;
-					break;
-				}
-			}
-
+			processSdlEvents();
 			Uint64 now = SDL_GetTicks64();
 			auto diff = now - last;
 			if (diff >= fps) {
 				print("{} ", diff);
 				last = now;
 				update(diff);
+			}
+		}
+	}
+
+	void processSdlEvents() {
+		SDL_Event event;
+		while (SDL_PollEvent(&event)) {
+			if (event.type == SDL_CONTROLLERDEVICEADDED) {
+				print("added: {}\n", event.cdevice.which);
+
+				auto con = SDL_JoystickOpen(event.cdevice.which);
+				auto conid = SDL_JoystickGetDeviceInstanceID(event.cdevice.which);
+				gamepads[conid] = con;
+				auto i = SDL_JoystickGetPlayerIndex(con);
+				print("player index: {}\n", i);
+
+			}
+			else if (event.type == SDL_CONTROLLERDEVICEREMOVED) {
+				auto conid = event.cdevice.which;
+				print("removed: {}\n", conid);
+
+				SDL_JoystickClose(gamepads[conid]);
+				gamepads.erase(conid);
+			}
+			else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE || event.type == SDL_QUIT) {
+				quit = true;
+				break;
 			}
 		}
 	}

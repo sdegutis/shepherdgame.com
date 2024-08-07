@@ -9,9 +9,9 @@ export constexpr auto HEIGHT = 180;
 
 export class Grid {
 
-	array<Pixel, WIDTH * HEIGHT> pixels;
-
 public:
+
+	array<Pixel, WIDTH * HEIGHT> pixels;
 
 	auto get(unsigned long long x, unsigned long long y) -> Pixel& {
 		return pixels[y * WIDTH + x];

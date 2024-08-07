@@ -11,10 +11,10 @@ public:
 
 	Pixel() {};
 
-	Pixel(int n) {
-		r = n;
-		g = n;
-		b = n;
-	}
+	Pixel(int n) :
+		r(n),
+		g(n),
+		b(n)
+	{}
 
 };

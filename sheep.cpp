@@ -2,7 +2,7 @@
 
 import game;
 
-void main() {
+int main() {
 	Game game;
 	game.start();
 }

@@ -9,7 +9,7 @@ public:
 	int g = 0x00;
 	int b = 0x00;
 
-	Pixel() = default;
+	Pixel() {};
 
 	Pixel(int n) {
 		r = n;

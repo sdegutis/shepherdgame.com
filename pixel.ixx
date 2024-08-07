@@ -9,4 +9,12 @@ public:
 	int g = 0x00;
 	int b = 0x00;
 
+	Pixel() = default;
+
+	Pixel(int n) {
+		r = n;
+		g = n;
+		b = n;
+	}
+
 };

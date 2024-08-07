@@ -102,7 +102,7 @@ public:
 
 		ii++;
 
-		fill(screen.pixels.pixels.begin(), screen.pixels.pixels.end(), Pixel{});
+		fill(screen.pixels.pixels.begin(), screen.pixels.pixels.end(), 0);
 
 		for (int y = 0; y < HEIGHT - 20; y++) {
 			int x = y;

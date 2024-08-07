@@ -4,7 +4,6 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "imlib dev",
     "generate": "imlib generate",
     "watch": "tsc --watch"
   },
@@ -17,6 +16,6 @@
     "typescript": "^5.5.2"
   },
   "dependencies": {
-    "@imlib/core": "^2.2.2"
+    "@imlib/core": "^2.3.2"
   }
 }

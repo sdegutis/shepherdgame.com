@@ -1,7 +1,6 @@
-export module pixel;
+#pragma once
 
-
-export class Pixel {
+class Pixel {
 
 public:
 

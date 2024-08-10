@@ -1,4 +1,4 @@
-import { COLORS_HSLA } from "./color.js";
+import { COLORS_HSLA } from "./p8.js";
 
 export class Img {
 

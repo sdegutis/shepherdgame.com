@@ -1,5 +1,3 @@
-import { COLORS_RGBA } from "./p8.js";
-
 export function convertRgbToHsl(colors: number[]) {
   const r = colors[0] / 255;
   const g = colors[1] / 255;
@@ -91,5 +89,3 @@ export function convertHslToRgb(input: Uint16Array, offset: number, output: Uint
     output[offset + i] = val * 255;
   }
 };
-
-export const COLORS_HSLA = COLORS_RGBA.map(convertRgbToHsl);

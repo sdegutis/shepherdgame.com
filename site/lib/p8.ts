@@ -1,4 +1,6 @@
-export const COLORS_RGBA = [
+import { convertRgbToHsl } from "./color.js";
+
+const COLORS_RGBA = [
   [0x00, 0x00, 0x00, 0x00],
   [0x1D, 0x2B, 0x53, 0xff],
   [0x7E, 0x25, 0x53, 0xff],
@@ -16,6 +18,8 @@ export const COLORS_RGBA = [
   [0xFF, 0x77, 0xA8, 0xff],
   [0xFF, 0xCC, 0xAA, 0xff],
 ] as [number, number, number, number][];
+
+export const COLORS_HSLA = COLORS_RGBA.map(convertRgbToHsl);
 
 const FLAGS = [
   'RED', 'ORANGE', 'YELLOW', 'GREEN',

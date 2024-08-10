@@ -17,7 +17,15 @@ export class Game {
   camera = { x: 0, y: 0 };
   entPoint = { x: 0, y: 0 };
 
-  constructor(private crt: CRT) { }
+  constructor(private crt: CRT) {
+    console.log('ctor')
+    for (let y = 0; y < 64; y++) {
+      this.entityGrid[y] = [];
+      for (let x = 0; x < 128; x++) {
+        this.entityGrid[y][x] = new Set();
+      }
+    }
+  }
 
   async load() {
     const map1 = await loadP8('sheep.p8');
@@ -86,10 +94,8 @@ export class Game {
     x = Math.floor(x / 8);
     y = Math.floor(y / 8);
 
-    for (let yy = 0; yy < entity.image.h / 8; yy++) {
-      for (let xx = 0; xx < entity.image.w / 8; xx++) {
-        this.entityGrid[y + yy] ??= [];
-        this.entityGrid[y + yy][x + xx] ??= new Set();
+    for (let yy = 0; yy < Math.floor(entity.image.h / 8); yy++) {
+      for (let xx = 0; xx < Math.floor(entity.image.w / 8); xx++) {
         this.entityGrid[y + yy][x + xx].add(entity);
       }
     }

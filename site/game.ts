@@ -17,15 +17,7 @@ export class Game {
   camera = { x: 0, y: 0 };
   entPoint = { x: 0, y: 0 };
 
-  constructor(private crt: CRT) {
-    document.onkeydown = (e) => {
-      if (e.key === 'ArrowRight') this.players[0].x += 1;
-      if (e.key === 'ArrowLeft') this.players[0].x -= 1;
-      if (e.key === 'ArrowDown') this.players[0].y += 1;
-      if (e.key === 'ArrowUp') this.players[0].y -= 1;
-      this.moveCamera();
-    };
-  }
+  constructor(private crt: CRT) { }
 
   async load() {
     const map1 = await loadP8('sheep.p8');

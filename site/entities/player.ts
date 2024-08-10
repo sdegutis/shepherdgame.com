@@ -17,6 +17,18 @@ export class Player extends Entity {
     game.players[playerNum] = this;
   }
 
+  get gamepad() { return navigator.getGamepads()[this.playerNum]; }
+
+  override update? = (t: number) => {
+    if (this.gamepad) {
+      const [x, y] = this.gamepad.axes;
+
+      this.x += x * 3;
+      this.y += y * 3;
+      game.moveCamera();
+    }
+  };
+
 }
 
 

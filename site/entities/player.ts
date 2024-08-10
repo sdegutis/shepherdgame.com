@@ -1,3 +1,4 @@
+import { A, X } from "../lib/crt.js";
 import { Img } from "../lib/image.js";
 import { game } from "../main.js";
 import { Entity } from "./entity.js";
@@ -23,8 +24,13 @@ export class Player extends Entity {
     if (this.gamepad) {
       const [x, y] = this.gamepad.axes;
 
-      this.x += x * 3;
-      this.y += y * 3;
+      let speed = 1;
+      if (this.gamepad.buttons[X].pressed) {
+        speed = 2;
+      }
+
+      this.x += x * speed;
+      this.y += y * speed;
       game.moveCamera();
     }
   };

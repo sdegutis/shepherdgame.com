@@ -20,7 +20,7 @@ const crt = setupCRT();
 // 15 = sand
 
 export const game = new Game(crt);
-await game.setup();
+await game.load();
 game.start();
 
 // const logic: Logic = {

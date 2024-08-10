@@ -27,7 +27,7 @@ export class Game {
     };
   }
 
-  async setup() {
+  async load() {
     const map1 = await loadP8('sheep.p8');
 
     new Entity(0, 0, Img.flatColor(3));

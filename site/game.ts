@@ -18,7 +18,6 @@ export class Game {
   entPoint = { x: 0, y: 0 };
 
   constructor(private crt: CRT) {
-    console.log('ctor')
     for (let y = 0; y < 64; y++) {
       this.entityGrid[y] = [];
       for (let x = 0; x < 128; x++) {

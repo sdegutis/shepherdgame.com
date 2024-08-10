@@ -2,7 +2,7 @@ import { Entity } from './entities/entity.js';
 import { Player } from './entities/player.js';
 import { Solid } from './entities/solid.js';
 import { convertHslToRgb } from './lib/color.js';
-import { CRT } from './lib/crt.js';
+import { CRT, setupCRT } from './lib/crt.js';
 import { Img } from './lib/image.js';
 import { loadP8 } from './lib/p8.js';
 
@@ -29,7 +29,7 @@ export class Game {
   async load() {
     const map1 = await loadP8('sheep.p8');
 
-    new Entity(0, 0, Img.flatColor(3));
+    new Entity(this, 0, 0, Img.flatColor(3));
 
     for (let y = 0; y < 64; y++) {
       for (let x = 0; x < 128; x++) {
@@ -38,10 +38,10 @@ export class Game {
           continue;
         }
         else if (s === 12) {
-          new Player(x * 8, y * 8, map1.pixels, s, 0);
+          new Player(this, x * 8, y * 8, map1.pixels, s, 0);
         }
         else if (s === 13) {
-          new Player(x * 8, y * 8, map1.pixels, s, 1);
+          new Player(this, x * 8, y * 8, map1.pixels, s, 1);
         }
         else if (s === 8) {
           // bees
@@ -54,7 +54,7 @@ export class Game {
         }
         else {
           const img = Img.from(map1.pixels, s);
-          new Entity(x * 8, y * 8, img);
+          new Entity(this, x * 8, y * 8, img);
         }
       }
     }
@@ -129,3 +129,47 @@ export class Game {
   }
 
 }
+
+export async function startGame() {
+  const crt = setupCRT();
+  const game = new Game(crt);
+  await game.load();
+  game.start();
+}
+
+
+// const logic: Logic = {
+//   tryMove: (movingEntity, x, y) => {
+//     movingEntity.x += x;
+//     movingEntity.y += y;
+
+//     let canMove = true;
+//     for (let i = 0; i < entities.length; i++) {
+//       const collidedInto = entities[i];
+//       if (
+//         movingEntity.x + 7 >= collidedInto.x &&
+//         movingEntity.y + 7 >= collidedInto.y &&
+//         movingEntity.x <= collidedInto.x + 7 &&
+//         movingEntity.y <= collidedInto.y + 7
+//       ) {
+//         if (collidedInto === movingEntity) continue;
+//         if (collidedInto.dead) continue;
+//         if (!movingEntity.collideWith) continue;
+
+//         const result = movingEntity.collideWith(collidedInto, x, y);
+//         if (result === 'stop') {
+//           canMove = false;
+//           break;
+//         }
+//       }
+//     }
+
+//     if (!canMove) {
+//       movingEntity.x -= x;
+//       movingEntity.y -= y;
+//     }
+
+//     return canMove;
+//   },
+
+// };

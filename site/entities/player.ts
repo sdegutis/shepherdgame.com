@@ -1,6 +1,6 @@
-import { A, X } from "../lib/crt.js";
+import { Game } from "../game.js";
+import { X } from "../lib/crt.js";
 import { Img } from "../lib/image.js";
-import { game } from "../main.js";
 import { Entity } from "./entity.js";
 
 export class Player extends Entity {
@@ -8,13 +8,14 @@ export class Player extends Entity {
   override layer = 1;
 
   constructor(
+    game: Game,
     x: number,
     y: number,
     spritesheet: number[],
     spriteIndex: number,
     private playerNum: number,
   ) {
-    super(x, y, Img.from(spritesheet, spriteIndex));
+    super(game, x, y, Img.from(spritesheet, spriteIndex));
     game.players[playerNum] = this;
   }
 
@@ -31,7 +32,7 @@ export class Player extends Entity {
 
       this.x += x * speed;
       this.y += y * speed;
-      game.moveCamera();
+      this.game.moveCamera();
     }
   };
 

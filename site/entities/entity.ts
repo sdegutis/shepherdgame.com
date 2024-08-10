@@ -28,4 +28,37 @@ export class Entity {
 
   collideWith?: <T extends Entity>(other: T, x: number, y: number) => Interaction;
 
+  tryMove(movingEntity: Entity, x: number, y: number) {
+    movingEntity.x += x;
+    movingEntity.y += y;
+
+    let canMove = true;
+    // for (let i = 0; i < entities.length; i++) {
+    //   const collidedInto = entities[i];
+    //   if (
+    //     movingEntity.x + 7 >= collidedInto.x &&
+    //     movingEntity.y + 7 >= collidedInto.y &&
+    //     movingEntity.x <= collidedInto.x + 7 &&
+    //     movingEntity.y <= collidedInto.y + 7
+    //   ) {
+    //     if (collidedInto === movingEntity) continue;
+    //     if (collidedInto.dead) continue;
+    //     if (!movingEntity.collideWith) continue;
+
+    //     const result = movingEntity.collideWith(collidedInto, x, y);
+    //     if (result === 'stop') {
+    //       canMove = false;
+    //       break;
+    //     }
+    //   }
+    // }
+
+    if (!canMove) {
+      movingEntity.x -= x;
+      movingEntity.y -= y;
+    }
+
+    return canMove;
+  }
+
 }

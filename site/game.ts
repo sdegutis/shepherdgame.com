@@ -1,7 +1,10 @@
 import { Entity } from './entities/entity.js';
 import { Player } from './entities/player.js';
+import { Solid } from './entities/solid.js';
 import { convertHslToRgb } from './lib/color.js';
 import { CRT } from './lib/crt.js';
+import { Img } from './lib/image.js';
+import { loadP8 } from './lib/p8.js';
 
 export class Game {
 
@@ -22,6 +25,40 @@ export class Game {
       if (e.key === 'ArrowUp') this.players[0].y -= 1;
       this.moved();
     };
+  }
+
+  async setup() {
+    const map1 = await loadP8('sheep.p8');
+
+    new Entity(0, 0, Img.flatColor(3));
+
+    for (let y = 0; y < 64; y++) {
+      for (let x = 0; x < 128; x++) {
+        const s = map1.map[y][x];
+        if (s === 0) {
+          continue;
+        }
+        else if (s === 12) {
+          new Player(x * 8, y * 8, map1.pixels, s, 0);
+        }
+        else if (s === 13) {
+          new Player(x * 8, y * 8, map1.pixels, s, 1);
+        }
+        else if (s === 8) {
+          // bees
+        }
+        else if (s === 9) {
+          // sheep
+        }
+        else if (map1.flags[s].RED) {
+          new Solid(x * 8, y * 8, map1.pixels, s);
+        }
+        else {
+          const img = Img.from(map1.pixels, s);
+          new Entity(x * 8, y * 8, img);
+        }
+      }
+    }
   }
 
   start() {

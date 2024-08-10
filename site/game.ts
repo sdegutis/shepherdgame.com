@@ -50,7 +50,7 @@ export class Game {
           // sheep
         }
         else if (map1.flags[s].RED) {
-          new Solid(x * 8, y * 8, map1.pixels, s);
+          new Solid(this, x * 8, y * 8, map1.pixels, s);
         }
         else {
           const img = Img.from(map1.pixels, s);

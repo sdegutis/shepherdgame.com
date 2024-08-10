@@ -23,7 +23,7 @@ export class Game {
       if (e.key === 'ArrowLeft') this.players[0].x -= 1;
       if (e.key === 'ArrowDown') this.players[0].y += 1;
       if (e.key === 'ArrowUp') this.players[0].y -= 1;
-      this.moved();
+      this.moveCamera();
     };
   }
 
@@ -62,7 +62,7 @@ export class Game {
   }
 
   start() {
-    this.moved();
+    this.moveCamera();
 
     this.crt.ontick = (t) => {
       this.pixels.fill(0);
@@ -103,7 +103,7 @@ export class Game {
     }
   }
 
-  moved() {
+  moveCamera() {
     const x = (this.players[0].x + (this.players[0].image.w / 2) + this.players[1].x + (this.players[1].image.w / 2)) / 2;
     const y = (this.players[0].y + (this.players[0].image.h / 2) + this.players[1].y + (this.players[1].image.h / 2)) / 2;
 

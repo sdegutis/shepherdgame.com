@@ -1,8 +1,7 @@
 import { Game } from "../game.js";
 import { Img } from "../lib/image.js";
 
-// export type Interaction = 'stop' | 'pass';
-//   collideWith?: (other: Entity, x: number, y: number) => Interaction;
+export type Interaction = 'pass' | 'stop';
 
 export class Entity {
 
@@ -26,5 +25,7 @@ export class Entity {
       this.image.draw(this.game.pixels, this.x - this.game.camera.x, this.y - this.game.camera.y);
     }
   }
+
+  collideWith?: <T extends Entity>(other: T, x: number, y: number) => Interaction;
 
 }

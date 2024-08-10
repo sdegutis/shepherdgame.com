@@ -95,7 +95,9 @@ export class Game {
 
     for (let yy = 0; yy < Math.floor(entity.image.h / 8); yy++) {
       for (let xx = 0; xx < Math.floor(entity.image.w / 8); xx++) {
-        this.entityGrid[y + yy][x + xx].add(entity);
+        const set = this.entityGrid[y + yy][x + xx];
+        set.add(entity);
+        entity.inSets.push(set);
       }
     }
   }

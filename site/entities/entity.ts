@@ -1,4 +1,5 @@
-import { Game, Tile } from "../game.js";
+import { Game } from "../game.js";
+import { Tile } from "../lib/grid.js";
 import { Img } from "../lib/image.js";
 
 export const enum Interaction {

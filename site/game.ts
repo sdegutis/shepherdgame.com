@@ -3,45 +3,9 @@ import { Player } from './entities/player.js';
 import { Solid } from './entities/solid.js';
 import { convertHslToRgb } from './lib/color.js';
 import { CRT, setupCRT } from './lib/crt.js';
+import { Grid, Point, Tile } from './lib/grid.js';
 import { Img } from './lib/image.js';
 import { loadP8 } from './lib/p8.js';
-
-export class Point {
-
-  constructor(
-    public x: number,
-    public y: number,
-  ) { }
-
-}
-
-export class Tile {
-
-  entities = new Set<Entity>();
-
-}
-
-export class Grid {
-
-  #tiles: Tile[][] = [];
-
-  constructor(
-    public width: number,
-    public height: number,
-  ) {
-    for (let y = 0; y < height; y++) {
-      this.#tiles[y] = [];
-      for (let x = 0; x < width; x++) {
-        this.#tiles[y][x] = new Tile();
-      }
-    }
-  }
-
-  get(x: number, y: number) {
-    return this.#tiles[y][x];
-  }
-
-}
 
 export class Game {
 

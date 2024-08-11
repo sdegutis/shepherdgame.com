@@ -30,7 +30,8 @@ export class Player extends Entity {
         speed = 2;
       }
 
-      this.tryMove(x * speed, y * speed);
+      this.tryMove('x', x * speed);
+      this.tryMove('y', y * speed);
     }
   };
 

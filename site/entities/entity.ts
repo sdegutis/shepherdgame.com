@@ -30,9 +30,8 @@ export class Entity {
 
   collideWith?: <T extends Entity>(other: T, x: number, y: number) => Interaction;
 
-  tryMove(x: number, y: number) {
-    this.x += x;
-    this.y += y;
+  tryMove(dir: 'x' | 'y', v: number) {
+    this[dir] += v;
 
     let canMove = true;
     // for (let i = 0; i < entities.length; i++) {
@@ -60,8 +59,7 @@ export class Entity {
       this.game.moveCamera();
     }
     else {
-      this.x -= x;
-      this.y -= y;
+      this[dir] -= v;
     }
 
 

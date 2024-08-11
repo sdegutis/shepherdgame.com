@@ -12,7 +12,6 @@ export type Collider = (other: Entity, dir: Dir, by: number) => Interaction;
 export class Entity {
 
   inTiles = new Set<Tile>();
-
   layer = 0;
 
   constructor(
@@ -23,8 +22,6 @@ export class Entity {
   ) {
     game.putEntity(this);
   }
-
-  // overlaps(other:Entity) {}
 
   update?: (t: number) => void;
 
@@ -37,41 +34,42 @@ export class Entity {
   collideWith?: Collider;
 
   tryMove(dir: Dir, by: number) {
-    if (by === 0) return;
+    const seen = new Set();
+    while (by !== 0) {
+      const inch = Math.min(1, Math.max(-1, by));
 
-    this[dir] += by;
+      by -= inch;
+      this[dir] += by;
+      this.game.putEntity(this);
 
-    let canMove = true;
-    // for (let i = 0; i < entities.length; i++) {
-    //   const collidedInto = entities[i];
-    //   if (
+      for (const tile of this.inTiles) {
+        for (const ent of tile.entities) {
+          if (seen.has(ent)) continue;
+          seen.add(ent);
+
+          if (this.#overlaps(ent) && this.collideWith!(ent, dir, inch) === Interaction.Stop) {
+            this[dir] -= by;
+            this.game.putEntity(this);
+            this.game.moveCamera();
+            return false;
+          }
+        }
+      }
+    }
+
+    this.game.moveCamera();
+    return true;
+  }
+
+  #overlaps(other: Entity) {
     //     movingEntity.x + 7 >= collidedInto.x &&
     //     movingEntity.y + 7 >= collidedInto.y &&
     //     movingEntity.x <= collidedInto.x + 7 &&
     //     movingEntity.y <= collidedInto.y + 7
-    //   ) {
-    //     if (collidedInto === movingEntity) continue;
-    //     if (collidedInto.dead) continue;
-    //     if (!movingEntity.collideWith) continue;
-
-    //     const result = movingEntity.collideWith(collidedInto, x, y);
-    //     if (result === 'stop') {
-    //       canMove = false;
-    //       break;
-    //     }
-    //   }
-    // }
-
-    if (canMove) {
-      this.game.putEntity(this);
-      this.game.moveCamera();
-    }
-    else {
-      this[dir] -= by;
-    }
 
 
-    return canMove;
+
+    return true;
   }
 
 }

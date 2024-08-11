@@ -36,8 +36,10 @@ export class Entity {
 
   collideWith?: Collider;
 
-  tryMove(dir: Dir, v: number) {
-    this[dir] += v;
+  tryMove(dir: Dir, by: number) {
+    if (by === 0) return;
+
+    this[dir] += by;
 
     let canMove = true;
     // for (let i = 0; i < entities.length; i++) {
@@ -65,7 +67,7 @@ export class Entity {
       this.game.moveCamera();
     }
     else {
-      this[dir] -= v;
+      this[dir] -= by;
     }
 
 

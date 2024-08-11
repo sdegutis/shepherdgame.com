@@ -2,6 +2,7 @@ import { Game } from "../game.js";
 import { X } from "../lib/crt.js";
 import { Img } from "../lib/image.js";
 import { Collider, Entity, Interaction } from "./entity.js";
+import { Solid } from "./solid.js";
 
 export class Player extends Entity {
 
@@ -36,6 +37,7 @@ export class Player extends Entity {
   };
 
   override collideWith?: Collider = (other, dir, by) => {
+    if (other instanceof Solid) return Interaction.Stop;
     return Interaction.Pass;
   };
 

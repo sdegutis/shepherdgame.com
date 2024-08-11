@@ -39,16 +39,17 @@ export class Entity {
       const inch = Math.min(1, Math.max(-1, by));
 
       by -= inch;
-      this[dir] += by;
+      this[dir] += inch;
       this.game.putEntity(this);
 
       for (const tile of this.inTiles) {
         for (const ent of tile.entities) {
+          if (ent === this) continue;
           if (seen.has(ent)) continue;
           seen.add(ent);
 
           if (this.#overlaps(ent) && this.collideWith!(ent, dir, inch) === Interaction.Stop) {
-            this[dir] -= by;
+            this[dir] -= inch;
             this.game.putEntity(this);
             this.game.moveCamera();
             return false;
@@ -62,14 +63,12 @@ export class Entity {
   }
 
   #overlaps(other: Entity) {
-    //     movingEntity.x + 7 >= collidedInto.x &&
-    //     movingEntity.y + 7 >= collidedInto.y &&
-    //     movingEntity.x <= collidedInto.x + 7 &&
-    //     movingEntity.y <= collidedInto.y + 7
-
-
-
-    return true;
+    return (
+      this.x + this.image.w >= other.x &&
+      this.y + this.image.h >= other.y &&
+      this.x <= other.x + other.image.w &&
+      this.y <= other.y + other.image.h
+    );
   }
 
 }

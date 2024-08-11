@@ -116,14 +116,14 @@ export class Game {
     };
   }
 
-  putEntity(entity: Entity, x: number, y: number) {
+  putEntity(entity: Entity) {
     for (const tile of entity.inTiles) {
       tile.entities.delete(entity);
     }
     entity.inTiles.clear();
 
-    x = Math.floor(x / 8);
-    y = Math.floor(y / 8);
+    const x = Math.floor(entity.x / 8);
+    const y = Math.floor(entity.y / 8);
 
     for (let yy = 0; yy < Math.floor(entity.image.h / 8); yy++) {
       for (let xx = 0; xx < Math.floor(entity.image.w / 8); xx++) {

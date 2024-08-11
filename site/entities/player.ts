@@ -1,7 +1,7 @@
 import { Game } from "../game.js";
 import { X } from "../lib/crt.js";
 import { Img } from "../lib/image.js";
-import { Entity } from "./entity.js";
+import { Entity, Interaction } from "./entity.js";
 
 export class Player extends Entity {
 
@@ -30,10 +30,12 @@ export class Player extends Entity {
         speed = 2;
       }
 
-      this.x += x * speed;
-      this.y += y * speed;
-      this.game.moveCamera();
+      this.tryMove(x * speed, y * speed);
     }
+  };
+
+  override collideWith? = <T extends Entity>(other: T, x: number, y: number): Interaction => {
+    return 'pass';
   };
 
 }

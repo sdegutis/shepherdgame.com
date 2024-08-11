@@ -15,8 +15,10 @@ export class Entity {
     public y: number,
     public image: Img,
   ) {
-    game.putEntity(this, x, y);
+    game.putEntity(this);
   }
+
+  // overlaps(other:Entity) {}
 
   update?: (t: number) => void;
 
@@ -28,9 +30,9 @@ export class Entity {
 
   collideWith?: <T extends Entity>(other: T, x: number, y: number) => Interaction;
 
-  tryMove(movingEntity: Entity, x: number, y: number) {
-    movingEntity.x += x;
-    movingEntity.y += y;
+  tryMove(x: number, y: number) {
+    this.x += x;
+    this.y += y;
 
     let canMove = true;
     // for (let i = 0; i < entities.length; i++) {
@@ -53,10 +55,15 @@ export class Entity {
     //   }
     // }
 
-    if (!canMove) {
-      movingEntity.x -= x;
-      movingEntity.y -= y;
+    if (canMove) {
+      this.game.putEntity(this);
+      this.game.moveCamera();
     }
+    else {
+      this.x -= x;
+      this.y -= y;
+    }
+
 
     return canMove;
   }

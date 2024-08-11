@@ -6,25 +6,56 @@ import { CRT, setupCRT } from './lib/crt.js';
 import { Img } from './lib/image.js';
 import { loadP8 } from './lib/p8.js';
 
+export class Point {
+
+  constructor(
+    public x: number,
+    public y: number,
+  ) { }
+
+}
+
+export class Tile {
+
+  entities = new Set<Entity>();
+
+}
+
+export class Grid {
+
+  #tiles: Tile[][] = [];
+
+  constructor(
+    public width: number,
+    public height: number,
+  ) {
+    for (let y = 0; y < height; y++) {
+      this.#tiles[y] = [];
+      for (let x = 0; x < width; x++) {
+        this.#tiles[y][x] = new Tile();
+      }
+    }
+  }
+
+  get(x: number, y: number) {
+    return this.#tiles[y][x];
+  }
+
+}
+
 export class Game {
 
-  entityGrid: Set<Entity>[][] = [];
+  grid = new Grid(128, 64);
+  liveTiles = new Set<Tile>();
   liveEntities = new Set<Entity>();
 
   pixels = new Uint16Array(320 * 180 * 4);
 
   players: Player[] = [];
-  camera = { x: 0, y: 0 };
-  entPoint = { x: 0, y: 0 };
+  camera = new Point(0, 0);
+  entPoint = new Point(0, 0);
 
-  constructor(private crt: CRT) {
-    for (let y = 0; y < 64; y++) {
-      this.entityGrid[y] = [];
-      for (let x = 0; x < 128; x++) {
-        this.entityGrid[y][x] = new Set();
-      }
-    }
-  }
+  constructor(private crt: CRT) { }
 
   async load() {
     const map1 = await loadP8('sheep.p8');
@@ -86,19 +117,19 @@ export class Game {
   }
 
   putEntity(entity: Entity, x: number, y: number) {
-    for (const set of entity.inSets) {
-      set.delete(entity);
+    for (const tile of entity.inTiles) {
+      tile.entities.delete(entity);
     }
-    entity.inSets.length = 0;
+    entity.inTiles.clear();
 
     x = Math.floor(x / 8);
     y = Math.floor(y / 8);
 
     for (let yy = 0; yy < Math.floor(entity.image.h / 8); yy++) {
       for (let xx = 0; xx < Math.floor(entity.image.w / 8); xx++) {
-        const set = this.entityGrid[y + yy][x + xx];
-        set.add(entity);
-        entity.inSets.push(set);
+        const tile = this.grid.get(x + xx, y + yy);
+        tile.entities.add(entity);
+        entity.inTiles.add(tile);
       }
     }
   }
@@ -120,10 +151,9 @@ export class Game {
 
       for (let y = -1; y < 24; y++) {
         for (let x = -1; x < 41; x++) {
-          const cell = this.entityGrid[y + this.entPoint.y]?.[x + this.entPoint.x];
-          if (!cell) continue;
+          const cell = this.grid.get(x + this.entPoint.x, y + this.entPoint.y);
 
-          for (const ent of cell) {
+          for (const ent of cell.entities) {
             this.liveEntities.add(ent);
           }
         }

@@ -1,11 +1,11 @@
-import { Game } from "../game.js";
+import { Game, Tile } from "../game.js";
 import { Img } from "../lib/image.js";
 
 export type Interaction = 'pass' | 'stop';
 
 export class Entity {
 
-  inSets: Set<Entity>[] = [];
+  inTiles = new Set<Tile>();
 
   layer = 0;
 

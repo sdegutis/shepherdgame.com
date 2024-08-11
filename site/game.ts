@@ -93,6 +93,13 @@ export class Game {
         this.grid.get(x + xx, y + yy).add(entity);
       }
     }
+
+    const endx = x + Math.floor((entity.image.w - 1) / 8);
+    const endy = y + Math.floor((entity.image.h - 1) / 8);
+
+    this.grid.get(endx, endy).add(entity);
+    this.grid.get(x, endy).add(entity);
+    this.grid.get(endx, y).add(entity);
   }
 
   moveCamera() {

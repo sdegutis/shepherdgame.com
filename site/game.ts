@@ -89,6 +89,7 @@ export class Game {
     for (const set of entity.inSets) {
       set.delete(entity);
     }
+    entity.inSets.length = 0;
 
     x = Math.floor(x / 8);
     y = Math.floor(y / 8);

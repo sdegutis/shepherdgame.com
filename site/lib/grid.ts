@@ -13,6 +13,16 @@ export class Tile {
 
   entities = new Set<Entity>();
 
+  add(ent: Entity) {
+    this.entities.add(ent);
+    ent.inTiles.add(this);
+  }
+
+  rem(ent: Entity) {
+    this.entities.delete(ent);
+    ent.inTiles.delete(this);
+  }
+
 }
 
 export class Grid {

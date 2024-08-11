@@ -1,7 +1,7 @@
 import { Game } from "../game.js";
 import { X } from "../lib/crt.js";
 import { Img } from "../lib/image.js";
-import { Entity, Interaction } from "./entity.js";
+import { Collider, Entity, Interaction } from "./entity.js";
 
 export class Player extends Entity {
 
@@ -35,8 +35,8 @@ export class Player extends Entity {
     }
   };
 
-  override collideWith? = <T extends Entity>(other: T, x: number, y: number): Interaction => {
-    return 'pass';
+  override collideWith?: Collider = (other, dir, by) => {
+    return Interaction.Pass;
   };
 
 }

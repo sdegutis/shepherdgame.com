@@ -1,7 +1,13 @@
 import { Game, Tile } from "../game.js";
 import { Img } from "../lib/image.js";
 
-export type Interaction = 'pass' | 'stop';
+export const enum Interaction {
+  Pass,
+  Stop,
+}
+
+type Dir = 'x' | 'y';
+export type Collider = (other: Entity, dir: Dir, by: number) => Interaction;
 
 export class Entity {
 
@@ -28,9 +34,9 @@ export class Entity {
     }
   }
 
-  collideWith?: <T extends Entity>(other: T, x: number, y: number) => Interaction;
+  collideWith?: Collider;
 
-  tryMove(dir: 'x' | 'y', v: number) {
+  tryMove(dir: Dir, v: number) {
     this[dir] += v;
 
     let canMove = true;

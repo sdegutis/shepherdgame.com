@@ -16,11 +16,11 @@ export function setupCRT() {
   canvas.height = HEIGHT;
   document.body.append(canvas);
 
-  new ResizeObserver(([{ contentRect: box }]) => {
+  new ResizeObserver(([{ contentRect }]) => {
     let width = WIDTH;
     let height = HEIGHT;
 
-    while (width + WIDTH <= box.width && height + HEIGHT <= box.height) {
+    while (width + WIDTH <= contentRect.width && height + HEIGHT <= contentRect.height) {
       width += WIDTH;
       height += HEIGHT;
     }

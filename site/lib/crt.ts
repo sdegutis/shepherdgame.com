@@ -16,9 +16,7 @@ export function setupCRT() {
   canvas.height = HEIGHT;
   document.body.append(canvas);
 
-  new ResizeObserver(function () {
-    const box = document.body.getBoundingClientRect();
-
+  new ResizeObserver(([{ contentRect: box }]) => {
     let width = 320;
     let height = 180;
 

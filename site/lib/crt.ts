@@ -12,10 +12,24 @@ export type CRT = ReturnType<typeof setupCRT>;
 
 export function setupCRT() {
   const canvas = document.createElement('canvas');
-  canvas.style.height = '95vh';
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   document.body.append(canvas);
+
+  new ResizeObserver(function () {
+    const box = document.body.getBoundingClientRect();
+
+    let width = 320;
+    let height = 180;
+
+    while (width + 320 <= box.width && height + 180 <= box.height) {
+      width += 320;
+      height += 180;
+    }
+
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+  }).observe(document.body);
 
   const ctx = canvas.getContext('2d')!;
   const pixels = new Uint8ClampedArray(320 * 180 * 4);

@@ -17,12 +17,12 @@ export function setupCRT() {
   document.body.append(canvas);
 
   new ResizeObserver(([{ contentRect: box }]) => {
-    let width = 320;
-    let height = 180;
+    let width = WIDTH;
+    let height = HEIGHT;
 
-    while (width + 320 <= box.width && height + 180 <= box.height) {
-      width += 320;
-      height += 180;
+    while (width + WIDTH <= box.width && height + HEIGHT <= box.height) {
+      width += WIDTH;
+      height += HEIGHT;
     }
 
     canvas.style.width = width + 'px';
@@ -30,8 +30,8 @@ export function setupCRT() {
   }).observe(document.body);
 
   const ctx = canvas.getContext('2d')!;
-  const pixels = new Uint8ClampedArray(320 * 180 * 4);
-  const imgdata = new ImageData(pixels, 320, 180);
+  const pixels = new Uint8ClampedArray(WIDTH * HEIGHT * 4);
+  const imgdata = new ImageData(pixels, WIDTH, HEIGHT);
   const blit = () => ctx.putImageData(imgdata, 0, 0);
 
   const crt = {

@@ -19,7 +19,7 @@ export class Game {
   camera = new Point(0, 0);
   entPoint = new Point(0, 0);
 
-  constructor(private crt: CRT) { }
+  constructor(public crt: CRT) { }
 
   async load() {
     const map1 = await loadP8('sheep.p8');
@@ -90,16 +90,17 @@ export class Game {
 
     for (let yy = 0; yy < Math.floor(entity.image.h / 8); yy++) {
       for (let xx = 0; xx < Math.floor(entity.image.w / 8); xx++) {
+        // const x3 = x + xx + Math.floor((entity.image.w - 1) / 8);
+        // const y3 = y + yy + Math.floor((entity.image.h - 1) / 8);
+
         this.grid.get(x + xx, y + yy).add(entity);
+
+
+        // this.grid.get(endx, endy).add(entity);
+        // this.grid.get(x, endy).add(entity);
+        // this.grid.get(endx, y).add(entity);
       }
     }
-
-    const endx = x + Math.floor((entity.image.w - 1) / 8);
-    const endy = y + Math.floor((entity.image.h - 1) / 8);
-
-    this.grid.get(endx, endy).add(entity);
-    this.grid.get(x, endy).add(entity);
-    this.grid.get(endx, y).add(entity);
   }
 
   moveCamera() {

@@ -1,5 +1,5 @@
 import { Game } from "../game.js";
-import { X } from "../lib/crt.js";
+import { DOWN, LEFT, RIGHT, UP, X } from "../lib/crt.js";
 import { Img } from "../lib/image.js";
 import { Collider, Entity, Interaction } from "./entity.js";
 import { Solid } from "./solid.js";
@@ -23,17 +23,23 @@ export class Player extends Entity {
   get gamepad() { return navigator.getGamepads()[this.playerNum]; }
 
   override update? = (t: number) => {
-    if (this.gamepad) {
-      const [x, y] = this.gamepad.axes;
+    let x = 0, y = 0, speed = 1;
 
-      let speed = 1;
+    if (this.gamepad) {
+      [x, y] = this.gamepad.axes;
       if (this.gamepad.buttons[X].pressed) {
         speed = 2;
       }
-
-      this.tryMove('x', x * speed);
-      this.tryMove('y', y * speed);
     }
+    else if (this.playerNum === 0) {
+      if (this.game.crt.keys[RIGHT]) x = 1; else if (this.game.crt.keys[LEFT]) x = -1;
+      if (this.game.crt.keys[DOWN]) y = 1; else if (this.game.crt.keys[UP]) y = -1;
+      if (this.game.crt.keys[X]) speed = 2;
+    }
+
+    this.tryMove('x', x * speed);
+    this.tryMove('y', y * speed);
+
   };
 
   override collideWith?: Collider = (other, dir, by) => {

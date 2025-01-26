@@ -12,9 +12,12 @@ export type CRT = ReturnType<typeof setupCRT>;
 
 export function setupCRT() {
   const canvas = document.createElement('canvas');
+  canvas.tabIndex = 1;
+  canvas.style.outline = 'none';
   canvas.width = WIDTH;
   canvas.height = HEIGHT;
   document.body.append(canvas);
+  canvas.focus();
 
   new ResizeObserver(([{ contentRect }]) => {
     let width = WIDTH;
@@ -34,10 +37,27 @@ export function setupCRT() {
   const imgdata = new ImageData(pixels, WIDTH, HEIGHT);
   const blit = () => ctx.putImageData(imgdata, 0, 0);
 
+  const keys: number[] = Array(16).fill(0);
+
   const crt = {
     ontick: (t: number) => { },
     pixels,
     blit,
+    keys,
+  };
+
+  canvas.onkeydown = (e) => {
+    if (e.key === 'ArrowUp') { keys[UP] = 1 }
+    if (e.key === 'ArrowDown') { keys[DOWN] = 1 }
+    if (e.key === 'ArrowLeft') { keys[LEFT] = 1 }
+    if (e.key === 'ArrowRight') { keys[RIGHT] = 1 }
+  };
+
+  canvas.onkeyup = (e) => {
+    if (e.key === 'ArrowUp') { keys[UP] = 0 }
+    if (e.key === 'ArrowDown') { keys[DOWN] = 0 }
+    if (e.key === 'ArrowLeft') { keys[LEFT] = 0 }
+    if (e.key === 'ArrowRight') { keys[RIGHT] = 0 }
   };
 
   const framerate = 30;

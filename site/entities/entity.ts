@@ -49,11 +49,17 @@ export class Entity {
           if (seen.has(ent)) continue;
           seen.add(ent);
 
-          if (this.#overlaps(ent) && this.collideWith!(ent, dir, inch) === Interaction.Stop) {
-            this[dir] -= inch;
-            this.game.putEntity(this);
-            this.game.moveCamera();
-            return false;
+          if (this.#overlaps(ent)) {
+            // console.log('colliding')
+
+            if (this.collideWith!(ent, dir, inch) === Interaction.Stop) {
+
+              this[dir] -= inch;
+              this.game.putEntity(this);
+              this.game.moveCamera();
+              return false;
+            }
+
           }
         }
       }
